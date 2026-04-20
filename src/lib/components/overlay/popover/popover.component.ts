@@ -14,7 +14,10 @@ import {
 
 import { LucideAngularModule, X } from 'lucide-angular';
 
-export type PopoverPosition = 'top' | 'bottom' | 'left' | 'right';
+export type PopoverPosition =
+  | 'top' | 'top-start' | 'top-end'
+  | 'bottom' | 'bottom-start' | 'bottom-end'
+  | 'left' | 'right';
 export type PopoverTrigger = 'click' | 'hover' | 'focus';
 
 @Component({
@@ -50,6 +53,7 @@ export class UiPopoverComponent {
   private showTimeout: ReturnType<typeof setTimeout> | null = null;
   private hideTimeout: ReturnType<typeof setTimeout> | null = null;
   readonly isHovering = signal<boolean>(false);
+  readonly effectivePosition = signal<PopoverPosition>('bottom');
 
   // Computed
   readonly popoverClasses = computed(() => {
@@ -74,11 +78,15 @@ export class UiPopoverComponent {
   readonly positionClasses = computed(() => {
     const positionMap: Record<PopoverPosition, string> = {
       top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
+      'top-start': 'bottom-full left-0 mb-2',
+      'top-end': 'bottom-full right-0 mb-2',
       bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
+      'bottom-start': 'top-full left-0 mt-2',
+      'bottom-end': 'top-full right-0 mt-2',
       left: 'right-full top-1/2 -translate-y-1/2 mr-2',
       right: 'left-full top-1/2 -translate-y-1/2 ml-2',
     };
-    return positionMap[this.position()];
+    return positionMap[this.effectivePosition()];
   });
 
   readonly arrowClasses = computed(() => {
@@ -86,14 +94,35 @@ export class UiPopoverComponent {
       'absolute w-3 h-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rotate-45';
     const positionMap: Record<PopoverPosition, string> = {
       top: 'top-full left-1/2 -translate-x-1/2 -mt-1.5 border-t-0 border-l-0',
+      'top-start': 'top-full -mt-1.5 border-t-0 border-l-0',
+      'top-end': 'top-full -mt-1.5 border-t-0 border-l-0',
       bottom: 'bottom-full left-1/2 -translate-x-1/2 -mb-1.5 border-b-0 border-r-0',
+      'bottom-start': 'bottom-full -mb-1.5 border-b-0 border-r-0',
+      'bottom-end': 'bottom-full -mb-1.5 border-b-0 border-r-0',
       left: 'left-full top-1/2 -translate-y-1/2 -ml-1.5 border-l-0 border-b-0',
       right: 'right-full top-1/2 -translate-y-1/2 -mr-1.5 border-r-0 border-t-0',
     };
-    return `${base} ${positionMap[this.position()]}`;
+    return `${base} ${positionMap[this.effectivePosition()]}`;
+  });
+
+  readonly arrowStyle = computed(() => {
+    const pos = this.effectivePosition();
+    if (!pos.endsWith('-start') && !pos.endsWith('-end')) return {};
+
+    const triggerEl = this.triggerElement()?.nativeElement;
+    if (!triggerEl) return {};
+
+    const arrowHalfWidth = 6;
+    const offset = `${Math.max(triggerEl.offsetWidth / 2 - arrowHalfWidth, 4)}px`;
+
+    return pos.endsWith('-start') ? { left: offset } : { right: offset };
   });
 
   constructor() {
+    effect(() => {
+      this.effectivePosition.set(this.position());
+    });
+
     // Handle click outside
     effect(() => {
       if (this.visible() && this.dismissable()) {
@@ -190,6 +219,8 @@ export class UiPopoverComponent {
       this.hideTimeout = null;
     }
 
+    this.computeAutoFlip();
+
     const delay = this.showDelay();
     if (delay > 0) {
       this.showTimeout = setTimeout(() => {
@@ -200,6 +231,33 @@ export class UiPopoverComponent {
       this.visible.set(true);
       this.onShow.emit();
     }
+  }
+
+  private computeAutoFlip(): void {
+    const popoverEl = this.popoverElement()?.nativeElement;
+    const triggerEl = this.triggerElement()?.nativeElement;
+    if (!popoverEl || !triggerEl) return;
+
+    const triggerRect = triggerEl.getBoundingClientRect();
+    const popoverWidth = popoverEl.offsetWidth;
+    const popoverHeight = popoverEl.offsetHeight;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const MARGIN = 8;
+    const pos = this.position();
+    let effective = pos;
+
+    if (pos.startsWith('bottom') && triggerRect.bottom + popoverHeight + MARGIN > vh) {
+      effective = pos.replace('bottom', 'top') as PopoverPosition;
+    } else if (pos.startsWith('top') && triggerRect.top - popoverHeight - MARGIN < 0) {
+      effective = pos.replace('top', 'bottom') as PopoverPosition;
+    } else if (pos === 'right' && triggerRect.right + popoverWidth + MARGIN > vw) {
+      effective = 'left';
+    } else if (pos === 'left' && triggerRect.left - popoverWidth - MARGIN < 0) {
+      effective = 'right';
+    }
+
+    this.effectivePosition.set(effective);
   }
 
   hide(): void {

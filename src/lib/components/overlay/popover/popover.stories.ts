@@ -14,7 +14,7 @@ const meta: Meta<UiPopoverComponent> = {
   argTypes: {
     position: {
       control: { type: 'select' },
-      options: ['top', 'bottom', 'left', 'right'],
+      options: ['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'right'],
       description: 'Popover position',
       table: { category: 'Position' },
     },
@@ -242,6 +242,113 @@ export const ActionMenu: Story = {
             </button>
           </div>
         </ui-popover>
+      </div>
+    `,
+  }),
+};
+
+export const BottomStart: Story = {
+  render: () => ({
+    template: `
+      <div class="flex items-center justify-center p-32">
+        <ui-popover position="bottom-start">
+          <button trigger class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
+            Bottom Start
+          </button>
+          <div class="p-4 min-w-64">
+            <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-1">Bottom Start</h4>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              El panel se alinea al borde izquierdo del trigger. La flecha apunta al centro del trigger.
+            </p>
+          </div>
+        </ui-popover>
+      </div>
+    `,
+  }),
+};
+
+export const BottomEnd: Story = {
+  render: () => ({
+    template: `
+      <div class="flex items-end justify-end p-32">
+        <ui-popover position="bottom-end">
+          <button trigger class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
+            Bottom End
+          </button>
+          <div class="p-4 min-w-64">
+            <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-1">Bottom End</h4>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              El panel se alinea al borde derecho del trigger. La flecha apunta al centro del trigger.
+            </p>
+          </div>
+        </ui-popover>
+      </div>
+    `,
+  }),
+};
+
+export const TopStart: Story = {
+  render: () => ({
+    template: `
+      <div class="flex items-center justify-center p-32">
+        <ui-popover position="top-start">
+          <button trigger class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
+            Top Start
+          </button>
+          <div class="p-4 min-w-64">
+            <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-1">Top Start</h4>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              El panel aparece arriba alineado al borde izquierdo del trigger.
+            </p>
+          </div>
+        </ui-popover>
+      </div>
+    `,
+  }),
+};
+
+export const TopEnd: Story = {
+  render: () => ({
+    template: `
+      <div class="flex items-center justify-end p-32">
+        <ui-popover position="top-end">
+          <button trigger class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
+            Top End
+          </button>
+          <div class="p-4 min-w-64">
+            <h4 class="font-medium text-gray-900 dark:text-gray-100 mb-1">Top End</h4>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              El panel aparece arriba alineado al borde derecho del trigger.
+            </p>
+          </div>
+        </ui-popover>
+      </div>
+    `,
+  }),
+};
+
+export const AutoFlip: Story = {
+  render: () => ({
+    template: `
+      <div class="relative" style="height: 100vh; width: 100%;">
+        <div class="absolute bottom-2 right-2">
+          <ui-popover position="bottom-end" trigger="hover">
+            <div trigger class="w-10 h-10 bg-primary-500 text-white rounded-full flex items-center justify-center font-medium cursor-pointer">
+              JD
+            </div>
+            <div class="p-4 min-w-56">
+              <p class="font-medium text-gray-900 dark:text-gray-100">John Doe</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">john@example.com</p>
+              <div class="border-t border-gray-200 dark:border-gray-700 pt-2 space-y-1">
+                <a href="#" class="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">Profile</a>
+                <a href="#" class="block px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">Sign Out</a>
+              </div>
+            </div>
+          </ui-popover>
+        </div>
+        <p class="p-4 text-sm text-gray-500 dark:text-gray-400">
+          El avatar está en la esquina inferior derecha. Aunque position="bottom-end", el auto-flip lo muestra arriba (top-end).
+        </p>
       </div>
     `,
   }),
