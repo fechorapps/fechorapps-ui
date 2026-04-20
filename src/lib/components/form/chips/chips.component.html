@@ -1,0 +1,52 @@
+<div [class]="wrapperClasses()">
+  <!-- Label -->
+  @if (label()) {
+    <label [for]="inputId()" [class]="labelClasses()">
+      {{ label() }}
+    </label>
+  }
+
+  <!-- Chips container -->
+  <div [class]="containerClasses()">
+    <!-- Chips -->
+    @for (chip of value(); track chip; let i = $index) {
+      <span [class]="chipClasses()">
+        <span class="truncate max-w-[150px]">{{ chip }}</span>
+        @if (!disabled()) {
+          <button
+            type="button"
+            [class]="removeButtonClasses()"
+            [attr.aria-label]="'Remove ' + chip"
+            (click)="removeChip(i)"
+          >
+            <lucide-icon [img]="closeIcon" [size]="iconSize()"></lucide-icon>
+          </button>
+        }
+      </span>
+    }
+
+    <!-- Input -->
+    @if (canAddMore()) {
+      <input
+        type="text"
+        [class]="inputClasses()"
+        [placeholder]="value().length === 0 ? placeholder() : ''"
+        [disabled]="disabled()"
+        [id]="inputId()"
+        [attr.aria-invalid]="invalid()"
+        [attr.aria-describedby]="helpText() ? inputId() + '-help' : null"
+        (input)="handleInput($event)"
+        (keydown)="handleKeydown($event)"
+        (focus)="handleFocus($event)"
+        (blur)="handleBlur($event)"
+      />
+    }
+  </div>
+
+  <!-- Help text -->
+  @if (helpText()) {
+    <p [id]="inputId() + '-help'" [class]="helpTextClasses()">
+      {{ helpText() }}
+    </p>
+  }
+</div>

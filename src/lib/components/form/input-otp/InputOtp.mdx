@@ -1,0 +1,117 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as InputOtpStories from './input-otp.stories';
+
+<Meta of={InputOtpStories} />
+
+<Title />
+
+<Subtitle>Componente de entrada de código OTP/verificación para autenticación de dos factores.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiInputOtpComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-input-otp
+  label="Código de Verificación"
+  [length]="6"
+  [(ngModel)]="code"
+></ui-input-otp>
+```
+
+<Canvas of={InputOtpStories.Default} />
+
+## API
+
+<ArgTypes of={InputOtpStories} />
+
+## Longitud Variable
+
+<Canvas of={InputOtpStories.FourDigits} />
+<Canvas of={InputOtpStories.EightDigits} />
+
+## Modo Enmascarado
+
+```html
+<ui-input-otp
+  [mask]="true"
+  label="PIN Seguro"
+></ui-input-otp>
+```
+
+<Canvas of={InputOtpStories.MaskedInput} />
+
+## Alfanumérico
+
+```html
+<ui-input-otp
+  [integerOnly]="false"
+  label="Código Alfanumérico"
+></ui-input-otp>
+```
+
+<Canvas of={InputOtpStories.AlphanumericAllowed} />
+
+## Variantes
+
+<Canvas of={InputOtpStories.Variants} />
+
+## Tamaños
+
+<Canvas of={InputOtpStories.Sizes} />
+
+## Estados
+
+### Deshabilitado
+
+<Canvas of={InputOtpStories.Disabled} />
+
+### Inválido
+
+<Canvas of={InputOtpStories.Invalid} />
+
+## Ejemplos de Uso
+
+### Verificación de Email
+
+<Canvas of={InputOtpStories.VerificationFlow} />
+
+### Autenticación de Dos Factores
+
+<Canvas of={InputOtpStories.TwoFactorAuth} />
+
+---
+
+## Eventos
+
+| Evento | Descripción |
+|--------|-------------|
+| `onComplete` | Emitido cuando todos los campos están llenos |
+| `onFocus` | Emitido al enfocar |
+| `onBlur` | Emitido al perder el foco |
+
+```html
+<ui-input-otp
+  [length]="6"
+  (onComplete)="verifyCode($event)"
+></ui-input-otp>
+```
+
+---
+
+## Accesibilidad
+
+- Navegación con flechas izquierda/derecha
+- Soporte para pegar código completo
+- `aria-label` en cada campo
+- Soporte para teclado numérico en móviles
+
+---
+
+## Todas las Stories
+
+<Stories />

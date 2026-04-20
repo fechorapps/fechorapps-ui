@@ -1,0 +1,39 @@
+<div [class]="wrapperClasses()">
+  <!-- Label -->
+  @if (label()) {
+    <label [for]="inputId()" [class]="labelClasses()">
+      {{ label() }}
+    </label>
+  }
+
+  <!-- Rating container -->
+  <div
+    [class]="containerClasses()"
+    role="slider"
+    [attr.aria-valuemin]="0"
+    [attr.aria-valuemax]="stars()"
+    [attr.aria-valuenow]="value()"
+    [attr.aria-disabled]="disabled()"
+    [attr.aria-readonly]="readonly()"
+    [tabindex]="disabled() ? -1 : 0"
+    (keydown)="onKeydown($event)"
+    (mouseleave)="onStarLeave()"
+  >
+    @for (star of starsArray(); track star) {
+      <span
+        [class]="getStarClasses(star)"
+        (click)="onStarClick(star)"
+        (mouseenter)="onStarHover(star)"
+      >
+        <lucide-icon [img]="starIcon" [size]="iconSize()"></lucide-icon>
+      </span>
+    }
+  </div>
+
+  <!-- Help text -->
+  @if (helpText()) {
+    <p [id]="inputId() + '-help'" [class]="helpTextClasses()">
+      {{ helpText() }}
+    </p>
+  }
+</div>

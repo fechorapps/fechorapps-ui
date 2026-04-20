@@ -1,0 +1,33 @@
+<button
+  [type]="type()"
+  [disabled]="isDisabled()"
+  [class]="buttonClasses()"
+  (click)="onClick($event)"
+>
+  <!-- Loading spinner -->
+  @if (loading()) {
+    <lucide-icon
+      [img]="loaderIcon"
+      [size]="iconSize()"
+      class="animate-spin"
+      aria-hidden="true"
+    ></lucide-icon>
+  }
+
+  <!-- Left icon -->
+  @if (icon() && !loading()) {
+    <lucide-icon [img]="icon()!" [size]="iconSize()" aria-hidden="true"></lucide-icon>
+  }
+
+  <!-- Content (hidden when iconOnly) -->
+  @if (!iconOnly()) {
+    <span class="button-content">
+      <ng-content></ng-content>
+    </span>
+  }
+
+  <!-- Right icon -->
+  @if (iconEnd() && !loading()) {
+    <lucide-icon [img]="iconEnd()!" [size]="iconSize()" aria-hidden="true"></lucide-icon>
+  }
+</button>

@@ -1,0 +1,120 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as ColorPickerStories from './color-picker.stories';
+
+<Meta of={ColorPickerStories} />
+
+<Title />
+
+<Subtitle>Selector de color con soporte para paletas predefinidas y formatos HEX, RGB y HSL.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiColorPickerComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-color-picker
+  label="Color"
+  [(ngModel)]="color"
+></ui-color-picker>
+```
+
+<Canvas of={ColorPickerStories.Default} />
+
+## API
+
+<ArgTypes of={ColorPickerStories} />
+
+## Formatos de Color
+
+| Formato | Ejemplo |
+|---------|---------|
+| `hex` | #3b82f6 |
+| `rgb` | rgb(59, 130, 246) |
+| `hsl` | hsl(217, 91%, 60%) |
+
+<Canvas of={ColorPickerStories.RGBFormat} />
+<Canvas of={ColorPickerStories.HSLFormat} />
+
+## Modo Inline
+
+```html
+<ui-color-picker
+  [inline]="true"
+  label="Selecciona un Color"
+></ui-color-picker>
+```
+
+<Canvas of={ColorPickerStories.Inline} />
+
+## Paletas Personalizadas
+
+```typescript
+customPresets = [
+  { name: 'Primary', value: '#1e3a5f' },
+  { name: 'Secondary', value: '#2d4a6f' },
+  { name: 'Accent', value: '#00b4d8' },
+];
+```
+
+```html
+<ui-color-picker
+  [presets]="customPresets"
+  label="Color del Tema"
+></ui-color-picker>
+```
+
+<Canvas of={ColorPickerStories.CustomPresets} />
+
+## Variantes
+
+<Canvas of={ColorPickerStories.Variants} />
+
+## Tamaños
+
+<Canvas of={ColorPickerStories.Sizes} />
+
+## Estados
+
+### Deshabilitado
+
+<Canvas of={ColorPickerStories.Disabled} />
+
+### Inválido
+
+<Canvas of={ColorPickerStories.Invalid} />
+
+## Ejemplos de Uso
+
+### Personalizador de Tema
+
+<Canvas of={ColorPickerStories.ThemeCustomizer} />
+
+### Sistema de Diseño
+
+<Canvas of={ColorPickerStories.DesignSystem} />
+
+---
+
+## Opciones de Visualización
+
+| Propiedad | Descripción |
+|-----------|-------------|
+| `showInput` | Muestra campo de entrada de texto |
+| `showPresets` | Muestra la paleta de colores predefinidos |
+
+```html
+<ui-color-picker
+  [showInput]="false"
+  [showPresets]="true"
+></ui-color-picker>
+```
+
+---
+
+## Todas las Stories
+
+<Stories />

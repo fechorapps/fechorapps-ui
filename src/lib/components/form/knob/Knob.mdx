@@ -1,0 +1,118 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as KnobStories from './knob.stories';
+
+<Meta of={KnobStories} />
+
+<Title />
+
+<Subtitle>Control circular tipo dial para seleccionar valores numéricos de forma visual e intuitiva.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiKnobComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-knob
+  [(ngModel)]="value"
+  label="Volumen"
+></ui-knob>
+```
+
+<Canvas of={KnobStories.Default} />
+
+## API
+
+<ArgTypes of={KnobStories} />
+
+## Con Porcentaje
+
+```html
+<ui-knob
+  [(ngModel)]="progress"
+  valueTemplate="{value}%"
+  label="Progreso"
+></ui-knob>
+```
+
+<Canvas of={KnobStories.WithPercentage} />
+
+## Rango Personalizado
+
+```html
+<ui-knob
+  [(ngModel)]="temperature"
+  [min]="16"
+  [max]="30"
+  [step]="0.5"
+  valueTemplate="{value}°C"
+  label="Temperatura"
+></ui-knob>
+```
+
+<Canvas of={KnobStories.CustomRange} />
+
+## Tamaños
+
+<Canvas of={KnobStories.Sizes} />
+
+## Colores Personalizados
+
+```html
+<ui-knob
+  valueColor="#ef4444"
+  rangeColor="#374151"
+  label="Alerta"
+></ui-knob>
+```
+
+<Canvas of={KnobStories.CustomColors} />
+
+## Sin Valor
+
+<Canvas of={KnobStories.WithoutValue} />
+
+## Estados
+
+### Deshabilitado
+
+<Canvas of={KnobStories.Disabled} />
+
+### Solo Lectura
+
+<Canvas of={KnobStories.Readonly} />
+
+## Ejemplos de Uso
+
+### Mezclador de Audio
+
+<Canvas of={KnobStories.AudioMixer} />
+
+### Indicadores de Progreso
+
+<Canvas of={KnobStories.ProgressIndicator} />
+
+### Control de Termostato
+
+<Canvas of={KnobStories.ThermostatControl} />
+
+---
+
+## Controles
+
+| Interacción | Descripción |
+|-------------|-------------|
+| Arrastrar | Ajusta el valor siguiendo el movimiento del mouse |
+| Scroll | Incrementa/decrementa el valor |
+| Flechas | Ajusta el valor por pasos |
+| Home/End | Va al mínimo/máximo |
+| Page Up/Down | Ajusta el valor por 10 pasos |
+
+---
+
+## Todas las Stories
+
+<Stories />

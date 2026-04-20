@@ -1,0 +1,22 @@
+<div [class]="containerClasses()">
+  <!-- First Panel -->
+  <div class="overflow-auto" [style]="getPanelStyle(0)">
+    <ng-content select="[splitterPanel1]" />
+  </div>
+
+  <!-- Gutter -->
+  <div [class]="gutterClasses()" (mousedown)="onGutterMouseDown($event)">
+    <div
+      [class]="
+        layout() === 'horizontal'
+          ? 'w-1 h-8 rounded-full bg-gray-400 dark:bg-gray-500'
+          : 'h-1 w-8 rounded-full bg-gray-400 dark:bg-gray-500'
+      "
+    ></div>
+  </div>
+
+  <!-- Second Panel -->
+  <div class="overflow-auto" [style]="getPanelStyle(1)">
+    <ng-content select="[splitterPanel2]" />
+  </div>
+</div>

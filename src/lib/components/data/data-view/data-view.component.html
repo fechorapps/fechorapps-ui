@@ -1,0 +1,129 @@
+<div [class]="containerClasses()">
+  <!-- Header -->
+  <div
+    class="flex items-center justify-between gap-4 p-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800"
+  >
+    <!-- Custom Header or Filter -->
+    <div class="flex-1">
+      @if (headerTemplate(); as template) {
+        <ng-container [ngTemplateOutlet]="template" />
+      } @else if (filter()) {
+        <div class="relative max-w-xs">
+          <lucide-icon
+            [img]="searchIcon"
+            class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+          />
+          <input
+            type="text"
+            [placeholder]="filterPlaceholder()"
+            [value]="filterValue()"
+            (input)="onFilterInput($event)"
+            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+        </div>
+      }
+    </div>
+
+    <!-- Layout Switcher -->
+    @if (showLayoutSwitcher()) {
+      <div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+        <button
+          type="button"
+          [class]="layoutButtonClasses()('list')"
+          (click)="setLayout('list')"
+          title="List view"
+        >
+          <lucide-icon [img]="listIcon" class="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          [class]="layoutButtonClasses()('grid')"
+          (click)="setLayout('grid')"
+          title="Grid view"
+        >
+          <lucide-icon [img]="gridIcon" class="w-4 h-4" />
+        </button>
+      </div>
+    }
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="p-8 text-center">
+      <div
+        class="inline-block w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"
+      ></div>
+      <p class="mt-2 text-gray-500 dark:text-gray-400">Loading...</p>
+    </div>
+  } @else {
+    <!-- Content -->
+    @if (!hasData()) {
+      <!-- Empty State -->
+      <div class="p-8 text-center text-gray-500 dark:text-gray-400">
+        @if (emptyTemplate(); as template) {
+          <ng-container [ngTemplateOutlet]="template" />
+        } @else {
+          {{ emptyMessage() }}
+        }
+      </div>
+    } @else {
+      <!-- Grid Layout -->
+      @if (isGridLayout()) {
+        <div [class]="gridClasses()">
+          @for (item of paginatedData(); track $index; let i = $index) {
+            @if (gridItemTemplate(); as template) {
+              <ng-container
+                [ngTemplateOutlet]="template"
+                [ngTemplateOutletContext]="getItemContext(item, i)"
+              />
+            } @else if (listItemTemplate(); as template) {
+              <!-- Fallback to list template if no grid template -->
+              <ng-container
+                [ngTemplateOutlet]="template"
+                [ngTemplateOutletContext]="getItemContext(item, i)"
+              />
+            } @else {
+              <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                {{ item }}
+              </div>
+            }
+          }
+        </div>
+      }
+
+      <!-- List Layout -->
+      @if (isListLayout()) {
+        <div [class]="listClasses()">
+          @for (item of paginatedData(); track $index; let i = $index) {
+            @if (listItemTemplate(); as template) {
+              <div class="p-4">
+                <ng-container
+                  [ngTemplateOutlet]="template"
+                  [ngTemplateOutletContext]="getItemContext(item, i)"
+                />
+              </div>
+            } @else {
+              <div class="p-4 text-gray-900 dark:text-gray-100">
+                {{ item }}
+              </div>
+            }
+          }
+        </div>
+      }
+    }
+  }
+
+  <!-- Paginator -->
+  @if (paginator() && hasData()) {
+    <div class="border-t border-gray-200 dark:border-gray-700">
+      <ui-paginator
+        [totalRecords]="effectiveTotalRecords()"
+        [rows]="rows()"
+        [(first)]="first"
+        [rowsPerPageOptions]="rowsPerPageOptions()"
+        [showCurrentPageReport]="true"
+        (onPageChange)="onPageChange($event)"
+      />
+    </div>
+  }
+</div>

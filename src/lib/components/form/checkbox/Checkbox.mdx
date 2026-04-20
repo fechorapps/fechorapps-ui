@@ -1,0 +1,33 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as CheckboxStories from './checkbox.stories';
+
+<Meta of={CheckboxStories} />
+
+<Title />
+
+<Subtitle>Componente de casilla de verificación para selecciones binarias.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiCheckboxComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-checkbox
+  [(ngModel)]="accepted"
+  label="Acepto los términos y condiciones"
+></ui-checkbox>
+```
+
+<Canvas of={CheckboxStories.Default} />
+
+## API
+
+<ArgTypes of={CheckboxStories} />
+
+## Todas las Stories
+
+<Stories />

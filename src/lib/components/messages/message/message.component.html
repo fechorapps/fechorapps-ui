@@ -1,0 +1,24 @@
+<div [class]="containerClasses()" role="alert">
+  @if (icon()) {
+    <lucide-icon [img]="currentIcon()" [class]="iconClasses()" [size]="20" />
+  }
+
+  <div class="flex-1 text-sm">
+    @if (text()) {
+      {{ text() }}
+    } @else {
+      <ng-content />
+    }
+  </div>
+
+  @if (closable()) {
+    <button
+      type="button"
+      class="shrink-0 p-0.5 rounded hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+      (click)="close()"
+      aria-label="Close"
+    >
+      <lucide-icon [img]="icons.close" [size]="16" />
+    </button>
+  }
+</div>

@@ -1,0 +1,30 @@
+<fieldset [class]="containerClasses()">
+  <legend class="px-2 mx-2">
+    @if (toggleable()) {
+      <button
+        type="button"
+        class="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500 transition-colors"
+        (click)="toggle()"
+        [attr.aria-expanded]="!isCollapsed()"
+      >
+        <lucide-icon
+          [img]="chevronIcon"
+          [size]="18"
+          class="transition-transform duration-200"
+          [class.-rotate-90]="isCollapsed()"
+        />
+        {{ legend() }}
+      </button>
+    } @else {
+      <span class="font-medium text-gray-700 dark:text-gray-300">
+        {{ legend() }}
+      </span>
+    }
+  </legend>
+
+  @if (!isCollapsed()) {
+    <div class="p-4">
+      <ng-content />
+    </div>
+  }
+</fieldset>

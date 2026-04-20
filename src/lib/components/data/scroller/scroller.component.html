@@ -1,0 +1,40 @@
+<div
+  #viewport
+  [class]="viewportClasses()"
+  [style]="viewportStyle()"
+  (scroll)="onViewportScroll($event)"
+>
+  <!-- Content Spacer -->
+  <div #content [style]="contentStyle()">
+    <!-- Visible Items Container -->
+    <div [class]="itemContainerClasses()" [style]="spacerStyle()">
+      @for (entry of visibleItems(); track entry.index) {
+        <div [style]="itemStyle()">
+          @if (itemTemplate(); as template) {
+            <ng-container
+              [ngTemplateOutlet]="template"
+              [ngTemplateOutletContext]="getItemContext(entry.item, entry.index)"
+            />
+          } @else {
+            <div class="p-2 text-gray-900 dark:text-gray-100">
+              {{ entry.item }}
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  @if (loading() && showLoader()) {
+    <div class="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-gray-900/50">
+      @if (loaderTemplate(); as template) {
+        <ng-container [ngTemplateOutlet]="template" />
+      } @else {
+        <div
+          class="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"
+        ></div>
+      }
+    </div>
+  }
+</div>

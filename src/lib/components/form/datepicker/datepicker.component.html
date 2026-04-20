@@ -1,0 +1,183 @@
+<div [class]="wrapperClasses()">
+  <!-- Label -->
+  @if (label()) {
+    <label [for]="inputId()" [class]="labelClasses()">
+      {{ label() }}
+    </label>
+  }
+
+  <!-- Container -->
+  <div #containerEl class="relative">
+    <!-- Trigger (only if not inline) -->
+    @if (!inline()) {
+      <button
+        type="button"
+        [class]="triggerClasses()"
+        [disabled]="disabled()"
+        [id]="inputId()"
+        [attr.aria-expanded]="panelVisible()"
+        [attr.aria-invalid]="invalid()"
+        (click)="togglePanel()"
+        (focus)="handleFocus($event)"
+        (blur)="handleBlur($event)"
+      >
+        <span class="truncate">
+          @if (displayValue()) {
+            {{ displayValue() }}
+          } @else {
+            <span class="text-gray-400">{{ placeholder() }}</span>
+          }
+        </span>
+        <lucide-icon [img]="calendarIcon" [size]="iconSize()" class="text-gray-400"></lucide-icon>
+      </button>
+    }
+
+    <!-- Calendar panel -->
+    @if (panelVisible() || inline()) {
+      <div [class]="panelClasses()" [style.width]="'280px'">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-3">
+          <!-- Previous button -->
+          <button
+            type="button"
+            class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400"
+            (click)="
+              currentView() === 'date'
+                ? previousMonth()
+                : currentView() === 'month'
+                  ? previousYear()
+                  : previousDecade()
+            "
+          >
+            <lucide-icon [img]="chevronLeftIcon" [size]="16"></lucide-icon>
+          </button>
+
+          <!-- Month/Year selector -->
+          <button
+            type="button"
+            class="px-2 py-1 text-sm font-medium text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
+            (click)="currentView() === 'date' ? switchToMonthView() : switchToYearView()"
+          >
+            @if (currentView() === 'date') {
+              {{ currentMonthYear() }}
+            } @else if (currentView() === 'month') {
+              {{ viewDate().getFullYear() }}
+            } @else {
+              {{ years()[0] }} - {{ years()[years().length - 1] }}
+            }
+          </button>
+
+          <!-- Next button -->
+          <button
+            type="button"
+            class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400"
+            (click)="
+              currentView() === 'date'
+                ? nextMonth()
+                : currentView() === 'month'
+                  ? nextYear()
+                  : nextDecade()
+            "
+          >
+            <lucide-icon [img]="chevronRightIcon" [size]="16"></lucide-icon>
+          </button>
+        </div>
+
+        <!-- Date view -->
+        @if (currentView() === 'date') {
+          <!-- Week days header -->
+          <div class="grid grid-cols-7 gap-1 mb-2">
+            @for (day of weekDays(); track day) {
+              <div
+                class="w-8 h-8 flex items-center justify-center text-xs font-medium text-gray-500 dark:text-gray-400"
+              >
+                {{ day }}
+              </div>
+            }
+          </div>
+
+          <!-- Days grid -->
+          <div class="grid grid-cols-7 gap-1">
+            @for (dayInfo of calendarDays(); track dayInfo.date.getTime()) {
+              <button
+                type="button"
+                [class]="getDayClasses(dayInfo)"
+                [disabled]="dayInfo.isDisabled"
+                (click)="selectDate(dayInfo)"
+              >
+                {{ dayInfo.day }}
+              </button>
+            }
+          </div>
+        }
+
+        <!-- Month view -->
+        @if (currentView() === 'month') {
+          <div class="grid grid-cols-3 gap-2">
+            @for (month of months(); let i = $index; track month) {
+              <button
+                type="button"
+                class="px-2 py-3 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white"
+                [class.bg-primary-500]="viewDate().getMonth() === i"
+                [class.text-white]="viewDate().getMonth() === i"
+                (click)="selectMonth(i)"
+              >
+                {{ month }}
+              </button>
+            }
+          </div>
+        }
+
+        <!-- Year view -->
+        @if (currentView() === 'year') {
+          <div class="grid grid-cols-3 gap-2">
+            @for (year of years(); track year) {
+              <button
+                type="button"
+                class="px-2 py-3 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white"
+                [class.bg-primary-500]="viewDate().getFullYear() === year"
+                [class.text-white]="viewDate().getFullYear() === year"
+                (click)="selectYear(year)"
+              >
+                {{ year }}
+              </button>
+            }
+          </div>
+        }
+
+        <!-- Button bar -->
+        @if (showButtonBar()) {
+          <div
+            class="flex items-center justify-between mt-3 pt-3 border-t border-gray-200 dark:border-gray-700"
+          >
+            @if (showToday()) {
+              <button
+                type="button"
+                class="px-3 py-1.5 text-sm text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded"
+                (click)="selectToday()"
+              >
+                Today
+              </button>
+            }
+            @if (showClear()) {
+              <button
+                type="button"
+                class="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
+                (click)="clear()"
+              >
+                Clear
+              </button>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Help text -->
+  @if (helpText()) {
+    <p [id]="inputId() + '-help'" [class]="helpTextClasses()">
+      {{ helpText() }}
+    </p>
+  }
+</div>

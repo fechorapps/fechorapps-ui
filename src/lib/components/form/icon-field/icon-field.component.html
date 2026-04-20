@@ -1,0 +1,20 @@
+<div [class]="containerClasses()">
+  <!-- Left/Main icon -->
+  @if (icon()) {
+    <span [class]="iconClasses()">
+      <lucide-icon [img]="icon()!" [size]="iconSize()"></lucide-icon>
+    </span>
+  }
+
+  <!-- Content (input field) -->
+  <div class="w-full" [class]="contentPaddingClass()">
+    <ng-content></ng-content>
+  </div>
+
+  <!-- Right/End icon -->
+  @if (iconEnd()) {
+    <span [class]="iconEndClasses()">
+      <lucide-icon [img]="iconEnd()!" [size]="iconSize()"></lucide-icon>
+    </span>
+  }
+</div>

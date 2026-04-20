@@ -1,0 +1,257 @@
+<div [class]="containerClasses()">
+  <!-- Source List -->
+  <div [class]="listContainerClasses()">
+    <!-- Source Header -->
+    <div
+      class="px-3 py-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between"
+    >
+      @if (sourceHeaderTemplate(); as template) {
+        <ng-container [ngTemplateOutlet]="template" />
+      } @else {
+        <h3 class="font-semibold text-gray-900 dark:text-gray-100">
+          {{ sourceHeader() }}
+        </h3>
+      }
+      <span class="text-sm text-gray-500">{{ source().length }}</span>
+    </div>
+
+    <!-- Source Filter -->
+    @if (filter()) {
+      <div class="p-2 border-b border-gray-200 dark:border-gray-700">
+        <div class="relative">
+          <lucide-icon
+            [img]="searchIcon"
+            class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+          />
+          <input
+            type="text"
+            [placeholder]="sourceFilterPlaceholder()"
+            [value]="sourceFilterValue()"
+            (input)="onSourceFilterInput($event)"
+            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+        </div>
+      </div>
+    }
+
+    <!-- Source Reorder Controls -->
+    @if (showSourceControls()) {
+      <div class="flex gap-1 p-2 border-b border-gray-200 dark:border-gray-700">
+        <button
+          type="button"
+          [class]="buttonClasses()"
+          [disabled]="!hasSourceSelection()"
+          (click)="moveTop('source')"
+          title="Move to top"
+        >
+          <lucide-icon [img]="moveTopIcon" class="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          [class]="buttonClasses()"
+          [disabled]="!hasSourceSelection()"
+          (click)="moveUp('source')"
+          title="Move up"
+        >
+          <lucide-icon [img]="moveUpIcon" class="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          [class]="buttonClasses()"
+          [disabled]="!hasSourceSelection()"
+          (click)="moveDown('source')"
+          title="Move down"
+        >
+          <lucide-icon [img]="moveDownIcon" class="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          [class]="buttonClasses()"
+          [disabled]="!hasSourceSelection()"
+          (click)="moveBottom('source')"
+          title="Move to bottom"
+        >
+          <lucide-icon [img]="moveBottomIcon" class="w-4 h-4" />
+        </button>
+      </div>
+    }
+
+    <!-- Source List Items -->
+    <ul
+      [class]="listClasses()"
+      [style.height]="listHeight()"
+      role="listbox"
+      aria-multiselectable="true"
+    >
+      @if (filteredSource().length === 0) {
+        <li class="px-3 py-8 text-center text-gray-500 dark:text-gray-400">No items available</li>
+      } @else {
+        @for (item of filteredSource(); track $index; let i = $index) {
+          <li
+            [class]="getItemClasses(item, i, 'source')"
+            [attr.aria-selected]="isSourceSelected(item)"
+            role="option"
+            (click)="onSourceItemClick($event, item)"
+          >
+            @if (itemTemplate(); as template) {
+              <ng-container
+                [ngTemplateOutlet]="template"
+                [ngTemplateOutletContext]="getItemContext(item, i, 'source')"
+              />
+            } @else {
+              <span class="text-gray-900 dark:text-gray-100">{{ item }}</span>
+            }
+          </li>
+        }
+      }
+    </ul>
+  </div>
+
+  <!-- Transfer Buttons -->
+  <div [class]="transferButtonsClasses()">
+    <button
+      type="button"
+      [class]="buttonClasses()"
+      [disabled]="!canMoveAllToTarget()"
+      (click)="moveAllToTarget()"
+      title="Move all to target"
+    >
+      <lucide-icon [img]="moveAllRightIcon" class="w-4 h-4" />
+    </button>
+    <button
+      type="button"
+      [class]="buttonClasses()"
+      [disabled]="!canMoveToTarget()"
+      (click)="moveToTarget()"
+      title="Move to target"
+    >
+      <lucide-icon [img]="moveRightIcon" class="w-4 h-4" />
+    </button>
+    <button
+      type="button"
+      [class]="buttonClasses()"
+      [disabled]="!canMoveToSource()"
+      (click)="moveToSource()"
+      title="Move to source"
+    >
+      <lucide-icon [img]="moveLeftIcon" class="w-4 h-4" />
+    </button>
+    <button
+      type="button"
+      [class]="buttonClasses()"
+      [disabled]="!canMoveAllToSource()"
+      (click)="moveAllToSource()"
+      title="Move all to source"
+    >
+      <lucide-icon [img]="moveAllLeftIcon" class="w-4 h-4" />
+    </button>
+  </div>
+
+  <!-- Target List -->
+  <div [class]="listContainerClasses()">
+    <!-- Target Header -->
+    <div
+      class="px-3 py-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between"
+    >
+      @if (targetHeaderTemplate(); as template) {
+        <ng-container [ngTemplateOutlet]="template" />
+      } @else {
+        <h3 class="font-semibold text-gray-900 dark:text-gray-100">
+          {{ targetHeader() }}
+        </h3>
+      }
+      <span class="text-sm text-gray-500">{{ target().length }}</span>
+    </div>
+
+    <!-- Target Filter -->
+    @if (filter()) {
+      <div class="p-2 border-b border-gray-200 dark:border-gray-700">
+        <div class="relative">
+          <lucide-icon
+            [img]="searchIcon"
+            class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+          />
+          <input
+            type="text"
+            [placeholder]="targetFilterPlaceholder()"
+            [value]="targetFilterValue()"
+            (input)="onTargetFilterInput($event)"
+            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+        </div>
+      </div>
+    }
+
+    <!-- Target Reorder Controls -->
+    @if (showTargetControls()) {
+      <div class="flex gap-1 p-2 border-b border-gray-200 dark:border-gray-700">
+        <button
+          type="button"
+          [class]="buttonClasses()"
+          [disabled]="!hasTargetSelection()"
+          (click)="moveTop('target')"
+          title="Move to top"
+        >
+          <lucide-icon [img]="moveTopIcon" class="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          [class]="buttonClasses()"
+          [disabled]="!hasTargetSelection()"
+          (click)="moveUp('target')"
+          title="Move up"
+        >
+          <lucide-icon [img]="moveUpIcon" class="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          [class]="buttonClasses()"
+          [disabled]="!hasTargetSelection()"
+          (click)="moveDown('target')"
+          title="Move down"
+        >
+          <lucide-icon [img]="moveDownIcon" class="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          [class]="buttonClasses()"
+          [disabled]="!hasTargetSelection()"
+          (click)="moveBottom('target')"
+          title="Move to bottom"
+        >
+          <lucide-icon [img]="moveBottomIcon" class="w-4 h-4" />
+        </button>
+      </div>
+    }
+
+    <!-- Target List Items -->
+    <ul
+      [class]="listClasses()"
+      [style.height]="listHeight()"
+      role="listbox"
+      aria-multiselectable="true"
+    >
+      @if (filteredTarget().length === 0) {
+        <li class="px-3 py-8 text-center text-gray-500 dark:text-gray-400">No items selected</li>
+      } @else {
+        @for (item of filteredTarget(); track $index; let i = $index) {
+          <li
+            [class]="getItemClasses(item, i, 'target')"
+            [attr.aria-selected]="isTargetSelected(item)"
+            role="option"
+            (click)="onTargetItemClick($event, item)"
+          >
+            @if (itemTemplate(); as template) {
+              <ng-container
+                [ngTemplateOutlet]="template"
+                [ngTemplateOutletContext]="getItemContext(item, i, 'target')"
+              />
+            } @else {
+              <span class="text-gray-900 dark:text-gray-100">{{ item }}</span>
+            }
+          </li>
+        }
+      }
+    </ul>
+  </div>
+</div>

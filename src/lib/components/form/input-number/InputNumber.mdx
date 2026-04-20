@@ -1,0 +1,33 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as InputNumberStories from './input-number.stories';
+
+<Meta of={InputNumberStories} />
+
+<Title />
+
+<Subtitle>Campo de entrada numérica con soporte para formato, moneda y botones de incremento.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiInputNumberComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-input-number
+  [(ngModel)]="quantity"
+  label="Cantidad"
+></ui-input-number>
+```
+
+<Canvas of={InputNumberStories.Default} />
+
+## API
+
+<ArgTypes of={InputNumberStories} />
+
+## Todas las Stories
+
+<Stories />

@@ -1,0 +1,115 @@
+<div [class]="menubarClasses()" role="menubar">
+  <!-- Start Content -->
+  @if (startTemplate(); as template) {
+    <div class="flex items-center mr-4">
+      <ng-container [ngTemplateOutlet]="template" />
+    </div>
+  }
+
+  <!-- Menu Items -->
+  <div class="flex items-center gap-1 flex-1">
+    @for (item of visibleItems(); track trackByItem($index, item)) {
+      <div class="relative menubar-item">
+        @if (itemTemplate(); as template) {
+          <ng-container
+            [ngTemplateOutlet]="template"
+            [ngTemplateOutletContext]="{ $implicit: item, active: isActive(item) }"
+          />
+        } @else if (item.url) {
+          <a
+            [href]="item.url"
+            [target]="item.target || '_self'"
+            [class]="getItemClasses(item)"
+            [attr.aria-disabled]="item.disabled"
+            role="menuitem"
+            (click)="onItemClick($event, item)"
+          >
+            @if (item.icon) {
+              <lucide-icon [img]="item.icon" class="w-4 h-4" />
+            }
+            <span>{{ item.label }}</span>
+            @if (item.items && item.items.length > 0) {
+              <lucide-icon
+                [img]="chevronIcon"
+                class="w-4 h-4 transition-transform"
+                [class.rotate-180]="isActive(item)"
+              />
+            }
+          </a>
+        } @else {
+          <button
+            type="button"
+            [class]="getItemClasses(item)"
+            [disabled]="item.disabled"
+            role="menuitem"
+            [attr.aria-expanded]="isActive(item)"
+            [attr.aria-haspopup]="item.items && item.items.length > 0"
+            (click)="onItemClick($event, item)"
+          >
+            @if (item.icon) {
+              <lucide-icon [img]="item.icon" class="w-4 h-4" />
+            }
+            <span>{{ item.label }}</span>
+            @if (item.items && item.items.length > 0) {
+              <lucide-icon
+                [img]="chevronIcon"
+                class="w-4 h-4 transition-transform"
+                [class.rotate-180]="isActive(item)"
+              />
+            }
+          </button>
+        }
+
+        <!-- Dropdown Menu -->
+        @if (item.items && item.items.length > 0 && isActive(item)) {
+          <div
+            class="absolute top-full left-0 mt-1 min-w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg py-1 z-50"
+            role="menu"
+          >
+            @for (subitem of item.items; track trackByItem($index, subitem)) {
+              @if (subitem.visible !== false) {
+                @if (subitem.separator) {
+                  <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+                } @else if (subitem.url) {
+                  <a
+                    [href]="subitem.url"
+                    [target]="subitem.target || '_self'"
+                    [class]="getSubItemClasses(subitem)"
+                    [attr.aria-disabled]="subitem.disabled"
+                    role="menuitem"
+                    (click)="onSubItemClick($event, subitem)"
+                  >
+                    @if (subitem.icon) {
+                      <lucide-icon [img]="subitem.icon" class="w-4 h-4" />
+                    }
+                    <span>{{ subitem.label }}</span>
+                  </a>
+                } @else {
+                  <button
+                    type="button"
+                    [class]="getSubItemClasses(subitem)"
+                    [disabled]="subitem.disabled"
+                    role="menuitem"
+                    (click)="onSubItemClick($event, subitem)"
+                  >
+                    @if (subitem.icon) {
+                      <lucide-icon [img]="subitem.icon" class="w-4 h-4" />
+                    }
+                    <span>{{ subitem.label }}</span>
+                  </button>
+                }
+              }
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- End Content -->
+  @if (endTemplate(); as template) {
+    <div class="flex items-center ml-4">
+      <ng-container [ngTemplateOutlet]="template" />
+    </div>
+  }
+</div>

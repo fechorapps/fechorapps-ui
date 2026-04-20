@@ -1,0 +1,60 @@
+<div
+  [class]="
+    'divide-y divide-gray-200 dark:divide-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden ' +
+    styleClass()
+  "
+>
+  @for (tab of tabs(); track $index) {
+    <div>
+      <!-- Header -->
+      <button
+        type="button"
+        [class]="
+          'w-full flex items-center justify-between p-4 text-left font-medium transition-colors ' +
+          (tab.disabled()
+            ? 'opacity-50 cursor-not-allowed bg-gray-50 dark:bg-gray-800'
+            : isOpen($index)
+              ? 'bg-gray-50 dark:bg-gray-800'
+              : 'hover:bg-gray-50 dark:hover:bg-gray-800') +
+          ' ' +
+          tab.headerStyleClass()
+        "
+        [disabled]="tab.disabled()"
+        (click)="toggle($index)"
+        [attr.aria-expanded]="isOpen($index)"
+      >
+        <span>{{ tab.header() }}</span>
+        <svg
+          class="w-5 h-5 transition-transform duration-200"
+          [class.rotate-180]="isOpen($index)"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </button>
+
+      <!-- Content -->
+      @if (isOpen($index)) {
+        <div
+          [class]="'p-4 border-t border-gray-200 dark:border-gray-700 ' + tab.contentStyleClass()"
+        >
+          <ng-container
+            [ngTemplateOutlet]="tabContent"
+            [ngTemplateOutletContext]="{ $implicit: tab }"
+          />
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<ng-template #tabContent let-tab>
+  <ng-content select="[accordionContent]" />
+</ng-template>

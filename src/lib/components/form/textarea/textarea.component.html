@@ -1,0 +1,50 @@
+<div [class]="wrapperClasses()">
+  <!-- Label -->
+  @if (label()) {
+    <label [for]="inputId()" [class]="labelClasses()">
+      {{ label() }}
+    </label>
+  }
+
+  <!-- Textarea -->
+  <textarea
+    [class]="textareaClasses()"
+    [placeholder]="placeholder()"
+    [disabled]="disabled()"
+    [readonly]="readonly()"
+    [value]="value()"
+    [rows]="rows()"
+    [name]="name()"
+    [id]="inputId()"
+    [attr.maxlength]="maxLength()"
+    [attr.aria-invalid]="invalid()"
+    [attr.aria-describedby]="helpText() ? inputId() + '-help' : null"
+    (focus)="handleFocus($event)"
+    (blur)="handleBlur($event)"
+    (input)="handleInput($event)"
+  ></textarea>
+
+  <!-- Footer -->
+  @if (helpText() || showCount()) {
+    <div class="flex justify-between items-center mt-1.5">
+      <!-- Help text -->
+      @if (helpText()) {
+        <p [id]="inputId() + '-help'" [class]="helpTextClasses()">
+          {{ helpText() }}
+        </p>
+      } @else {
+        <span></span>
+      }
+
+      <!-- Character count -->
+      @if (showCount()) {
+        <span class="text-xs text-gray-400">
+          {{ characterCount() }}
+          @if (maxLength()) {
+            / {{ maxLength() }}
+          }
+        </span>
+      }
+    </div>
+  }
+</div>

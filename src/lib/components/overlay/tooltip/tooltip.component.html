@@ -1,0 +1,18 @@
+<div
+  class="relative inline-block"
+  (mouseenter)="show()"
+  (mouseleave)="hide()"
+  (focus)="show()"
+  (blur)="hide()"
+>
+  <!-- Target Element -->
+  <ng-content />
+
+  <!-- Tooltip -->
+  @if (text()) {
+    <div [class]="tooltipClasses()" [class]="positionClasses()" role="tooltip">
+      {{ text() }}
+      <div [class]="arrowClasses()"></div>
+    </div>
+  }
+</div>

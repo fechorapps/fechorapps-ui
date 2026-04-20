@@ -1,0 +1,11 @@
+<div [class]="dividerClasses()" role="separator">
+  @if (showLeftLine()) {
+    <div [class]="lineClasses()"></div>
+  }
+
+  <ng-content />
+
+  @if (showRightLine()) {
+    <div [class]="lineClasses()"></div>
+  }
+</div>

@@ -1,0 +1,177 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as InputTextStories from './input-text.stories';
+
+<Meta of={InputTextStories} />
+
+<Title />
+
+<Subtitle>Componente de entrada de texto con soporte para variantes, iconos, validación y etiquetas flotantes.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiInputTextComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-input-text
+  label="Nombre"
+  placeholder="Ingresa tu nombre"
+  [(ngModel)]="name"
+></ui-input-text>
+```
+
+<Canvas of={InputTextStories.WithLabel} />
+
+## API
+
+<ArgTypes of={InputTextStories} />
+
+## Variantes
+
+<Canvas of={InputTextStories.AllVariants} />
+
+| Variante | Uso |
+|----------|-----|
+| `default` | Estilo estándar con borde |
+| `filled` | Fondo gris, sin borde visible |
+| `outlined` | Énfasis en el borde |
+
+## Tamaños
+
+<Canvas of={InputTextStories.AllSizes} />
+
+## Con Iconos
+
+<Canvas of={InputTextStories.IconExamples} />
+
+```typescript
+import { User, Mail, Lock, Search } from 'lucide-angular';
+
+// En el componente
+readonly userIcon = User;
+readonly mailIcon = Mail;
+```
+
+```html
+<!-- Icono a la izquierda -->
+<ui-input-text [icon]="userIcon" label="Usuario"></ui-input-text>
+
+<!-- Icono a la derecha -->
+<ui-input-text [iconEnd]="searchIcon" placeholder="Buscar..."></ui-input-text>
+```
+
+## Estados
+
+<Canvas of={InputTextStories.AllStates} />
+
+### Disabled
+
+```html
+<ui-input-text [disabled]="true" label="Deshabilitado"></ui-input-text>
+```
+
+### Invalid
+
+```html
+<ui-input-text
+  [invalid]="true"
+  label="Email"
+  helpText="Por favor ingresa un email válido"
+></ui-input-text>
+```
+
+## Etiquetas Flotantes
+
+<Canvas of={InputTextStories.FloatLabelExamples} />
+
+```html
+<!-- Etiqueta normal -->
+<ui-input-text label="Nombre" floatLabel="never"></ui-input-text>
+
+<!-- Flota al enfocar -->
+<ui-input-text label="Nombre" floatLabel="auto"></ui-input-text>
+
+<!-- Siempre flotando -->
+<ui-input-text label="Nombre" floatLabel="always"></ui-input-text>
+```
+
+## Tipos de Input
+
+```html
+<ui-input-text type="text"></ui-input-text>
+<ui-input-text type="email"></ui-input-text>
+<ui-input-text type="password"></ui-input-text>
+<ui-input-text type="number"></ui-input-text>
+<ui-input-text type="tel"></ui-input-text>
+```
+
+---
+
+## Ejemplos de Uso Real
+
+### Formulario de Login
+
+<Canvas of={InputTextStories.LoginForm} />
+
+### Formulario de Registro
+
+<Canvas of={InputTextStories.RegistrationForm} />
+
+### Barra de Búsqueda
+
+<Canvas of={InputTextStories.SearchBar} />
+
+### Validación
+
+<Canvas of={InputTextStories.ValidationExample} />
+
+---
+
+## Integración con Formularios
+
+### Template-driven Forms
+
+```html
+<ui-input-text
+  [(ngModel)]="email"
+  name="email"
+  label="Email"
+  [invalid]="!isValid"
+  helpText="Ingresa un email válido"
+></ui-input-text>
+```
+
+### Reactive Forms
+
+```typescript
+form = new FormGroup({
+  email: new FormControl('', [Validators.required, Validators.email])
+});
+```
+
+```html
+<ui-input-text
+  formControlName="email"
+  label="Email"
+  [invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+  [helpText]="form.get('email')?.errors?.['email'] ? 'Email inválido' : ''"
+></ui-input-text>
+```
+
+---
+
+## Accesibilidad
+
+- Labels asociados correctamente con `for`/`id`
+- Estados `disabled` y `invalid` reflejados en atributos ARIA
+- `aria-describedby` para texto de ayuda
+- Focus visible con anillo de enfoque
+
+---
+
+## Todas las Stories
+
+<Stories />

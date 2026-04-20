@@ -1,0 +1,33 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as InputSwitchStories from './input-switch.stories';
+
+<Meta of={InputSwitchStories} />
+
+<Title />
+
+<Subtitle>Switch/toggle para activar o desactivar opciones binarias.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiInputSwitchComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-input-switch
+  [(ngModel)]="enabled"
+  label="Activar notificaciones"
+></ui-input-switch>
+```
+
+<Canvas of={InputSwitchStories.Default} />
+
+## API
+
+<ArgTypes of={InputSwitchStories} />
+
+## Todas las Stories
+
+<Stories />

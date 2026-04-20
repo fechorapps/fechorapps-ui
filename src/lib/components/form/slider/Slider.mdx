@@ -1,0 +1,35 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as SliderStories from './slider.stories';
+
+<Meta of={SliderStories} />
+
+<Title />
+
+<Subtitle>Control deslizante para seleccionar valores numéricos en un rango.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiSliderComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-slider
+  [(ngModel)]="value"
+  [min]="0"
+  [max]="100"
+  label="Volumen"
+></ui-slider>
+```
+
+<Canvas of={SliderStories.Default} />
+
+## API
+
+<ArgTypes of={SliderStories} />
+
+## Todas las Stories
+
+<Stories />

@@ -1,0 +1,84 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introduction" />
+
+# @appcordion/ui
+
+Sistema de diseño para aplicaciones Angular, construido con **Tailwind CSS v4** y patrones modernos de Angular.
+
+## Instalación
+
+La biblioteca está incluida en el monorepo de Appcordion. Para usarla:
+
+```typescript
+import {
+  UiButtonComponent,
+  UiCardComponent,
+  UiInputTextComponent,
+  UiAutoCompleteComponent
+} from '@appcordion/ui';
+```
+
+## Componentes Disponibles
+
+| Componente | Descripción |
+|------------|-------------|
+| **UiButton** | Botón con variantes, tamaños, iconos y estados |
+| **UiCard** | Tarjeta versátil con header, footer y slots de contenido |
+| **UiInputText** | Campo de texto con variantes, iconos y etiquetas flotantes |
+| **UiAutoComplete** | Autocompletado con sugerencias en tiempo real |
+
+## Características
+
+- **Standalone Components** - Sin necesidad de módulos
+- **Signal Inputs** - API moderna con `input()` y `output()`
+- **OnPush** - Optimizado para rendimiento
+- **Dark Mode** - Soporte completo con Tailwind `dark:`
+- **Temas Dinámicos** - Colores personalizables via CSS custom properties
+- **Accesibilidad** - Focus visible, ARIA labels
+
+## Temas de Color
+
+Los componentes usan CSS custom properties para theming dinámico:
+
+```html
+<html data-theme="blue">   <!-- Tema azul (default) -->
+<html data-theme="emerald"> <!-- Tema verde -->
+<html data-theme="violet">  <!-- Tema violeta -->
+<html data-theme="amber">   <!-- Tema ámbar -->
+<html data-theme="rose">    <!-- Tema rosa -->
+```
+
+## Modo Oscuro
+
+El modo oscuro se activa con la clase `dark` en el elemento raíz:
+
+```html
+<html class="dark">
+```
+
+## Uso
+
+```html
+<!-- Botón primario -->
+<ui-button variant="primary">Guardar</ui-button>
+
+<!-- Tarjeta con título -->
+<ui-card title="Mi Tarjeta" subtitle="Subtítulo opcional">
+  <p>Contenido aquí</p>
+</ui-card>
+
+<!-- Campo de texto con icono -->
+<ui-input-text
+  [icon]="mailIcon"
+  label="Email"
+  placeholder="tu@email.com"
+></ui-input-text>
+
+<!-- Autocompletado -->
+<ui-autocomplete
+  [suggestions]="suggestions"
+  (completeMethod)="search($event)"
+  placeholder="Buscar..."
+></ui-autocomplete>
+```

@@ -1,0 +1,104 @@
+<!-- Wrapper -->
+<div #containerEl [class]="wrapperClasses()" class="relative">
+  <!-- Label -->
+  @if (label()) {
+    <label [attr.for]="inputId()" [class]="labelClasses()">
+      {{ label() }}
+    </label>
+  }
+
+  <!-- Trigger -->
+  <button
+    type="button"
+    [attr.id]="inputId()"
+    [disabled]="disabled()"
+    [class]="triggerClasses()"
+    (click)="togglePanel()"
+    (focus)="handleFocus($event)"
+    (blur)="handleBlur($event)"
+  >
+    <span [class]="value() ? 'text-gray-900 dark:text-white' : 'text-gray-400'">
+      {{ displayLabel() || placeholder() }}
+    </span>
+    <lucide-icon
+      [img]="chevronDownIcon"
+      [size]="iconSize()"
+      class="text-gray-400 transition-transform duration-200"
+      [class.rotate-180]="panelVisible()"
+    />
+  </button>
+
+  <!-- Panel -->
+  @if (panelVisible()) {
+    <div
+      class="absolute z-50 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden"
+    >
+      <div class="flex">
+        <!-- Level 0 (Root options) -->
+        <div
+          class="min-w-48 max-h-64 overflow-y-auto border-r border-gray-200 dark:border-gray-700 last:border-r-0"
+        >
+          @for (option of getOptionsAtLevel(0); track getOptionLabel(option)) {
+            <div [class]="getOptionClasses(option, 0)" (click)="selectOption(option, 0)">
+              <span>{{ getOptionLabel(option) }}</span>
+              @if (hasChildren(option)) {
+                <lucide-icon [img]="chevronRightIcon" [size]="14" class="text-gray-400" />
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Level 1 -->
+        @if (expandedPath().length >= 1) {
+          <div
+            class="min-w-48 max-h-64 overflow-y-auto border-r border-gray-200 dark:border-gray-700 last:border-r-0"
+          >
+            @for (option of getOptionsAtLevel(1); track getOptionLabel(option)) {
+              <div [class]="getOptionClasses(option, 1)" (click)="selectOption(option, 1)">
+                <span>{{ getOptionLabel(option) }}</span>
+                @if (hasChildren(option)) {
+                  <lucide-icon [img]="chevronRightIcon" [size]="14" class="text-gray-400" />
+                }
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Level 2 -->
+        @if (expandedPath().length >= 2) {
+          <div
+            class="min-w-48 max-h-64 overflow-y-auto border-r border-gray-200 dark:border-gray-700 last:border-r-0"
+          >
+            @for (option of getOptionsAtLevel(2); track getOptionLabel(option)) {
+              <div [class]="getOptionClasses(option, 2)" (click)="selectOption(option, 2)">
+                <span>{{ getOptionLabel(option) }}</span>
+                @if (hasChildren(option)) {
+                  <lucide-icon [img]="chevronRightIcon" [size]="14" class="text-gray-400" />
+                }
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Level 3 -->
+        @if (expandedPath().length >= 3) {
+          <div class="min-w-48 max-h-64 overflow-y-auto">
+            @for (option of getOptionsAtLevel(3); track getOptionLabel(option)) {
+              <div [class]="getOptionClasses(option, 3)" (click)="selectOption(option, 3)">
+                <span>{{ getOptionLabel(option) }}</span>
+                @if (hasChildren(option)) {
+                  <lucide-icon [img]="chevronRightIcon" [size]="14" class="text-gray-400" />
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Help Text -->
+  @if (helpText()) {
+    <p [class]="helpTextClasses()">{{ helpText() }}</p>
+  }
+</div>

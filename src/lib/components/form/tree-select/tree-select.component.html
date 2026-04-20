@@ -1,0 +1,117 @@
+<!-- Wrapper -->
+<div #containerEl [class]="wrapperClasses()" class="relative">
+  <!-- Label -->
+  @if (label()) {
+    <label [attr.for]="inputId()" [class]="labelClasses()">
+      {{ label() }}
+    </label>
+  }
+
+  <!-- Trigger -->
+  <button
+    type="button"
+    [attr.id]="inputId()"
+    [disabled]="disabled()"
+    [class]="triggerClasses()"
+    (click)="togglePanel()"
+    (focus)="handleFocus($event)"
+    (blur)="handleBlur($event)"
+  >
+    <span [class]="value() ? 'text-gray-900 dark:text-white' : 'text-gray-400'">
+      {{ displayLabel() || placeholder() }}
+    </span>
+    <lucide-icon
+      [img]="chevronDownIcon"
+      [size]="iconSize()"
+      class="text-gray-400 transition-transform duration-200"
+      [class.rotate-180]="panelVisible()"
+    />
+  </button>
+
+  <!-- Panel -->
+  @if (panelVisible()) {
+    <div
+      class="absolute z-50 mt-1 w-full min-w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden"
+    >
+      <!-- Filter -->
+      @if (filter()) {
+        <div class="p-2 border-b border-gray-200 dark:border-gray-700">
+          <input
+            type="text"
+            [placeholder]="filterPlaceholder()"
+            [value]="filterValue()"
+            (input)="onFilterInput($event)"
+            class="w-full px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-primary-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+          />
+        </div>
+      }
+
+      <!-- Tree -->
+      <div class="max-h-64 overflow-y-auto p-2">
+        <ng-container
+          *ngTemplateOutlet="treeTemplate; context: { $implicit: filteredOptions(), level: 0 }"
+        ></ng-container>
+      </div>
+    </div>
+  }
+
+  <!-- Help Text -->
+  @if (helpText()) {
+    <p [class]="helpTextClasses()">{{ helpText() }}</p>
+  }
+</div>
+
+<!-- Tree Template -->
+<ng-template #treeTemplate let-nodes let-level="level">
+  @for (node of nodes; track node.key) {
+    <div [style.padding-left.px]="level * 20">
+      <div [class]="getNodeClasses(node)" (click)="selectNode(node, $event)">
+        <!-- Expand/Collapse Toggle -->
+        @if (node.children && node.children.length > 0) {
+          <button
+            type="button"
+            class="p-0.5 hover:bg-gray-200 dark:hover:bg-gray-600 rounded"
+            (click)="toggleNode(node, $event)"
+          >
+            <lucide-icon
+              [img]="chevronRightIcon"
+              [size]="14"
+              class="text-gray-400 transition-transform duration-200"
+              [class.rotate-90]="isExpanded(node)"
+            />
+          </button>
+        } @else {
+          <span class="w-5"></span>
+        }
+
+        <!-- Checkbox (for checkbox mode) -->
+        @if (selectionMode() === 'checkbox') {
+          <span
+            class="w-4 h-4 border rounded flex items-center justify-center transition-colors"
+            [class]="
+              getCheckboxState(node) === 'unchecked'
+                ? 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900'
+                : 'border-primary-500 bg-primary-500'
+            "
+          >
+            @if (getCheckboxState(node) === 'checked') {
+              <lucide-icon [img]="checkIcon" [size]="12" class="text-white" />
+            } @else if (getCheckboxState(node) === 'indeterminate') {
+              <lucide-icon [img]="minusIcon" [size]="12" class="text-white" />
+            }
+          </span>
+        }
+
+        <!-- Label -->
+        <span class="flex-1">{{ node.label }}</span>
+      </div>
+
+      <!-- Children -->
+      @if (node.children && node.children.length > 0 && isExpanded(node)) {
+        <ng-container
+          *ngTemplateOutlet="treeTemplate; context: { $implicit: node.children, level: level + 1 }"
+        ></ng-container>
+      }
+    </div>
+  }
+</ng-template>

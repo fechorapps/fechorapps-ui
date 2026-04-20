@@ -1,0 +1,129 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as InputMaskStories from './input-mask.stories';
+
+<Meta of={InputMaskStories} />
+
+<Title />
+
+<Subtitle>Componente de entrada con máscara para datos formateados como teléfonos, tarjetas de crédito, fechas, etc.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiInputMaskComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-input-mask
+  label="Teléfono"
+  maskType="phone"
+  [(ngModel)]="phone"
+></ui-input-mask>
+```
+
+<Canvas of={InputMaskStories.Default} />
+
+## API
+
+<ArgTypes of={InputMaskStories} />
+
+## Tipos de Máscara Predefinidos
+
+| Tipo | Formato | Ejemplo |
+|------|---------|---------|
+| `phone` | (999) 999-9999 | (555) 123-4567 |
+| `phone-mx` | +52 (99) 9999-9999 | +52 (55) 1234-5678 |
+| `credit-card` | 9999 9999 9999 9999 | 4111 1111 1111 1111 |
+| `date` | 99/99/9999 | 25/12/2024 |
+| `time` | 99:99 | 14:30 |
+| `ssn` | 999-99-9999 | 123-45-6789 |
+| `zip` | 99999 | 12345 |
+
+<Canvas of={InputMaskStories.Variants} />
+
+## Máscara Personalizada
+
+```html
+<ui-input-mask
+  label="Placa"
+  mask="aaa-9999"
+  placeholder="ABC-1234"
+></ui-input-mask>
+```
+
+### Caracteres de Máscara
+
+| Carácter | Descripción |
+|----------|-------------|
+| `9` | Solo dígitos (0-9) |
+| `a` | Solo letras (a-z, A-Z) |
+| `*` | Alfanumérico (letras y números) |
+
+<Canvas of={InputMaskStories.CustomMask} />
+
+## Tamaños
+
+<Canvas of={InputMaskStories.Sizes} />
+
+## Con Icono
+
+<Canvas of={InputMaskStories.WithIcon} />
+
+## Estados
+
+### Deshabilitado
+
+<Canvas of={InputMaskStories.Disabled} />
+
+### Inválido
+
+<Canvas of={InputMaskStories.Invalid} />
+
+## Ejemplos de Uso
+
+### Formulario de Pago
+
+<Canvas of={InputMaskStories.PaymentForm} />
+
+### Formulario de Contacto
+
+<Canvas of={InputMaskStories.ContactForm} />
+
+---
+
+## Integración con Formularios
+
+### Template-driven Forms
+
+```html
+<ui-input-mask
+  [(ngModel)]="phone"
+  maskType="phone"
+  label="Teléfono"
+></ui-input-mask>
+```
+
+### Reactive Forms
+
+```typescript
+form = new FormGroup({
+  phone: new FormControl('', [Validators.required])
+});
+```
+
+```html
+<ui-input-mask
+  formControlName="phone"
+  maskType="phone"
+  label="Teléfono"
+  [invalid]="form.get('phone')?.invalid && form.get('phone')?.touched"
+></ui-input-mask>
+```
+
+---
+
+## Todas las Stories
+
+<Stories />

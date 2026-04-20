@@ -1,0 +1,13 @@
+@if (messages().length > 0) {
+  <div [class]="containerClasses()">
+    @for (message of messages(); track message.id ?? $index) {
+      <ui-message
+        [severity]="message.severity"
+        [text]="getMessageText(message)"
+        [closable]="message.closable ?? closable()"
+        [icon]="message.icon ?? showIcon()"
+        (onClose)="closeMessage($index)"
+      />
+    }
+  </div>
+}

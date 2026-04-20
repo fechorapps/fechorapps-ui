@@ -1,0 +1,38 @@
+<div [class]="containerClasses()">
+  <!-- Meter Bar -->
+  <div [class]="meterClasses()">
+    @for (item of items(); track item.label) {
+      <div
+        class="transition-all duration-300"
+        [class]="item.color"
+        [style.width.%]="orientation() === 'horizontal' ? item.percentage : 100"
+        [style.height.%]="orientation() === 'vertical' ? item.percentage : 100"
+      ></div>
+    }
+  </div>
+
+  <!-- Legend -->
+  <div
+    class="flex flex-wrap gap-4"
+    [class.justify-center]="orientation() === 'horizontal'"
+    [class.flex-col]="orientation() === 'vertical'"
+  >
+    @for (item of items(); track item.label) {
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full" [class]="item.color"></span>
+        @if (item.icon) {
+          <lucide-icon
+            [img]="item.icon"
+            class="w-4 h-4 text-gray-500 dark:text-gray-400"
+          ></lucide-icon>
+        }
+        <span class="text-sm text-gray-700 dark:text-gray-300">
+          {{ item.label }}
+        </span>
+        <span class="text-sm font-medium text-gray-900 dark:text-white">
+          {{ item.value }}
+        </span>
+      </div>
+    }
+  </div>
+</div>

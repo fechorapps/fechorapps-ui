@@ -1,0 +1,115 @@
+/* ==========================================================================
+   Layout Variables & Structure
+   ========================================================================== */
+
+:root {
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 80px;
+  --topbar-height: 70px;
+  --sidebar-transition-duration: 0.3s;
+  --sidebar-transition-timing: ease;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  transition:
+    width var(--sidebar-transition-duration) var(--sidebar-transition-timing),
+    transform var(--sidebar-transition-duration) var(--sidebar-transition-timing);
+}
+
+.main-content {
+  margin-left: var(--sidebar-width);
+  padding-top: var(--topbar-height);
+  transition: margin-left 0.3s ease;
+}
+
+.topbar {
+  height: var(--topbar-height);
+  left: var(--sidebar-width);
+  transition: left 0.3s ease;
+}
+
+/* ==========================================================================
+   Collapsed Sidebar (Desktop)
+   ========================================================================== */
+
+.layout-static-inactive .sidebar {
+  width: var(--sidebar-collapsed-width);
+}
+
+.layout-static-inactive .main-content {
+  margin-left: var(--sidebar-collapsed-width);
+}
+
+.layout-static-inactive .topbar {
+  left: var(--sidebar-collapsed-width);
+}
+
+.layout-static-inactive .sidebar .sidebar-logo-text,
+.layout-static-inactive .sidebar .menu-item-label,
+.layout-static-inactive .sidebar .menu-item-badge,
+.layout-static-inactive .sidebar .submenu,
+.layout-static-inactive .sidebar .menu-toggle-icon,
+.layout-static-inactive .sidebar .sidebar-footer-text {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: opacity 0.2s ease, width 0.2s ease;
+}
+
+.layout-static-inactive .sidebar .menu-item a {
+  justify-content: center;
+  padding: 0.75rem;
+}
+
+.layout-static-inactive .sidebar .menu-item-icon {
+  margin: 0;
+}
+
+.layout-static-inactive .sidebar .sidebar-header {
+  justify-content: center;
+  padding: 0 0.75rem;
+}
+
+/* ==========================================================================
+   Mobile Responsive
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+    width: var(--sidebar-width) !important;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+  }
+
+  .topbar {
+    left: 0 !important;
+  }
+
+  .layout-static-inactive .sidebar .sidebar-logo-text,
+  .layout-static-inactive .sidebar .menu-item-label,
+  .layout-static-inactive .sidebar .menu-item-badge,
+  .layout-static-inactive .sidebar .menu-toggle-icon,
+  .layout-static-inactive .sidebar .sidebar-footer-text {
+    opacity: 1;
+    width: auto;
+  }
+
+  .layout-static-inactive .sidebar .menu-item a {
+    justify-content: flex-start;
+    padding: 0.625rem 0.75rem;
+  }
+
+  .layout-static-inactive .sidebar .sidebar-header {
+    justify-content: flex-start;
+    padding: 0 1.25rem;
+  }
+}

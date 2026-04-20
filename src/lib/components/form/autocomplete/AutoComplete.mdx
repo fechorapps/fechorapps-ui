@@ -1,0 +1,244 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as AutoCompleteStories from './autocomplete.stories';
+
+<Meta of={AutoCompleteStories} />
+
+<Title />
+
+<Subtitle>Componente de autocompletado que proporciona sugerencias en tiempo real mientras el usuario escribe.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiAutoCompleteComponent, AutoCompleteSuggestion } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```typescript
+// Definir sugerencias
+suggestions: AutoCompleteSuggestion[] = [];
+
+// Método de búsqueda
+search(event: AutoCompleteCompleteEvent) {
+  this.suggestions = this.items.filter(item =>
+    item.label.toLowerCase().includes(event.query.toLowerCase())
+  );
+}
+```
+
+```html
+<ui-autocomplete
+  [(ngModel)]="selectedItem"
+  [suggestions]="suggestions"
+  (completeMethod)="search($event)"
+  placeholder="Buscar..."
+></ui-autocomplete>
+```
+
+<Canvas of={AutoCompleteStories.Default} />
+
+## API
+
+<ArgTypes of={AutoCompleteStories} />
+
+## Variantes
+
+<Canvas of={AutoCompleteStories.AllVariants} />
+
+## Tamaños
+
+<Canvas of={AutoCompleteStories.AllSizes} />
+
+## Modo Dropdown
+
+Muestra un botón para abrir el panel de sugerencias:
+
+<Canvas of={AutoCompleteStories.WithDropdown} />
+
+```html
+<ui-autocomplete
+  [dropdown]="true"
+  [suggestions]="suggestions"
+  (completeMethod)="search($event)"
+></ui-autocomplete>
+```
+
+## Selección Múltiple
+
+Permite seleccionar varios items:
+
+<Canvas of={AutoCompleteStories.MultipleSelection} />
+
+```html
+<ui-autocomplete
+  [multiple]="true"
+  [suggestions]="suggestions"
+  (completeMethod)="search($event)"
+></ui-autocomplete>
+```
+
+## Forzar Selección
+
+Obliga al usuario a seleccionar un valor de la lista:
+
+<Canvas of={AutoCompleteStories.ForceSelection} />
+
+```html
+<ui-autocomplete
+  [forceSelection]="true"
+  [suggestions]="suggestions"
+  (completeMethod)="search($event)"
+></ui-autocomplete>
+```
+
+## Estados
+
+<Canvas of={AutoCompleteStories.AllStates} />
+
+### Loading
+
+```html
+<ui-autocomplete [loading]="isSearching"></ui-autocomplete>
+```
+
+### Disabled
+
+```html
+<ui-autocomplete [disabled]="true"></ui-autocomplete>
+```
+
+### Invalid
+
+```html
+<ui-autocomplete [invalid]="true" helpText="Campo requerido"></ui-autocomplete>
+```
+
+## Con Icono Personalizado
+
+<Canvas of={AutoCompleteStories.WithCustomIcon} />
+
+```typescript
+import { MapPin } from 'lucide-angular';
+
+readonly locationIcon = MapPin;
+```
+
+```html
+<ui-autocomplete [icon]="locationIcon"></ui-autocomplete>
+```
+
+---
+
+## Ejemplos de Uso Real
+
+### Búsqueda de Universidad
+
+<Canvas of={AutoCompleteStories.UniversitySearch} />
+
+### Selector de Materias
+
+<Canvas of={AutoCompleteStories.SubjectSelector} />
+
+### Búsqueda de Examen
+
+<Canvas of={AutoCompleteStories.ExamSearch} />
+
+### Búsqueda Asíncrona
+
+<Canvas of={AutoCompleteStories.AsyncSearch} />
+
+---
+
+## Interfaz de Sugerencias
+
+```typescript
+interface AutoCompleteSuggestion {
+  label: string;      // Texto a mostrar
+  value: unknown;     // Valor asociado
+  disabled?: boolean; // Si está deshabilitado
+  [key: string]: unknown; // Campos adicionales
+}
+```
+
+## Eventos
+
+| Evento | Tipo | Descripción |
+|--------|------|-------------|
+| `completeMethod` | `AutoCompleteCompleteEvent` | Se emite cuando se debe buscar |
+| `onSelect` | `AutoCompleteSelectEvent` | Se emite al seleccionar un item |
+| `onClear` | `void` | Se emite al limpiar la selección |
+| `onShow` | `void` | Se emite al abrir el panel |
+| `onHide` | `void` | Se emite al cerrar el panel |
+
+```typescript
+interface AutoCompleteCompleteEvent {
+  query: string;
+  originalEvent: Event;
+}
+
+interface AutoCompleteSelectEvent {
+  value: AutoCompleteSuggestion;
+  originalEvent: Event;
+}
+```
+
+## Ejemplo con API
+
+```typescript
+@Component({...})
+export class MyComponent {
+  suggestions: AutoCompleteSuggestion[] = [];
+  loading = false;
+
+  async search(event: AutoCompleteCompleteEvent) {
+    this.loading = true;
+    try {
+      const response = await this.api.search(event.query);
+      this.suggestions = response.map(item => ({
+        label: item.name,
+        value: item.id
+      }));
+    } finally {
+      this.loading = false;
+    }
+  }
+}
+```
+
+```html
+<ui-autocomplete
+  [loading]="loading"
+  [suggestions]="suggestions"
+  (completeMethod)="search($event)"
+></ui-autocomplete>
+```
+
+---
+
+## Navegación por Teclado
+
+| Tecla | Acción |
+|-------|--------|
+| `↓` | Siguiente opción / Abrir panel |
+| `↑` | Opción anterior |
+| `Enter` | Seleccionar opción resaltada |
+| `Escape` | Cerrar panel |
+| `Tab` | Cerrar panel y mover foco |
+
+---
+
+## Accesibilidad
+
+- `role="combobox"` en el input
+- `role="listbox"` en el panel
+- `aria-expanded` indica estado del panel
+- `aria-selected` en la opción resaltada
+- `aria-disabled` en opciones deshabilitadas
+- Navegación completa por teclado
+
+---
+
+## Todas las Stories
+
+<Stories />

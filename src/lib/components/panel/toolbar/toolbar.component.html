@@ -1,0 +1,13 @@
+<div [class]="containerClasses()" role="toolbar">
+  <div class="flex items-center gap-2">
+    <ng-content select="[toolbarStart]" />
+  </div>
+
+  <div class="flex items-center gap-2">
+    <ng-content select="[toolbarCenter]" />
+  </div>
+
+  <div class="flex items-center gap-2">
+    <ng-content select="[toolbarEnd]" />
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="relative inline-block">
+  <!-- Trigger -->
+  <div #trigger (click)="show()">
+    <ng-content select="[trigger]" />
+  </div>
+
+  <!-- Popup -->
+  <div #popup [class]="popupClasses()" [class]="positionClasses()" role="alertdialog">
+    <!-- Arrow -->
+    <div [class]="arrowClasses()"></div>
+
+    <!-- Content -->
+    <div class="relative p-4">
+      <div class="flex items-start gap-3">
+        <lucide-icon
+          [img]="severityIcon()"
+          class="w-5 h-5 flex-shrink-0 mt-0.5"
+          [class]="severityClasses()"
+        />
+        <p class="text-sm text-gray-700 dark:text-gray-300">
+          {{ message() }}
+        </p>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-end gap-2 mt-4">
+        <button
+          type="button"
+          class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 rounded transition-colors"
+          (click)="reject()"
+        >
+          {{ rejectLabel() }}
+        </button>
+        <button type="button" [class]="acceptButtonClasses()" (click)="accept()">
+          {{ acceptLabel() }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

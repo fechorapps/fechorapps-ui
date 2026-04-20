@@ -1,0 +1,100 @@
+<div [class]="wrapperClasses()">
+  <!-- Label -->
+  @if (label()) {
+    <label [for]="inputId()" [class]="labelClasses()">
+      {{ label() }}
+    </label>
+  }
+
+  <!-- Input container -->
+  <div [class]="containerClasses()">
+    <!-- Minus button (horizontal layout) -->
+    @if (showButtons() && buttonLayout() === 'horizontal') {
+      <button
+        type="button"
+        [class]="buttonClasses()"
+        class="w-10 h-full border-r border-gray-200 dark:border-gray-700"
+        [disabled]="disabled() || !canDecrement()"
+        [class.opacity-50]="!canDecrement()"
+        (click)="decrement()"
+      >
+        <lucide-icon [img]="minusIcon" [size]="iconSize()"></lucide-icon>
+      </button>
+    }
+
+    <!-- Prefix -->
+    @if (prefix()) {
+      <span class="pl-3 text-gray-500 dark:text-gray-400 text-sm">{{ prefix() }}</span>
+    }
+
+    <!-- Input -->
+    <input
+      type="text"
+      inputmode="decimal"
+      [class]="inputClasses()"
+      [placeholder]="placeholder()"
+      [disabled]="disabled()"
+      [value]="displayValue()"
+      [name]="name()"
+      [id]="inputId()"
+      [attr.aria-invalid]="invalid()"
+      [attr.aria-describedby]="helpText() ? inputId() + '-help' : null"
+      (input)="handleInput($event)"
+      (focus)="handleFocus($event)"
+      (blur)="handleBlur($event)"
+      (keydown)="handleKeydown($event)"
+    />
+
+    <!-- Suffix -->
+    @if (suffix()) {
+      <span class="pr-3 text-gray-500 dark:text-gray-400 text-sm">{{ suffix() }}</span>
+    }
+
+    <!-- Plus button (horizontal layout) -->
+    @if (showButtons() && buttonLayout() === 'horizontal') {
+      <button
+        type="button"
+        [class]="buttonClasses()"
+        class="w-10 h-full border-l border-gray-200 dark:border-gray-700"
+        [disabled]="disabled() || !canIncrement()"
+        [class.opacity-50]="!canIncrement()"
+        (click)="increment()"
+      >
+        <lucide-icon [img]="plusIcon" [size]="iconSize()"></lucide-icon>
+      </button>
+    }
+
+    <!-- Stacked buttons -->
+    @if (showButtons() && buttonLayout() === 'stacked') {
+      <div class="flex flex-col border-l border-gray-200 dark:border-gray-700">
+        <button
+          type="button"
+          [class]="buttonClasses()"
+          class="flex-1 px-2 border-b border-gray-200 dark:border-gray-700"
+          [disabled]="disabled() || !canIncrement()"
+          [class.opacity-50]="!canIncrement()"
+          (click)="increment()"
+        >
+          <lucide-icon [img]="upIcon" [size]="iconSize() - 2"></lucide-icon>
+        </button>
+        <button
+          type="button"
+          [class]="buttonClasses()"
+          class="flex-1 px-2"
+          [disabled]="disabled() || !canDecrement()"
+          [class.opacity-50]="!canDecrement()"
+          (click)="decrement()"
+        >
+          <lucide-icon [img]="downIcon" [size]="iconSize() - 2"></lucide-icon>
+        </button>
+      </div>
+    }
+  </div>
+
+  <!-- Help text -->
+  @if (helpText()) {
+    <p [id]="inputId() + '-help'" [class]="helpTextClasses()">
+      {{ helpText() }}
+    </p>
+  }
+</div>

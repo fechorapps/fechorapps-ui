@@ -1,0 +1,30 @@
+@if (!isActive()) {
+  <!-- Display Mode -->
+  <div
+    [class]="displayClasses()"
+    (click)="activate()"
+    (keydown.enter)="activate()"
+    tabindex="0"
+    role="button"
+  >
+    <ng-content select="[inplaceDisplay]"></ng-content>
+    @if (!disabled()) {
+      <lucide-icon name="pencil" class="w-4 h-4 text-gray-400"></lucide-icon>
+    }
+  </div>
+} @else {
+  <!-- Content Mode -->
+  <div [class]="contentClasses()">
+    <ng-content select="[inplaceContent]"></ng-content>
+
+    @if (closable()) {
+      <button
+        type="button"
+        class="flex items-center justify-center w-8 h-8 rounded-md text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        (click)="deactivate()"
+      >
+        <lucide-icon name="check" class="w-4 h-4"></lucide-icon>
+      </button>
+    }
+  </div>
+}

@@ -1,0 +1,104 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as ToggleButtonStories from './toggle-button.stories';
+
+<Meta of={ToggleButtonStories} />
+
+<Title />
+
+<Subtitle>Botón que alterna entre estados encendido/apagado, ideal para acciones binarias.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiToggleButtonComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-toggle-button [(ngModel)]="isActive">
+  Activo
+</ui-toggle-button>
+```
+
+<Canvas of={ToggleButtonStories.Default} />
+
+## API
+
+<ArgTypes of={ToggleButtonStories} />
+
+## Con Icono
+
+```typescript
+import { Star } from 'lucide-angular';
+
+readonly starIcon = Star;
+```
+
+```html
+<ui-toggle-button [icon]="starIcon">
+  Favorito
+</ui-toggle-button>
+```
+
+<Canvas of={ToggleButtonStories.WithIcon} />
+
+## Solo Icono
+
+<Canvas of={ToggleButtonStories.IconOnly} />
+
+## Etiquetas On/Off
+
+```html
+<ui-toggle-button onLabel="ON" offLabel="OFF">
+</ui-toggle-button>
+```
+
+<Canvas of={ToggleButtonStories.OnOffLabels} />
+
+## Iconos On/Off
+
+```html
+<ui-toggle-button [onIcon]="checkIcon" [offIcon]="xIcon">
+</ui-toggle-button>
+```
+
+<Canvas of={ToggleButtonStories.OnOffIcons} />
+
+## Selector de Tema
+
+<Canvas of={ToggleButtonStories.ThemeToggle} />
+
+## Variantes
+
+<Canvas of={ToggleButtonStories.Variants} />
+
+## Tamaños
+
+<Canvas of={ToggleButtonStories.Sizes} />
+
+## Estados
+
+### Deshabilitado
+
+<Canvas of={ToggleButtonStories.Disabled} />
+
+## Ejemplos de Uso
+
+### Editor de Texto
+
+<Canvas of={ToggleButtonStories.TextEditor} />
+
+### Barra de Alineación
+
+<Canvas of={ToggleButtonStories.AlignmentToolbar} />
+
+### Acciones Sociales
+
+<Canvas of={ToggleButtonStories.SocialActions} />
+
+---
+
+## Todas las Stories
+
+<Stories />

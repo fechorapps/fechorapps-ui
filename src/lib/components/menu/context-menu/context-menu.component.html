@@ -1,0 +1,61 @@
+@if (visible()) {
+  <div
+    [class]="menuClasses()"
+    [style]="menuStyles()"
+    role="menu"
+    (click)="$event.stopPropagation()"
+  >
+    @for (item of visibleItems(); track trackByItem($index, item)) {
+      @if (item.separator) {
+        <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+      } @else {
+        <div class="relative" (mouseenter)="onItemMouseEnter(item)">
+          <button
+            type="button"
+            [class]="getItemClasses(item)"
+            [disabled]="item.disabled"
+            role="menuitem"
+            (click)="onItemClick($event, item)"
+          >
+            @if (item.icon) {
+              <lucide-icon [img]="item.icon" class="w-4 h-4 flex-shrink-0" />
+            }
+            <span class="flex-1">{{ item.label }}</span>
+            @if (item.items && item.items.length > 0) {
+              <lucide-icon [img]="chevronIcon" class="w-4 h-4 text-gray-400" />
+            }
+          </button>
+
+          <!-- Submenu -->
+          @if (item.items && item.items.length > 0 && isSubmenuActive(item)) {
+            <div
+              class="absolute left-full top-0 ml-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg py-1 min-w-48"
+              role="menu"
+            >
+              @for (subitem of item.items; track trackByItem($index, subitem)) {
+                @if (subitem.visible !== false) {
+                  @if (subitem.separator) {
+                    <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+                  } @else {
+                    <button
+                      type="button"
+                      [class]="getItemClasses(subitem)"
+                      [disabled]="subitem.disabled"
+                      role="menuitem"
+                      (click)="onItemClick($event, subitem)"
+                    >
+                      @if (subitem.icon) {
+                        <lucide-icon [img]="subitem.icon" class="w-4 h-4 flex-shrink-0" />
+                      }
+                      <span class="flex-1">{{ subitem.label }}</span>
+                    </button>
+                  }
+                }
+              }
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+}

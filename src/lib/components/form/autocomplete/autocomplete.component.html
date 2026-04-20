@@ -1,0 +1,137 @@
+<div [class]="wrapperClasses()">
+  <!-- Label -->
+  @if (label()) {
+    <label [for]="inputId()" [class]="labelClasses()">
+      {{ label() }}
+    </label>
+  }
+
+  <!-- Input Container -->
+  <div #containerEl [class]="containerClasses()">
+    <!-- Search Icon -->
+    @if (icon() || (!dropdown() && !multiple())) {
+      <span class="pl-3 flex items-center text-gray-400">
+        <lucide-icon [img]="icon() || searchIcon" [size]="iconSize()"></lucide-icon>
+      </span>
+    }
+
+    <!-- Multiple Selected Items -->
+    @if (multiple() && selectedItems().length > 0) {
+      <div class="flex flex-wrap gap-1 px-2 py-1">
+        @for (item of selectedItems(); track item.value) {
+          <span
+            class="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300"
+          >
+            {{ getLabel(item) }}
+            <button
+              type="button"
+              class="hover:text-primary-900 dark:hover:text-primary-100"
+              (click)="removeItem(item, $event)"
+              [attr.aria-label]="'Remove ' + getLabel(item)"
+            >
+              <lucide-icon [img]="clearIcon" [size]="12"></lucide-icon>
+            </button>
+          </span>
+        }
+      </div>
+    }
+
+    <!-- Input -->
+    <input
+      #inputEl
+      type="text"
+      [class]="inputClasses()"
+      [placeholder]="placeholder()"
+      [disabled]="disabled()"
+      [value]="query()"
+      [name]="name()"
+      [id]="inputId()"
+      autocomplete="off"
+      role="combobox"
+      [attr.aria-expanded]="panelVisible()"
+      [attr.aria-autocomplete]="'list'"
+      [attr.aria-invalid]="invalid()"
+      [attr.aria-describedby]="helpText() ? inputId() + '-help' : null"
+      (input)="onInput($event)"
+      (focus)="handleFocus($event)"
+      (blur)="handleBlur($event)"
+      (keydown)="onKeydown($event)"
+    />
+
+    <!-- Loading Spinner -->
+    @if (loading()) {
+      <span class="pr-2 flex items-center text-gray-400">
+        <lucide-icon [img]="loaderIcon" [size]="iconSize()" class="animate-spin"></lucide-icon>
+      </span>
+    }
+
+    <!-- Clear Button -->
+    @if (showClearButton() && !loading()) {
+      <button
+        type="button"
+        class="pr-2 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+        (click)="clear($event)"
+        aria-label="Clear"
+      >
+        <lucide-icon [img]="clearIcon" [size]="iconSize()"></lucide-icon>
+      </button>
+    }
+
+    <!-- Dropdown Button -->
+    @if (dropdown()) {
+      <button
+        type="button"
+        class="px-2 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors border-l border-gray-200 dark:border-gray-700 h-full"
+        (click)="toggleDropdown($event)"
+        [attr.aria-label]="panelVisible() ? 'Close dropdown' : 'Open dropdown'"
+      >
+        <lucide-icon
+          [img]="chevronIcon"
+          [size]="iconSize()"
+          class="transition-transform"
+          [class.rotate-180]="panelVisible()"
+        ></lucide-icon>
+      </button>
+    }
+
+    <!-- Dropdown Panel -->
+    @if (panelVisible()) {
+      <div [class]="panelClasses()" role="listbox">
+        @if (loading()) {
+          <div class="px-3 py-4 text-center text-gray-500 dark:text-gray-400">
+            <lucide-icon
+              [img]="loaderIcon"
+              [size]="24"
+              class="animate-spin mx-auto mb-2"
+            ></lucide-icon>
+            <p class="text-sm">Buscando...</p>
+          </div>
+        } @else if (visibleSuggestions().length === 0) {
+          <div class="px-3 py-4 text-center text-gray-500 dark:text-gray-400 text-sm">
+            {{ emptyMessage() }}
+          </div>
+        } @else {
+          @for (item of visibleSuggestions(); track item.value; let i = $index) {
+            <div
+              [class]="getItemClasses(i, item)"
+              role="option"
+              [attr.aria-selected]="i === highlightedIndex()"
+              [attr.aria-disabled]="item.disabled"
+              (click)="selectItem(item, $event)"
+              (mouseenter)="highlightedIndex.set(i)"
+            >
+              {{ getLabel(item) }}
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Help Text -->
+  @if (helpText()) {
+    <p [id]="inputId() + '-help'" [class]="helpTextClasses()">
+      {{ helpText() }}
+    </p>
+  }
+</div>

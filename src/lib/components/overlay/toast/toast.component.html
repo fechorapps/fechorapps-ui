@@ -1,0 +1,42 @@
+<div [class]="containerClasses()">
+  @for (message of messages(); track trackByFn($index, message)) {
+    <div
+      class="pointer-events-auto w-80 max-w-full border rounded-lg shadow-lg animate-slide-in"
+      [class]="getSeverityClasses(message.severity)"
+      role="alert"
+    >
+      <div class="flex items-start gap-3 p-4">
+        <!-- Icon -->
+        <lucide-icon
+          [img]="getIcon(message.severity)"
+          class="w-5 h-5 flex-shrink-0 mt-0.5"
+          [class]="getIconClasses(message.severity)"
+        />
+
+        <!-- Content -->
+        <div class="flex-1 min-w-0">
+          <p class="font-medium text-gray-900 dark:text-gray-100">
+            {{ message.summary }}
+          </p>
+          @if (message.detail) {
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+              {{ message.detail }}
+            </p>
+          }
+        </div>
+
+        <!-- Close Button -->
+        @if (message.closable !== false) {
+          <button
+            type="button"
+            class="flex-shrink-0 p-1 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+            (click)="$event.stopPropagation()"
+            aria-label="Close"
+          >
+            <lucide-icon [img]="closeIcon" class="w-4 h-4" />
+          </button>
+        }
+      </div>
+    </div>
+  }
+</div>

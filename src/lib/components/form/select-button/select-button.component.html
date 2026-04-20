@@ -1,0 +1,18 @@
+<div [class]="containerClasses()" role="group">
+  @for (option of options(); let i = $index; track option.value) {
+    <button
+      type="button"
+      [class]="getOptionClasses(option, i)"
+      [disabled]="disabled() || option.disabled"
+      [attr.aria-pressed]="isSelected(option)"
+      (click)="selectOption(option)"
+    >
+      @if (option.icon) {
+        <lucide-icon [img]="option.icon" [size]="iconSize()"></lucide-icon>
+      }
+      @if (option.label) {
+        <span>{{ option.label }}</span>
+      }
+    </button>
+  }
+</div>

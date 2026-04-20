@@ -1,0 +1,69 @@
+<div class="flex flex-col items-center gap-2">
+  <!-- Knob SVG -->
+  <svg
+    #svgEl
+    [attr.width]="dimensions()"
+    [attr.height]="dimensions()"
+    [class]="containerClasses()"
+    tabindex="0"
+    role="slider"
+    [attr.aria-valuemin]="min()"
+    [attr.aria-valuemax]="max()"
+    [attr.aria-valuenow]="value()"
+    [attr.aria-disabled]="disabled()"
+    (mousedown)="onMouseDown($event)"
+    (wheel)="onWheel($event)"
+    (keydown)="onKeyDown($event)"
+  >
+    <!-- Background track -->
+    <circle
+      [attr.cx]="center()"
+      [attr.cy]="center()"
+      [attr.r]="radius()"
+      fill="none"
+      [attr.stroke]="trackColor()"
+      [attr.stroke-width]="strokeWidth()"
+      stroke-linecap="round"
+      [attr.stroke-dasharray]="circumference() * 0.75"
+      [attr.stroke-dashoffset]="0"
+      [attr.transform]="rotateTransform()"
+      class="dark:stroke-gray-700"
+    />
+
+    <!-- Value arc -->
+    <circle
+      [attr.cx]="center()"
+      [attr.cy]="center()"
+      [attr.r]="radius()"
+      fill="none"
+      [attr.stroke]="arcColor()"
+      [attr.stroke-width]="strokeWidth()"
+      stroke-linecap="round"
+      [attr.stroke-dasharray]="circumference() * 0.75"
+      [attr.stroke-dashoffset]="strokeDashoffset()"
+      [attr.transform]="rotateTransform()"
+      class="transition-all duration-100"
+    />
+
+    <!-- Center value display -->
+    @if (showValue()) {
+      <text
+        [attr.x]="center()"
+        [attr.y]="center()"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        [class]="valueFontSize()"
+        class="font-semibold fill-gray-900 dark:fill-white"
+      >
+        {{ displayValue() }}
+      </text>
+    }
+  </svg>
+
+  <!-- Label -->
+  @if (label()) {
+    <span [class]="labelFontSize()" class="text-gray-600 dark:text-gray-400 font-medium">
+      {{ label() }}
+    </span>
+  }
+</div>

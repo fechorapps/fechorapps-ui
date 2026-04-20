@@ -1,0 +1,22 @@
+<span [class]="chipClasses()">
+  @if (image()) {
+    <img [src]="image()" [alt]="label()" class="w-5 h-5 rounded-full object-cover" />
+  }
+
+  @if (icon()) {
+    <lucide-icon [img]="icon()!" [size]="16" />
+  }
+
+  <span>{{ label() }}</span>
+
+  @if (removable()) {
+    <button
+      type="button"
+      class="ml-0.5 p-0.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+      (click)="remove($event)"
+      aria-label="Remove"
+    >
+      <lucide-icon [img]="closeIcon" [size]="14" />
+    </button>
+  }
+</span>

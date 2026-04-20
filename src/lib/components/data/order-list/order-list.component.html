@@ -1,0 +1,174 @@
+<div [class]="containerClasses()">
+  <!-- Controls (Left Position) -->
+  @if (controlsPosition() === 'left') {
+    <div [class]="controlsClasses()">
+      <button
+        type="button"
+        [class]="buttonClasses()"
+        [disabled]="!hasSelection() || disabled()"
+        (click)="moveTop()"
+        title="Move to top"
+      >
+        <lucide-icon [img]="moveTopIcon" class="w-4 h-4" />
+      </button>
+      <button
+        type="button"
+        [class]="buttonClasses()"
+        [disabled]="!canMoveUp() || disabled()"
+        (click)="moveUp()"
+        title="Move up"
+      >
+        <lucide-icon [img]="moveUpIcon" class="w-4 h-4" />
+      </button>
+      <button
+        type="button"
+        [class]="buttonClasses()"
+        [disabled]="!canMoveDown() || disabled()"
+        (click)="moveDown()"
+        title="Move down"
+      >
+        <lucide-icon [img]="moveDownIcon" class="w-4 h-4" />
+      </button>
+      <button
+        type="button"
+        [class]="buttonClasses()"
+        [disabled]="!hasSelection() || disabled()"
+        (click)="moveBottom()"
+        title="Move to bottom"
+      >
+        <lucide-icon [img]="moveBottomIcon" class="w-4 h-4" />
+      </button>
+    </div>
+  }
+
+  <!-- List Content -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <!-- Header -->
+    @if (header() || headerTemplate()) {
+      <div
+        class="px-3 py-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700"
+      >
+        @if (headerTemplate(); as template) {
+          <ng-container [ngTemplateOutlet]="template" />
+        } @else {
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100">
+            {{ header() }}
+          </h3>
+        }
+      </div>
+    }
+
+    <!-- Filter -->
+    @if (filter()) {
+      <div class="p-2 border-b border-gray-200 dark:border-gray-700">
+        <div class="relative">
+          <lucide-icon
+            [img]="searchIcon"
+            class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+          />
+          <input
+            type="text"
+            [placeholder]="filterPlaceholder()"
+            [value]="filterValue()"
+            (input)="onFilterInput($event)"
+            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+          />
+        </div>
+      </div>
+    }
+
+    <!-- List -->
+    <ul
+      #listEl
+      [class]="listClasses()"
+      [style.height]="listHeight()"
+      role="listbox"
+      [attr.aria-multiselectable]="metaKeySelection()"
+    >
+      @if (filteredItems().length === 0) {
+        <li class="px-3 py-8 text-center text-gray-500 dark:text-gray-400">
+          @if (emptyTemplate(); as template) {
+            <ng-container [ngTemplateOutlet]="template" />
+          } @else {
+            No items available
+          }
+        </li>
+      } @else {
+        @for (item of filteredItems(); track $index; let i = $index) {
+          <li
+            [class]="itemClasses()(item, i)"
+            [attr.draggable]="dragDrop()"
+            [attr.aria-selected]="isSelected(item)"
+            role="option"
+            (click)="onItemClick($event, item)"
+            (dragstart)="onDragStart($event, item, i)"
+            (dragover)="onDragOver($event, i)"
+            (drop)="onDrop($event, i)"
+            (dragend)="onDragEnd()"
+          >
+            <!-- Drag Handle -->
+            @if (dragDrop()) {
+              <lucide-icon [img]="dragIcon" class="w-4 h-4 text-gray-400 cursor-grab shrink-0" />
+            }
+
+            <!-- Item Content -->
+            <div class="flex-1 min-w-0">
+              @if (itemTemplate(); as template) {
+                <ng-container
+                  [ngTemplateOutlet]="template"
+                  [ngTemplateOutletContext]="getItemContext(item, i)"
+                />
+              } @else {
+                <span class="text-gray-900 dark:text-gray-100 truncate">
+                  {{ item }}
+                </span>
+              }
+            </div>
+          </li>
+        }
+      }
+    </ul>
+  </div>
+
+  <!-- Controls (Right Position) -->
+  @if (controlsPosition() === 'right') {
+    <div [class]="controlsClasses()" style="border-right: none; border-left: 1px solid">
+      <button
+        type="button"
+        [class]="buttonClasses()"
+        [disabled]="!hasSelection() || disabled()"
+        (click)="moveTop()"
+        title="Move to top"
+      >
+        <lucide-icon [img]="moveTopIcon" class="w-4 h-4" />
+      </button>
+      <button
+        type="button"
+        [class]="buttonClasses()"
+        [disabled]="!canMoveUp() || disabled()"
+        (click)="moveUp()"
+        title="Move up"
+      >
+        <lucide-icon [img]="moveUpIcon" class="w-4 h-4" />
+      </button>
+      <button
+        type="button"
+        [class]="buttonClasses()"
+        [disabled]="!canMoveDown() || disabled()"
+        (click)="moveDown()"
+        title="Move down"
+      >
+        <lucide-icon [img]="moveDownIcon" class="w-4 h-4" />
+      </button>
+      <button
+        type="button"
+        [class]="buttonClasses()"
+        [disabled]="!hasSelection() || disabled()"
+        (click)="moveBottom()"
+        title="Move to bottom"
+      >
+        <lucide-icon [img]="moveBottomIcon" class="w-4 h-4" />
+      </button>
+    </div>
+  }
+</div>

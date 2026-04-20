@@ -1,0 +1,133 @@
+<div [class]="wrapperClasses()">
+  <!-- Label -->
+  @if (label()) {
+    <label [for]="inputId()" [class]="labelClasses()">
+      {{ label() }}
+    </label>
+  }
+
+  <!-- Select container -->
+  <div #containerEl class="relative">
+    <!-- Trigger button -->
+    <button
+      type="button"
+      [class]="triggerClasses()"
+      [disabled]="disabled()"
+      [id]="inputId()"
+      [attr.aria-haspopup]="'listbox'"
+      [attr.aria-expanded]="panelVisible()"
+      [attr.aria-invalid]="invalid()"
+      (click)="togglePanel()"
+      (keydown)="onKeydown($event)"
+      (focus)="handleFocus($event)"
+      (blur)="handleBlur($event)"
+    >
+      <!-- Selected chips or placeholder -->
+      <div class="flex flex-wrap items-center gap-1 flex-1 min-w-0">
+        @if (chips() && selectedOptions().length > 0) {
+          @for (option of displayChips(); track getOptionValue(option)) {
+            <span
+              class="inline-flex items-center gap-1 px-2 py-0.5 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded text-xs"
+            >
+              <span class="truncate max-w-[100px]">{{ getOptionLabel(option) }}</span>
+              @if (!disabled()) {
+                <span
+                  class="hover:bg-primary-200 dark:hover:bg-primary-800 rounded-full p-0.5 cursor-pointer"
+                  (click)="removeChip(option, $event)"
+                >
+                  <lucide-icon [img]="closeIcon" [size]="12"></lucide-icon>
+                </span>
+              }
+            </span>
+          }
+          @if (remainingCount() > 0) {
+            <span class="text-xs text-gray-500 dark:text-gray-400"
+              >+{{ remainingCount() }} more</span
+            >
+          }
+        } @else if (!chips() && selectedOptions().length > 0) {
+          <span class="truncate">{{ selectedOptions().length }} items selected</span>
+        } @else {
+          <span class="text-gray-400">{{ placeholder() }}</span>
+        }
+      </div>
+
+      <!-- Chevron -->
+      <lucide-icon
+        [img]="chevronIcon"
+        [size]="iconSize()"
+        class="text-gray-400 transition-transform flex-shrink-0"
+        [class.rotate-180]="panelVisible()"
+      ></lucide-icon>
+    </button>
+
+    <!-- Dropdown panel -->
+    @if (panelVisible()) {
+      <div [class]="panelClasses()" role="listbox" aria-multiselectable="true">
+        <!-- Filter input -->
+        @if (filter()) {
+          <div class="p-2 border-b border-gray-200 dark:border-gray-700">
+            <input
+              type="text"
+              class="w-full px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white outline-none focus:border-primary-500"
+              [placeholder]="filterPlaceholder()"
+              [value]="filterQuery()"
+              (input)="onFilterInput($event)"
+            />
+          </div>
+        }
+
+        <!-- Select All -->
+        @if (showSelectAll()) {
+          <div
+            class="flex items-center justify-between px-3 py-2 text-sm border-b border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+            (click)="selectAll()"
+          >
+            <span class="font-medium text-gray-700 dark:text-gray-300">{{ selectAllLabel() }}</span>
+            @if (allSelected()) {
+              <lucide-icon
+                [img]="checkIcon"
+                [size]="iconSize()"
+                class="text-primary-500"
+              ></lucide-icon>
+            }
+          </div>
+        }
+
+        <!-- Options -->
+        @if (filteredOptions().length > 0) {
+          @for (option of filteredOptions(); track getOptionValue(option); let i = $index) {
+            <div
+              [class]="getOptionClasses(option, i)"
+              role="option"
+              [attr.aria-selected]="isSelected(option)"
+              [attr.aria-disabled]="option.disabled"
+              (click)="toggleOption(option)"
+              (mouseenter)="highlightedIndex.set(i)"
+            >
+              <span>{{ getOptionLabel(option) }}</span>
+              @if (isSelected(option)) {
+                <lucide-icon
+                  [img]="checkIcon"
+                  [size]="iconSize()"
+                  class="text-primary-500"
+                ></lucide-icon>
+              }
+            </div>
+          }
+        } @else {
+          <div class="px-3 py-4 text-center text-gray-500 text-sm">
+            {{ emptyMessage() }}
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Help text -->
+  @if (helpText()) {
+    <p [id]="inputId() + '-help'" [class]="helpTextClasses()">
+      {{ helpText() }}
+    </p>
+  }
+</div>

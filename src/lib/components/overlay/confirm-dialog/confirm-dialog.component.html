@@ -1,0 +1,68 @@
+@if (visible()) {
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-200"
+    [class.opacity-100]="visible()"
+    [class.opacity-0]="!visible()"
+    role="alertdialog"
+    aria-modal="true"
+  >
+    <!-- Backdrop -->
+    <div
+      class="absolute inset-0 bg-black/50 dark:bg-black/70 transition-opacity duration-200"
+      (click)="onMaskClick($event)"
+    ></div>
+
+    <!-- Dialog -->
+    <div
+      class="relative bg-white dark:bg-gray-900 rounded-lg shadow-2xl max-w-md w-full mx-4 transform transition-all duration-200"
+      [class.scale-100]="visible()"
+      [class.scale-95]="!visible()"
+    >
+      <!-- Header -->
+      <div
+        class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-full flex items-center justify-center"
+            [class]="severityClasses()"
+          >
+            <lucide-icon [img]="severityIcon()" class="w-5 h-5" />
+          </div>
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            {{ header() }}
+          </h2>
+        </div>
+
+        @if (closable()) {
+          <button
+            type="button"
+            class="p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 transition-colors"
+            (click)="reject()"
+            aria-label="Close"
+          >
+            <lucide-icon [img]="closeIcon" class="w-5 h-5" />
+          </button>
+        }
+      </div>
+
+      <!-- Content -->
+      <div class="px-6 py-4">
+        <p class="text-gray-600 dark:text-gray-300">
+          {{ message() }}
+        </p>
+        <ng-content />
+      </div>
+
+      <!-- Footer -->
+      <div class="flex justify-end gap-2 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+        <button type="button" [class]="rejectButtonClasses()" (click)="reject()">
+          {{ rejectLabel() }}
+        </button>
+        <button type="button" [class]="acceptButtonClasses()" (click)="accept()">
+          {{ acceptLabel() }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,173 @@
+import { Meta, Title, Subtitle, Description, Primary, Controls, Stories, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as ButtonStories from './button.stories';
+
+<Meta of={ButtonStories} />
+
+<Title />
+
+<Subtitle>Componente de botón con múltiples variantes, tamaños, iconos y estados.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiButtonComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-button variant="primary">Guardar</ui-button>
+<ui-button variant="secondary">Cancelar</ui-button>
+<ui-button variant="danger">Eliminar</ui-button>
+```
+
+<Canvas of={ButtonStories.AllVariants} />
+
+## API
+
+<ArgTypes of={ButtonStories} />
+
+## Variantes
+
+El botón soporta 5 variantes visuales:
+
+| Variante | Uso |
+|----------|-----|
+| `primary` | Acciones principales (Guardar, Confirmar) |
+| `secondary` | Acciones secundarias (Cancelar, Volver) |
+| `outline` | Acciones sutiles (Ver más, Detalles) |
+| `ghost` | Acciones mínimas (Omitir, Cerrar) |
+| `danger` | Acciones destructivas (Eliminar, Descartar) |
+
+## Tamaños
+
+<Canvas of={ButtonStories.AllSizes} />
+
+| Tamaño | Uso |
+|--------|-----|
+| `sm` | Espacios reducidos, acciones inline |
+| `md` | Tamaño por defecto |
+| `lg` | Acciones prominentes, CTAs |
+
+## Con Iconos
+
+Los botones pueden incluir iconos de [Lucide Icons](https://lucide.dev):
+
+<Canvas of={ButtonStories.ButtonsWithIcons} />
+
+```typescript
+import { Save, Plus, Trash2 } from 'lucide-angular';
+
+// En el componente
+readonly saveIcon = Save;
+readonly plusIcon = Plus;
+readonly trashIcon = Trash2;
+```
+
+```html
+<!-- Icono a la izquierda -->
+<ui-button [icon]="saveIcon">Guardar</ui-button>
+
+<!-- Icono a la derecha -->
+<ui-button [iconEnd]="arrowIcon">Continuar</ui-button>
+
+<!-- Solo icono -->
+<ui-button [icon]="plusIcon" iconOnly aria-label="Agregar"></ui-button>
+```
+
+## Botones de Solo Icono
+
+<Canvas of={ButtonStories.IconOnlyVariants} />
+
+> **Accesibilidad:** Los botones de solo icono deben incluir `aria-label` para lectores de pantalla.
+
+## Estados
+
+### Loading
+
+<Canvas of={ButtonStories.LoadingStates} />
+
+```html
+<ui-button [loading]="isLoading">Guardando...</ui-button>
+```
+
+Cuando `loading="true"`:
+- Se muestra un spinner animado
+- El botón no emite eventos de click
+- El texto sigue visible
+
+### Disabled
+
+<Canvas of={ButtonStories.Disabled} />
+
+```html
+<ui-button [disabled]="!isValid">Continuar</ui-button>
+```
+
+### Full Width
+
+<Canvas of={ButtonStories.FullWidth} />
+
+```html
+<ui-button [fullWidth]="true">Iniciar Sesión</ui-button>
+```
+
+## Eventos
+
+El botón emite un evento `clicked` al hacer click (excepto cuando está `disabled` o `loading`):
+
+```html
+<ui-button (clicked)="handleSave($event)">Guardar</ui-button>
+```
+
+```typescript
+handleSave(event: MouseEvent): void {
+  console.log('Button clicked!', event);
+}
+```
+
+## Ejemplos de Uso Real
+
+### Formulario de Login
+
+```html
+<form>
+  <ui-button type="submit" [fullWidth]="true" [loading]="isSubmitting">
+    Iniciar Sesión
+  </ui-button>
+  <ui-button type="button" variant="ghost" [fullWidth]="true">
+    ¿Olvidaste tu contraseña?
+  </ui-button>
+</form>
+```
+
+### Barra de Acciones
+
+```html
+<div class="flex gap-2">
+  <ui-button variant="secondary">Cancelar</ui-button>
+  <ui-button variant="primary" [icon]="saveIcon">Guardar</ui-button>
+</div>
+```
+
+### Confirmación de Eliminación
+
+```html
+<div class="flex gap-2">
+  <ui-button variant="outline">Cancelar</ui-button>
+  <ui-button variant="danger" [icon]="trashIcon">
+    Eliminar Permanentemente
+  </ui-button>
+</div>
+```
+
+## Accesibilidad
+
+- Focus visible con anillo de enfoque
+- Estados `disabled` reflejados en atributo HTML
+- Iconos decorativos ocultos de lectores de pantalla
+- Botones solo-icono requieren `aria-label`
+
+## Todas las Stories
+
+<Stories />

@@ -1,0 +1,58 @@
+<div [class]="containerClasses()">
+  @for (item of model(); track item.label; let i = $index) {
+    <ng-container
+      *ngTemplateOutlet="menuItemTemplate; context: { $implicit: item, key: '' + i, level: 0 }"
+    ></ng-container>
+  }
+</div>
+
+<ng-template #menuItemTemplate let-item let-key="key" let-level="level">
+  <div>
+    <button
+      type="button"
+      class="flex items-center justify-between w-full px-4 py-3 text-left transition-colors border-b border-gray-200 dark:border-gray-700 last:border-b-0"
+      [class.opacity-50]="item.disabled"
+      [class.cursor-not-allowed]="item.disabled"
+      [class.cursor-pointer]="!item.disabled"
+      [class.bg-gray-50]="isExpanded(key)"
+      [class.dark:bg-gray-800]="isExpanded(key)"
+      [class.hover:bg-gray-50]="!item.disabled && !isExpanded(key)"
+      [class.dark:hover:bg-gray-800]="!item.disabled && !isExpanded(key)"
+      [style.padding-left.rem]="1 + level * 1.5"
+      [disabled]="item.disabled ?? false"
+      (click)="toggleItem(item, key, $event)"
+    >
+      <div class="flex items-center gap-3">
+        @if (item.icon) {
+          <lucide-icon
+            [img]="item.icon"
+            class="w-5 h-5 text-gray-500 dark:text-gray-400"
+          ></lucide-icon>
+        }
+        <span class="font-medium text-gray-700 dark:text-gray-300">
+          {{ item.label }}
+        </span>
+      </div>
+      @if (item.items && item.items.length > 0) {
+        <lucide-icon
+          name="chevron-right"
+          class="w-4 h-4 text-gray-400 transition-transform"
+          [class.rotate-90]="isExpanded(key)"
+        ></lucide-icon>
+      }
+    </button>
+
+    @if (item.items && item.items.length > 0 && isExpanded(key)) {
+      <div class="bg-gray-50/50 dark:bg-gray-800/50">
+        @for (subItem of item.items; track subItem.label; let j = $index) {
+          <ng-container
+            *ngTemplateOutlet="
+              menuItemTemplate;
+              context: { $implicit: subItem, key: key + '-' + j, level: level + 1 }
+            "
+          ></ng-container>
+        }
+      </div>
+    }
+  </div>
+</ng-template>

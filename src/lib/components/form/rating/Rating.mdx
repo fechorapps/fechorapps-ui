@@ -1,0 +1,33 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as RatingStories from './rating.stories';
+
+<Meta of={RatingStories} />
+
+<Title />
+
+<Subtitle>Componente de calificación con estrellas o iconos personalizados.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiRatingComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-rating
+  [(ngModel)]="rating"
+  label="Calificación"
+></ui-rating>
+```
+
+<Canvas of={RatingStories.Default} />
+
+## API
+
+<ArgTypes of={RatingStories} />
+
+## Todas las Stories
+
+<Stories />

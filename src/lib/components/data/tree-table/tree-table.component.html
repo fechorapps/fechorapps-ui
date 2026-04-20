@@ -1,0 +1,148 @@
+<div
+  class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-white dark:bg-gray-900"
+>
+  <!-- Loading Overlay -->
+  @if (loading()) {
+    <div
+      class="absolute inset-0 bg-white/50 dark:bg-gray-900/50 flex items-center justify-center z-10"
+    >
+      <div
+        class="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"
+      ></div>
+    </div>
+  }
+
+  <!-- Table Container -->
+  <div
+    class="relative overflow-x-auto"
+    [class.overflow-y-auto]="scrollable()"
+    [style.maxHeight]="scrollHeight()"
+  >
+    <table [class]="tableClasses()">
+      <!-- Header -->
+      <thead>
+        <tr>
+          <!-- Checkbox Column -->
+          @if (isCheckboxMode()) {
+            <th
+              class="w-12 px-4 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700"
+            >
+              <!-- Header checkbox could be added for select all -->
+            </th>
+          }
+
+          <!-- Custom Header Template or Column Headers -->
+          @if (headerTemplate(); as template) {
+            <ng-container [ngTemplateOutlet]="template" />
+          } @else {
+            @for (column of columns(); track column.field) {
+              <th
+                [class]="headerCellClasses()(column)"
+                [style.width]="column.width"
+                (click)="onColumnClick(column)"
+              >
+                <div class="flex items-center gap-2">
+                  <span>{{ column.header }}</span>
+                  @if (column.sortable !== false && sortable()) {
+                    <lucide-icon
+                      [img]="getSortIcon(column)"
+                      class="w-4 h-4"
+                      [class.text-gray-400]="sortField() !== column.field"
+                      [class.text-primary-500]="sortField() === column.field"
+                    />
+                  }
+                </div>
+              </th>
+            }
+          }
+        </tr>
+      </thead>
+
+      <!-- Body -->
+      <tbody>
+        @if (flattenedNodes().length === 0) {
+          <tr>
+            <td
+              [attr.colspan]="columns().length + (isCheckboxMode() ? 1 : 0)"
+              class="px-4 py-8 text-center text-gray-500 dark:text-gray-400"
+            >
+              @if (emptyTemplate(); as template) {
+                <ng-container [ngTemplateOutlet]="template" />
+              } @else {
+                No records found
+              }
+            </td>
+          </tr>
+        } @else {
+          @for (entry of flattenedNodes(); track $index; let i = $index) {
+            <tr [class]="rowClasses()(entry.node, i)" (click)="onRowClick($event, entry.node)">
+              <!-- Checkbox Column -->
+              @if (isCheckboxMode()) {
+                <td class="w-12 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                  <div
+                    class="w-4 h-4 rounded border flex items-center justify-center transition-colors cursor-pointer"
+                    [class.bg-primary-500]="isSelected(entry.node)"
+                    [class.border-primary-500]="isSelected(entry.node)"
+                    [class.bg-primary-300]="isPartiallySelected(entry.node)"
+                    [class.border-primary-300]="isPartiallySelected(entry.node)"
+                    [class.border-gray-300]="
+                      !isSelected(entry.node) && !isPartiallySelected(entry.node)
+                    "
+                    [class.dark:border-gray-600]="
+                      !isSelected(entry.node) && !isPartiallySelected(entry.node)
+                    "
+                    (click)="onRowClick($event, entry.node)"
+                  >
+                    @if (isSelected(entry.node)) {
+                      <lucide-icon [img]="checkIcon" class="w-3 h-3 text-white" />
+                    } @else if (isPartiallySelected(entry.node)) {
+                      <lucide-icon [img]="indeterminateIcon" class="w-3 h-3 text-white" />
+                    }
+                  </div>
+                </td>
+              }
+
+              <!-- Custom Body Template or Column Values -->
+              @if (bodyTemplate(); as template) {
+                <ng-container
+                  [ngTemplateOutlet]="template"
+                  [ngTemplateOutletContext]="getRowContext(entry, i)"
+                />
+              } @else {
+                @for (column of columns(); track column.field) {
+                  <td [class]="bodyCellClasses()(column)">
+                    @if (isExpanderColumn(column)) {
+                      <div
+                        class="flex items-center gap-1"
+                        [style.paddingLeft.px]="entry.level * 24"
+                      >
+                        <!-- Expand/Collapse Toggle -->
+                        @if (hasChildren(entry.node)) {
+                          <button
+                            type="button"
+                            class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                            (click)="toggleNode($event, entry.node)"
+                          >
+                            <lucide-icon
+                              [img]="isExpanded(entry.node) ? collapseIcon : expandIcon"
+                              class="w-4 h-4 text-gray-500"
+                            />
+                          </button>
+                        } @else {
+                          <span class="w-6"></span>
+                        }
+                        <span>{{ getCellValue(entry.node, column) }}</span>
+                      </div>
+                    } @else {
+                      {{ getCellValue(entry.node, column) }}
+                    }
+                  </td>
+                }
+              }
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

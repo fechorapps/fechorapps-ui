@@ -1,0 +1,67 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as IconFieldStories from './icon-field.stories';
+
+<Meta of={IconFieldStories} />
+
+<Title />
+
+<Subtitle>Wrapper que agrega iconos decorativos a campos de entrada.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiIconFieldComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```typescript
+import { Search } from 'lucide-angular';
+readonly searchIcon = Search;
+```
+
+```html
+<ui-icon-field [icon]="searchIcon">
+  <input type="text" placeholder="Buscar..." />
+</ui-icon-field>
+```
+
+<Canvas of={IconFieldStories.Default} />
+
+## API
+
+<ArgTypes of={IconFieldStories} />
+
+## Icono a la Derecha
+
+```html
+<ui-icon-field [icon]="icon" iconPosition="right">
+  <input type="text" placeholder="Buscar..." />
+</ui-icon-field>
+```
+
+<Canvas of={IconFieldStories.RightIcon} />
+
+## Ambos Iconos
+
+```html
+<ui-icon-field [icon]="mailIcon" [iconEnd]="lockIcon">
+  <input type="email" placeholder="Email..." />
+</ui-icon-field>
+```
+
+<Canvas of={IconFieldStories.BothIcons} />
+
+## Tamaños
+
+<Canvas of={IconFieldStories.Sizes} />
+
+## Ejemplo de Formulario
+
+<Canvas of={IconFieldStories.FormExample} />
+
+---
+
+## Todas las Stories
+
+<Stories />

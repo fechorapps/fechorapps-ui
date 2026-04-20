@@ -1,0 +1,120 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as SelectButtonStories from './select-button.stories';
+
+<Meta of={SelectButtonStories} />
+
+<Title />
+
+<Subtitle>Grupo de botones para seleccionar una o múltiples opciones de forma visual.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiSelectButtonComponent, type SelectButtonOption } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```typescript
+options: SelectButtonOption<string>[] = [
+  { label: 'Opción 1', value: 'opt1' },
+  { label: 'Opción 2', value: 'opt2' },
+  { label: 'Opción 3', value: 'opt3' },
+];
+```
+
+```html
+<ui-select-button
+  [options]="options"
+  [(ngModel)]="selected"
+></ui-select-button>
+```
+
+<Canvas of={SelectButtonStories.Default} />
+
+## API
+
+<ArgTypes of={SelectButtonStories} />
+
+## Selección Múltiple
+
+```html
+<ui-select-button
+  [options]="options"
+  [multiple]="true"
+  [(ngModel)]="selectedItems"
+></ui-select-button>
+```
+
+<Canvas of={SelectButtonStories.MultipleSelection} />
+
+## Con Iconos
+
+```typescript
+options = [
+  { label: 'Lista', value: 'list', icon: List },
+  { label: 'Grid', value: 'grid', icon: Grid },
+  { label: 'Galería', value: 'gallery', icon: LayoutGrid },
+];
+```
+
+<Canvas of={SelectButtonStories.WithIcons} />
+
+## Solo Iconos
+
+<Canvas of={SelectButtonStories.IconsOnly} />
+
+## Tamaños
+
+<Canvas of={SelectButtonStories.Sizes} />
+
+## Estados
+
+### Deshabilitado
+
+<Canvas of={SelectButtonStories.Disabled} />
+
+### Opción Deshabilitada
+
+<Canvas of={SelectButtonStories.DisabledOption} />
+
+### Inválido
+
+<Canvas of={SelectButtonStories.Invalid} />
+
+## Ejemplos de Uso
+
+### Selector de Tema
+
+<Canvas of={SelectButtonStories.ThemeSelector} />
+
+### Toggle de Vista
+
+<Canvas of={SelectButtonStories.ViewToggle} />
+
+### Período de Pago
+
+<Canvas of={SelectButtonStories.PaymentPeriod} />
+
+### Selector de Talla
+
+<Canvas of={SelectButtonStories.SizeComparison} />
+
+---
+
+## Interface SelectButtonOption
+
+```typescript
+interface SelectButtonOption<T = unknown> {
+  label: string;
+  value: T;
+  icon?: LucideIconData;
+  disabled?: boolean;
+}
+```
+
+---
+
+## Todas las Stories
+
+<Stories />

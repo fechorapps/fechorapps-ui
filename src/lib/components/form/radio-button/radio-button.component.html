@@ -1,0 +1,30 @@
+<label
+  class="inline-flex items-center"
+  [class.cursor-pointer]="!disabled()"
+  [class.cursor-not-allowed]="disabled()"
+>
+  <!-- Hidden native radio for accessibility -->
+  <input
+    type="radio"
+    class="sr-only"
+    [name]="name()"
+    [id]="inputId()"
+    [value]="value()"
+    [checked]="isSelected()"
+    [disabled]="disabled()"
+    [attr.aria-invalid]="invalid()"
+    (change)="select()"
+    (keydown)="onKeydown($event)"
+  />
+
+  <!-- Custom radio circle -->
+  <span [class]="outerClasses()" (click)="select()">
+    <span [class]="innerClasses()"></span>
+  </span>
+
+  <!-- Label -->
+  @if (label()) {
+    <span [class]="labelClasses()">{{ label() }}</span>
+  }
+  <ng-content></ng-content>
+</label>

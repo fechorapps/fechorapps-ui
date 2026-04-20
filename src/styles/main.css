@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+/* KaTeX for mathematical formula rendering */
+@import "katex/dist/katex.min.css";
+
+@import "./base/tailwind.css";
+@import "./base/reset.css";
+
+@import "./themes/palettes.css";
+@import "./themes/color-system.css";
+
+@import "./layout/layout.css";
+@import "./layout/menu.css";
+
+@import "./components/forms.css";
+@import "./components/buttons.css";
+@import "./components/ui.css";

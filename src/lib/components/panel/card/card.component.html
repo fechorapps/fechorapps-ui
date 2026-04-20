@@ -1,0 +1,42 @@
+<div
+  [class]="cardClasses()"
+  (click)="onClick($event)"
+  [attr.role]="clickable() ? 'button' : null"
+  [attr.tabindex]="clickable() ? 0 : null"
+>
+  <!-- Image -->
+  @if (imageUrl()) {
+    <div class="aspect-video overflow-hidden">
+      <img [src]="imageUrl()" [alt]="imageAlt()" class="w-full h-full object-cover" />
+    </div>
+  }
+
+  <!-- Header (projected or default) -->
+  <ng-content select="[header]" />
+
+  <!-- Default Header with title/subtitle -->
+  @if (showHeader()) {
+    <div [class]="headerClasses()">
+      @if (title()) {
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+          {{ title() }}
+        </h3>
+      }
+      @if (subtitle()) {
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          {{ subtitle() }}
+        </p>
+      }
+    </div>
+  }
+
+  <!-- Content -->
+  <div [class]="contentClasses()">
+    <ng-content />
+  </div>
+
+  <!-- Footer -->
+  <div [class]="footerClasses()">
+    <ng-content select="[footer]" />
+  </div>
+</div>

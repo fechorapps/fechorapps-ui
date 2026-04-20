@@ -1,0 +1,15 @@
+<button
+  type="button"
+  [class]="buttonClasses()"
+  [disabled]="disabled()"
+  [attr.aria-pressed]="checked()"
+  (click)="toggle()"
+>
+  @if (currentIcon()) {
+    <lucide-icon [img]="currentIcon()!" [size]="iconSize()"></lucide-icon>
+  }
+  @if (currentLabel()) {
+    <span>{{ currentLabel() }}</span>
+  }
+  <ng-content></ng-content>
+</button>

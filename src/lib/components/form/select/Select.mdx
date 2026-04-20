@@ -1,0 +1,35 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as SelectStories from './select.stories';
+
+<Meta of={SelectStories} />
+
+<Title />
+
+<Subtitle>Componente de selección desplegable (dropdown).</Subtitle>
+
+## Importación
+
+```typescript
+import { UiSelectComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-select
+  [(ngModel)]="selected"
+  [options]="options"
+  label="Seleccionar"
+  placeholder="Elige una opción"
+></ui-select>
+```
+
+<Canvas of={SelectStories.Default} />
+
+## API
+
+<ArgTypes of={SelectStories} />
+
+## Todas las Stories
+
+<Stories />

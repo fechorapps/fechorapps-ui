@@ -1,0 +1,62 @@
+<div [class]="tabMenuClasses()" role="tablist">
+  @for (item of visibleItems(); track trackByItem($index, item)) {
+    @if (itemTemplate(); as template) {
+      <ng-container
+        [ngTemplateOutlet]="template"
+        [ngTemplateOutletContext]="{ $implicit: item, active: isActive(item), index: $index }"
+      />
+    } @else if (item.url) {
+      <a
+        [href]="item.url"
+        [class]="getItemClasses(item)"
+        [attr.aria-selected]="isActive(item)"
+        [attr.aria-disabled]="item.disabled"
+        role="tab"
+        (click)="onItemClick($event, item, $index)"
+      >
+        @if (item.icon) {
+          <lucide-icon [img]="item.icon" class="w-4 h-4" />
+        }
+        @if (item.label) {
+          <span>{{ item.label }}</span>
+        }
+        @if (item.badge) {
+          <span
+            class="px-2 py-0.5 text-xs font-medium rounded-full"
+            [class]="
+              item.badgeClass || 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
+            "
+          >
+            {{ item.badge }}
+          </span>
+        }
+      </a>
+    } @else {
+      <button
+        type="button"
+        [class]="getItemClasses(item)"
+        [disabled]="item.disabled"
+        [attr.aria-selected]="isActive(item)"
+        role="tab"
+        (click)="onItemClick($event, item, $index)"
+      >
+        @if (item.icon) {
+          <lucide-icon [img]="item.icon" class="w-4 h-4" />
+        }
+        @if (item.label) {
+          <span>{{ item.label }}</span>
+        }
+        @if (item.badge) {
+          <span
+            class="px-2 py-0.5 text-xs font-medium rounded-full"
+            [class]="
+              item.badgeClass || 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
+            "
+          >
+            {{ item.badge }}
+          </span>
+        }
+      </button>
+    }
+  }
+</div>

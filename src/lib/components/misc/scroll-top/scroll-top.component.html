@@ -1,0 +1,12 @@
+<button
+  type="button"
+  [class]="containerClasses()"
+  (click)="scrollToTop()"
+  aria-label="Scroll to top"
+>
+  @if (icon()) {
+    <lucide-icon [img]="icon()!" class="w-5 h-5"></lucide-icon>
+  } @else {
+    <lucide-icon name="chevron-up" class="w-5 h-5"></lucide-icon>
+  }
+</button>

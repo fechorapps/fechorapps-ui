@@ -1,0 +1,108 @@
+<div [class]="wrapperClasses()">
+  <!-- Label -->
+  @if (label()) {
+    <label [for]="inputId()" [class]="labelClasses()">
+      {{ label() }}
+    </label>
+  }
+
+  <!-- Select container -->
+  <div #containerEl class="relative">
+    <!-- Trigger button -->
+    <button
+      type="button"
+      [class]="triggerClasses()"
+      [disabled]="disabled()"
+      [id]="inputId()"
+      [attr.aria-haspopup]="'listbox'"
+      [attr.aria-expanded]="panelVisible()"
+      [attr.aria-invalid]="invalid()"
+      (click)="togglePanel()"
+      (keydown)="onKeydown($event)"
+      (focus)="handleFocus($event)"
+      (blur)="handleBlur($event)"
+    >
+      <!-- Selected value or placeholder -->
+      <span class="truncate">
+        @if (selectedOption()) {
+          {{ selectedLabel() }}
+        } @else {
+          {{ placeholder() }}
+        }
+      </span>
+
+      <!-- Icons -->
+      <span class="flex items-center gap-1 ml-2">
+        <!-- Clear button -->
+        @if (showClear() && selectedOption() && !disabled()) {
+          <span
+            class="p-0.5 hover:bg-accent rounded text-muted-foreground hover:text-foreground"
+            (click)="clear($event)"
+          >
+            <lucide-icon [img]="clearIcon" [size]="iconSize() - 2"></lucide-icon>
+          </span>
+        }
+
+        <!-- Chevron -->
+        <lucide-icon
+          [img]="chevronIcon"
+          [size]="iconSize()"
+          class="text-muted-foreground transition-transform"
+          [class.rotate-180]="panelVisible()"
+        ></lucide-icon>
+      </span>
+    </button>
+
+    <!-- Dropdown panel -->
+    @if (panelVisible()) {
+      <div [class]="panelClasses()" role="listbox">
+        <!-- Filter input -->
+        @if (filter()) {
+          <div class="pb-2 border-b border-border mb-2">
+            <input
+              type="text"
+              class="w-full px-3 py-1.5 text-sm border border-input rounded-md bg-background text-foreground placeholder:text-muted-foreground outline-none focus:border-primary focus:ring-2 focus:ring-ring/20"
+              [placeholder]="filterPlaceholder()"
+              [value]="filterQuery()"
+              (input)="onFilterInput($event)"
+            />
+          </div>
+        }
+
+        <!-- Options -->
+        @if (filteredOptions().length > 0) {
+          @for (option of filteredOptions(); track getOptionValue(option); let i = $index) {
+            <div
+              [class]="getOptionClasses(option, i)"
+              role="option"
+              [attr.aria-selected]="isSelected(option)"
+              [attr.aria-disabled]="option.disabled"
+              (click)="selectOption(option)"
+              (mouseenter)="highlightedIndex.set(i)"
+            >
+              <span>{{ getOptionLabel(option) }}</span>
+              @if (isSelected(option)) {
+                <lucide-icon
+                  [img]="checkIcon"
+                  [size]="iconSize()"
+                  class="text-primary"
+                ></lucide-icon>
+              }
+            </div>
+          }
+        } @else {
+          <div class="px-3 py-4 text-center text-muted-foreground text-sm">
+            {{ emptyMessage() }}
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Help text -->
+  @if (helpText()) {
+    <p [id]="inputId() + '-help'" [class]="helpTextClasses()">
+      {{ helpText() }}
+    </p>
+  }
+</div>

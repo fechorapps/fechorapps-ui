@@ -1,0 +1,35 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as MultiSelectStories from './multi-select.stories';
+
+<Meta of={MultiSelectStories} />
+
+<Title />
+
+<Subtitle>Selector múltiple con chips para seleccionar varias opciones.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiMultiSelectComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-multi-select
+  [(ngModel)]="selected"
+  [options]="options"
+  label="Seleccionar"
+  placeholder="Elige opciones"
+></ui-multi-select>
+```
+
+<Canvas of={MultiSelectStories.Default} />
+
+## API
+
+<ArgTypes of={MultiSelectStories} />
+
+## Todas las Stories
+
+<Stories />

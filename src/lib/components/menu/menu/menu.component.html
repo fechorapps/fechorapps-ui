@@ -1,0 +1,96 @@
+<div [class]="menuClasses()" role="menu">
+  @for (item of visibleItems(); track trackByItem($index, item)) {
+    @if (item.separator) {
+      <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+    } @else if (item.items && item.items.length > 0) {
+      <!-- Submenu Header -->
+      <div
+        class="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+      >
+        @if (submenuHeaderTemplate(); as template) {
+          <ng-container
+            [ngTemplateOutlet]="template"
+            [ngTemplateOutletContext]="{ $implicit: item }"
+          />
+        } @else {
+          {{ item.label }}
+        }
+      </div>
+
+      <!-- Submenu Items -->
+      @for (subitem of item.items; track trackByItem($index, subitem)) {
+        @if (subitem.visible !== false) {
+          @if (subitem.separator) {
+            <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+          } @else {
+            <ng-container
+              [ngTemplateOutlet]="menuItemTpl"
+              [ngTemplateOutletContext]="{ $implicit: subitem }"
+            />
+          }
+        }
+      }
+    } @else {
+      <ng-container
+        [ngTemplateOutlet]="menuItemTpl"
+        [ngTemplateOutletContext]="{ $implicit: item }"
+      />
+    }
+  }
+</div>
+
+<!-- Menu Item Template -->
+<ng-template #menuItemTpl let-item>
+  @if (itemTemplate(); as template) {
+    <ng-container [ngTemplateOutlet]="template" [ngTemplateOutletContext]="{ $implicit: item }" />
+  } @else if (item.url) {
+    <a
+      [href]="item.url"
+      [target]="item.target || '_self'"
+      [class]="getItemClasses(item)"
+      [attr.aria-disabled]="item.disabled"
+      role="menuitem"
+      (click)="onItemClick($event, item)"
+    >
+      @if (item.icon) {
+        <lucide-icon [img]="item.icon" class="w-5 h-5 flex-shrink-0" />
+      }
+      <span class="flex-1">{{ item.label }}</span>
+      @if (item.badge) {
+        <span
+          class="px-2 py-0.5 text-xs font-medium rounded-full"
+          [class]="
+            item.badgeClass ||
+            'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300'
+          "
+        >
+          {{ item.badge }}
+        </span>
+      }
+    </a>
+  } @else {
+    <button
+      type="button"
+      [class]="getItemClasses(item)"
+      [disabled]="item.disabled"
+      role="menuitem"
+      (click)="onItemClick($event, item)"
+    >
+      @if (item.icon) {
+        <lucide-icon [img]="item.icon" class="w-5 h-5 flex-shrink-0" />
+      }
+      <span class="flex-1">{{ item.label }}</span>
+      @if (item.badge) {
+        <span
+          class="px-2 py-0.5 text-xs font-medium rounded-full"
+          [class]="
+            item.badgeClass ||
+            'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300'
+          "
+        >
+          {{ item.badge }}
+        </span>
+      }
+    </button>
+  }
+</ng-template>

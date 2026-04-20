@@ -1,0 +1,32 @@
+<div [class]="wrapperClasses()">
+  <div [class]="containerClasses()">
+    <!-- Prefix addon -->
+    @if (prefix() || prefixIcon()) {
+      <span [class]="prefixAddonClasses()">
+        @if (prefixIcon()) {
+          <lucide-icon [img]="prefixIcon()!" [size]="iconSize()"></lucide-icon>
+        }
+        @if (prefix()) {
+          <span>{{ prefix() }}</span>
+        }
+      </span>
+    }
+
+    <!-- Content (input field) -->
+    <div class="flex-1 min-w-0">
+      <ng-content></ng-content>
+    </div>
+
+    <!-- Suffix addon -->
+    @if (suffix() || suffixIcon()) {
+      <span [class]="suffixAddonClasses()">
+        @if (suffixIcon()) {
+          <lucide-icon [img]="suffixIcon()!" [size]="iconSize()"></lucide-icon>
+        }
+        @if (suffix()) {
+          <span>{{ suffix() }}</span>
+        }
+      </span>
+    }
+  </div>
+</div>

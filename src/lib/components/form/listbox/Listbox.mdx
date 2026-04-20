@@ -1,0 +1,152 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as ListboxStories from './listbox.stories';
+
+<Meta of={ListboxStories} />
+
+<Title />
+
+<Subtitle>Lista de opciones seleccionables con soporte para filtrado, agrupación y selección múltiple.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiListboxComponent, type ListboxOption, type ListboxOptionGroup } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```typescript
+options: ListboxOption<string>[] = [
+  { label: 'Nueva York', value: 'ny' },
+  { label: 'Los Angeles', value: 'la' },
+  { label: 'Chicago', value: 'chi' },
+];
+```
+
+```html
+<ui-listbox
+  [options]="options"
+  [(ngModel)]="selected"
+  label="Seleccionar Ciudad"
+></ui-listbox>
+```
+
+<Canvas of={ListboxStories.Default} />
+
+## API
+
+<ArgTypes of={ListboxStories} />
+
+## Selección Múltiple
+
+```html
+<ui-listbox
+  [options]="options"
+  [multiple]="true"
+  [(ngModel)]="selectedItems"
+></ui-listbox>
+```
+
+<Canvas of={ListboxStories.MultipleSelection} />
+
+## Con Checkboxes
+
+```html
+<ui-listbox
+  [options]="options"
+  [multiple]="true"
+  [checkbox]="true"
+></ui-listbox>
+```
+
+<Canvas of={ListboxStories.WithCheckboxes} />
+
+## Con Filtro
+
+```html
+<ui-listbox
+  [options]="options"
+  [filter]="true"
+  filterPlaceholder="Buscar..."
+></ui-listbox>
+```
+
+<Canvas of={ListboxStories.WithFilter} />
+
+## Opciones Agrupadas
+
+```typescript
+groups: ListboxOptionGroup<string>[] = [
+  {
+    label: 'Norteamérica',
+    options: [
+      { label: 'Estados Unidos', value: 'us' },
+      { label: 'Canadá', value: 'ca' },
+    ],
+  },
+  {
+    label: 'Sudamérica',
+    options: [
+      { label: 'Brasil', value: 'br' },
+      { label: 'Argentina', value: 'ar' },
+    ],
+  },
+];
+```
+
+```html
+<ui-listbox
+  [optionGroups]="groups"
+></ui-listbox>
+```
+
+<Canvas of={ListboxStories.GroupedOptions} />
+
+## Tamaños
+
+<Canvas of={ListboxStories.Sizes} />
+
+## Estados
+
+### Deshabilitado
+
+<Canvas of={ListboxStories.Disabled} />
+
+### Opción Deshabilitada
+
+<Canvas of={ListboxStories.DisabledOption} />
+
+### Inválido
+
+<Canvas of={ListboxStories.Invalid} />
+
+### Lista Vacía
+
+<Canvas of={ListboxStories.EmptyState} />
+
+## Ejemplos de Uso
+
+### Selector de Habilidades
+
+<Canvas of={ListboxStories.SkillsSelector} />
+
+### Selector de Equipo
+
+<Canvas of={ListboxStories.TeamMemberSelector} />
+
+---
+
+## Navegación por Teclado
+
+| Tecla | Acción |
+|-------|--------|
+| ↑ / ↓ | Navegar opciones |
+| Enter / Space | Seleccionar opción |
+| Home | Ir a primera opción |
+| End | Ir a última opción |
+
+---
+
+## Todas las Stories
+
+<Stories />

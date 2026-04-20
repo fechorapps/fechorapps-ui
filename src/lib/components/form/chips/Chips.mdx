@@ -1,0 +1,34 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as ChipsStories from './chips.stories';
+
+<Meta of={ChipsStories} />
+
+<Title />
+
+<Subtitle>Campo de entrada para crear múltiples etiquetas/chips.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiChipsComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-chips
+  [(ngModel)]="tags"
+  label="Etiquetas"
+  placeholder="Agregar etiqueta..."
+></ui-chips>
+```
+
+<Canvas of={ChipsStories.Default} />
+
+## API
+
+<ArgTypes of={ChipsStories} />
+
+## Todas las Stories
+
+<Stories />

@@ -1,0 +1,121 @@
+/* ==========================================================================
+   Cards — Metronic Design System
+   ========================================================================== */
+
+@layer components {
+  .card {
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07);
+  }
+}
+
+/* ==========================================================================
+   Badges — Metronic Design System
+   ========================================================================== */
+
+@layer components {
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1;
+    border-radius: 9999px;
+  }
+
+  .badge-primary {
+    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+    color: var(--primary);
+  }
+
+  .badge-success {
+    background-color: #dcfce7;
+    color: #15803d;
+
+    @variant dark {
+      background-color: rgba(34, 197, 94, 0.2);
+      color: #86efac;
+    }
+  }
+
+  .badge-warning {
+    background-color: #fef3c7;
+    color: #b45309;
+
+    @variant dark {
+      background-color: rgba(245, 158, 11, 0.2);
+      color: #fcd34d;
+    }
+  }
+
+  .badge-danger {
+    background-color: color-mix(in srgb, var(--destructive) 12%, transparent);
+    color: var(--destructive);
+  }
+
+  .badge-neutral {
+    background-color: var(--muted);
+    color: var(--muted-foreground);
+  }
+}
+
+/* ==========================================================================
+   Avatar — Metronic Design System
+   ========================================================================== */
+
+@layer components {
+  .avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.875rem;
+
+    & img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+  }
+
+  .avatar-sm {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.75rem;
+  }
+
+  .avatar-lg {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1rem;
+  }
+}
+
+/* ==========================================================================
+   Loading Spinner
+   ========================================================================== */
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}

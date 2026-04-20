@@ -1,0 +1,36 @@
+<div [class]="containerClasses()" role="progressbar">
+  <svg
+    class="w-full h-full animate-spin"
+    viewBox="0 0 50 50"
+    [style.animation-duration]="animationDuration()"
+  >
+    <circle
+      class="stroke-gray-200 dark:stroke-gray-700"
+      cx="25"
+      cy="25"
+      r="20"
+      [attr.fill]="fill()"
+      [attr.stroke-width]="strokeWidth()"
+    ></circle>
+    <circle
+      class="stroke-blue-500 dark:stroke-blue-400"
+      cx="25"
+      cy="25"
+      r="20"
+      [attr.fill]="fill()"
+      [attr.stroke-width]="strokeWidth()"
+      stroke-linecap="round"
+      stroke-dasharray="125.6"
+      stroke-dashoffset="62.8"
+    >
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="0 25 25"
+        to="360 25 25"
+        dur="1.5s"
+        repeatCount="indefinite"
+      />
+    </circle>
+  </svg>
+</div>

@@ -1,0 +1,50 @@
+<div [class]="wrapperClasses()">
+  <!-- Label -->
+  @if (label()) {
+    <label [for]="inputId()" [class]="labelClasses()">
+      {{ label() }}
+    </label>
+  }
+
+  <!-- Container -->
+  <div [class]="containerClasses()">
+    <!-- Start icon -->
+    @if (icon()) {
+      <span class="absolute left-3 flex items-center pointer-events-none" [class]="iconClasses()">
+        <lucide-icon [img]="icon()!" [size]="iconSize()"></lucide-icon>
+      </span>
+    }
+
+    <!-- Input -->
+    <input
+      type="text"
+      [class]="inputClasses()"
+      [id]="inputId()"
+      [name]="name()"
+      [placeholder]="showMaskGuide() ? maskPlaceholder() : placeholder()"
+      [disabled]="disabled()"
+      [readonly]="readonly()"
+      [value]="value()"
+      [attr.aria-invalid]="invalid()"
+      [attr.aria-describedby]="helpText() ? inputId() + '-help' : null"
+      (input)="onInput($event)"
+      (keydown)="onKeyDown($event)"
+      (focus)="onFocus($event)"
+      (blur)="onBlur($event)"
+    />
+
+    <!-- End icon -->
+    @if (iconEnd()) {
+      <span class="absolute right-3 flex items-center pointer-events-none" [class]="iconClasses()">
+        <lucide-icon [img]="iconEnd()!" [size]="iconSize()"></lucide-icon>
+      </span>
+    }
+  </div>
+
+  <!-- Help text -->
+  @if (helpText()) {
+    <p [id]="inputId() + '-help'" [class]="helpTextClasses()">
+      {{ helpText() }}
+    </p>
+  }
+</div>

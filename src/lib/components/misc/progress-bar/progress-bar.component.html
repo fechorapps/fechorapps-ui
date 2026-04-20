@@ -1,0 +1,11 @@
+<div [class]="containerClasses() + ' transition-shadow duration-300 ' + (value() > 0 ? 'shadow-sm' : '')">
+  <div [class]="barClasses()" [style]="barStyle()"></div>
+
+  @if (showValue() && mode() === 'determinate') {
+    <span
+      class="absolute inset-0 flex items-center justify-center text-xs font-medium text-gray-700 dark:text-gray-200"
+    >
+      {{ displayValue() }}%
+    </span>
+  }
+</div>

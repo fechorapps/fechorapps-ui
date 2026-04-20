@@ -1,0 +1,52 @@
+<div class="flex flex-col">
+  <label
+    class="inline-flex items-center"
+    [class.cursor-pointer]="!disabled()"
+    [class.cursor-not-allowed]="disabled()"
+  >
+    <!-- Hidden native checkbox for accessibility -->
+    <input
+      type="checkbox"
+      role="switch"
+      class="sr-only"
+      [name]="name()"
+      [id]="inputId()"
+      [checked]="checked()"
+      [disabled]="disabled()"
+      [attr.aria-checked]="checked()"
+      [attr.aria-invalid]="invalid()"
+      (change)="toggle()"
+      (keydown)="onKeydown($event)"
+    />
+
+    <!-- Label (left position) -->
+    @if (label() && labelPosition() === 'left') {
+      <span [class]="labelClasses()">{{ label() }}</span>
+    }
+
+    <!-- Switch track -->
+    <span [class]="trackClasses()" (click)="toggle()">
+      <!-- Switch thumb -->
+      <span [class]="thumbClasses()"></span>
+    </span>
+
+    <!-- Label (right position) -->
+    @if (label() && labelPosition() === 'right') {
+      <span [class]="labelClasses()">{{ label() }}</span>
+    }
+    <ng-content></ng-content>
+  </label>
+
+  <!-- Help text -->
+  @if (helpText()) {
+    <span
+      class="text-xs mt-1 ml-12"
+      [class.text-gray-500]="!invalid()"
+      [class.dark:text-gray-400]="!invalid()"
+      [class.text-red-500]="invalid()"
+      [class.dark:text-red-400]="invalid()"
+    >
+      {{ helpText() }}
+    </span>
+  }
+</div>

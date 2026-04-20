@@ -1,0 +1,38 @@
+<div class="inline-block">
+  <!-- Label -->
+  @if (label()) {
+    <label [class]="labelClasses()">
+      {{ label() }}
+    </label>
+  }
+
+  <!-- OTP Inputs -->
+  <div [class]="containerClasses()">
+    @for (i of inputArray(); track i) {
+      <input
+        #inputEl
+        [type]="mask() ? 'password' : 'text'"
+        inputmode="numeric"
+        [class]="inputClasses()"
+        [disabled]="disabled()"
+        [readonly]="readonly()"
+        [value]="getInputValue(i)"
+        [attr.aria-label]="'Digit ' + (i + 1)"
+        maxlength="2"
+        autocomplete="one-time-code"
+        (input)="handleInput($event, i)"
+        (keydown)="handleKeyDown($event, i)"
+        (paste)="handlePaste($event, i)"
+        (focus)="handleFocus($event, i)"
+        (blur)="handleBlur($event)"
+      />
+    }
+  </div>
+
+  <!-- Help text -->
+  @if (helpText()) {
+    <p [class]="helpTextClasses()">
+      {{ helpText() }}
+    </p>
+  }
+</div>

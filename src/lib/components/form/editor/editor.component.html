@@ -1,0 +1,208 @@
+<!-- Label -->
+@if (label()) {
+  <label [class]="labelClasses()">{{ label() }}</label>
+}
+
+<!-- Editor Wrapper -->
+<div [class]="wrapperClasses()">
+  <!-- Toolbar -->
+  <div
+    class="flex flex-wrap items-center gap-1 p-2 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800"
+  >
+    <!-- Formatting -->
+    @if (showFormatting()) {
+      <div class="flex items-center gap-0.5">
+        <button
+          type="button"
+          [class]="getToolbarButtonClasses('bold')"
+          [disabled]="disabled() || readonly()"
+          (click)="formatBold()"
+          title="Bold (Ctrl+B)"
+        >
+          <lucide-icon [img]="boldIcon" [size]="16" />
+        </button>
+        <button
+          type="button"
+          [class]="getToolbarButtonClasses('italic')"
+          [disabled]="disabled() || readonly()"
+          (click)="formatItalic()"
+          title="Italic (Ctrl+I)"
+        >
+          <lucide-icon [img]="italicIcon" [size]="16" />
+        </button>
+        <button
+          type="button"
+          [class]="getToolbarButtonClasses('underline')"
+          [disabled]="disabled() || readonly()"
+          (click)="formatUnderline()"
+          title="Underline (Ctrl+U)"
+        >
+          <lucide-icon [img]="underlineIcon" [size]="16" />
+        </button>
+        <button
+          type="button"
+          [class]="getToolbarButtonClasses('strikethrough')"
+          [disabled]="disabled() || readonly()"
+          (click)="formatStrikethrough()"
+          title="Strikethrough"
+        >
+          <lucide-icon [img]="strikethroughIcon" [size]="16" />
+        </button>
+      </div>
+      <div class="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+    }
+
+    <!-- Heading -->
+    @if (showHeading()) {
+      <div class="flex items-center gap-0.5">
+        <button
+          type="button"
+          [class]="getToolbarButtonClasses('h1')"
+          [disabled]="disabled() || readonly()"
+          (click)="formatHeading(1)"
+          title="Heading 1"
+        >
+          <lucide-icon [img]="heading1Icon" [size]="16" />
+        </button>
+        <button
+          type="button"
+          [class]="getToolbarButtonClasses('h2')"
+          [disabled]="disabled() || readonly()"
+          (click)="formatHeading(2)"
+          title="Heading 2"
+        >
+          <lucide-icon [img]="heading2Icon" [size]="16" />
+        </button>
+      </div>
+      <div class="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+    }
+
+    <!-- Alignment -->
+    @if (showAlignment()) {
+      <div class="flex items-center gap-0.5">
+        <button
+          type="button"
+          [class]="getToolbarButtonClasses('alignLeft')"
+          [disabled]="disabled() || readonly()"
+          (click)="alignLeft()"
+          title="Align Left"
+        >
+          <lucide-icon [img]="alignLeftIcon" [size]="16" />
+        </button>
+        <button
+          type="button"
+          [class]="getToolbarButtonClasses('alignCenter')"
+          [disabled]="disabled() || readonly()"
+          (click)="alignCenter()"
+          title="Align Center"
+        >
+          <lucide-icon [img]="alignCenterIcon" [size]="16" />
+        </button>
+        <button
+          type="button"
+          [class]="getToolbarButtonClasses('alignRight')"
+          [disabled]="disabled() || readonly()"
+          (click)="alignRight()"
+          title="Align Right"
+        >
+          <lucide-icon [img]="alignRightIcon" [size]="16" />
+        </button>
+        <button
+          type="button"
+          [class]="getToolbarButtonClasses('alignJustify')"
+          [disabled]="disabled() || readonly()"
+          (click)="alignJustify()"
+          title="Justify"
+        >
+          <lucide-icon [img]="alignJustifyIcon" [size]="16" />
+        </button>
+      </div>
+      <div class="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+    }
+
+    <!-- Lists -->
+    @if (showList()) {
+      <div class="flex items-center gap-0.5">
+        <button
+          type="button"
+          [class]="getToolbarButtonClasses('unorderedList')"
+          [disabled]="disabled() || readonly()"
+          (click)="insertUnorderedList()"
+          title="Bullet List"
+        >
+          <lucide-icon [img]="listIcon" [size]="16" />
+        </button>
+        <button
+          type="button"
+          [class]="getToolbarButtonClasses('orderedList')"
+          [disabled]="disabled() || readonly()"
+          (click)="insertOrderedList()"
+          title="Numbered List"
+        >
+          <lucide-icon [img]="listOrderedIcon" [size]="16" />
+        </button>
+      </div>
+      <div class="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+    }
+
+    <!-- Link -->
+    @if (showLink()) {
+      <div class="flex items-center gap-0.5">
+        <button
+          type="button"
+          [class]="getToolbarButtonClasses('link')"
+          [disabled]="disabled() || readonly()"
+          (click)="insertLink()"
+          title="Insert Link"
+        >
+          <lucide-icon [img]="linkIcon" [size]="16" />
+        </button>
+        <button
+          type="button"
+          [class]="getToolbarButtonClasses('blockquote')"
+          [disabled]="disabled() || readonly()"
+          (click)="insertBlockquote()"
+          title="Block Quote"
+        >
+          <lucide-icon [img]="quoteIcon" [size]="16" />
+        </button>
+      </div>
+    }
+
+    <!-- Code -->
+    @if (showCode()) {
+      <div class="flex items-center gap-0.5">
+        <button
+          type="button"
+          [class]="getToolbarButtonClasses('code')"
+          [disabled]="disabled() || readonly()"
+          (click)="insertCode()"
+          title="Code Block"
+        >
+          <lucide-icon [img]="codeIcon" [size]="16" />
+        </button>
+      </div>
+    }
+  </div>
+
+  <!-- Editor Content -->
+  <div
+    #editorEl
+    contenteditable="true"
+    [attr.contenteditable]="!disabled() && !readonly()"
+    [attr.placeholder]="placeholder()"
+    [style]="editorStyles()"
+    class="p-3 overflow-y-auto text-gray-900 dark:text-white focus:outline-none prose prose-sm dark:prose-invert max-w-none"
+    (input)="handleInput()"
+    (focus)="handleFocus($event)"
+    (blur)="handleBlur($event)"
+    (keydown)="handleKeyDown($event)"
+    (mouseup)="handleSelectionChange()"
+    (keyup)="handleSelectionChange()"
+  ></div>
+</div>
+
+<!-- Help Text -->
+@if (helpText()) {
+  <p [class]="helpTextClasses()">{{ helpText() }}</p>
+}

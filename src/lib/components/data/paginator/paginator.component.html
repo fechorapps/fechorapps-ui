@@ -1,0 +1,140 @@
+<ng-container *transloco="let t; prefix: 'common.pagination'">
+  <div [class]="containerClasses()">
+    <!-- Left Section: Current Page Report -->
+    <div class="flex items-center">
+      @if (showCurrentPageReport()) {
+        <span class="text-sm text-muted-foreground">
+          {{ currentPageReport() }}
+        </span>
+      }
+    </div>
+
+    <!-- Right Section: Controls -->
+    <div class="flex items-center gap-6">
+      <!-- Rows Per Page -->
+      @if (hasRowsPerPageOptions()) {
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-muted-foreground hidden sm:inline"
+            >{{ t('rowsPerPage') }}:</span
+          >
+          <ui-select
+            [options]="rowsSelectOptions()"
+            [value]="rows()"
+            [disabled]="disabled()"
+            size="sm"
+            [showClear]="false"
+            (onChange)="onRowsSelectChange($event)"
+            [attr.aria-label]="t('rowsPerPage')"
+            style="width: 5rem"
+          />
+        </div>
+      }
+
+      <!-- Jump to Page -->
+      @if (showJumpToPage()) {
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-muted-foreground hidden sm:inline">{{
+            t('page')
+          }}</span>
+          <input
+            type="number"
+            min="1"
+            [max]="pageCount()"
+            [value]="currentPage() + 1"
+            class="h-8 w-12 px-2 border border-border rounded-md bg-background text-foreground text-sm text-center focus:outline-none focus:ring-1 focus:ring-ring focus:border-primary [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            [disabled]="disabled()"
+            (blur)="onJumpToPage($event)"
+            (keydown)="onJumpInputKeydown($event)"
+            [attr.aria-label]="t('goToPage')"
+          />
+          <span class="text-sm text-muted-foreground"
+            >{{ t('of') }} {{ pageCount() }}</span
+          >
+        </div>
+      }
+
+      <!-- Navigation Controls -->
+      <nav class="flex items-center gap-1" aria-label="Pagination">
+        <!-- First Button -->
+        @if (showFirstLastButtons()) {
+          <button
+            type="button"
+            [class]="navButtonClasses()"
+            [disabled]="isFirstPage() || disabled()"
+            (click)="goToFirstPage()"
+            [uiTooltip]="t('firstPage')"
+            [tooltipPosition]="'top'"
+            [attr.aria-label]="t('firstPage')"
+          >
+            <lucide-icon [img]="firstIcon" class="w-4 h-4" />
+          </button>
+        }
+
+        <!-- Previous Button -->
+        @if (showPrevNextButtons()) {
+          <button
+            type="button"
+            [class]="navButtonClasses()"
+            [disabled]="isFirstPage() || disabled()"
+            (click)="goToPreviousPage()"
+            [uiTooltip]="t('previousPage')"
+            [tooltipPosition]="'top'"
+            [attr.aria-label]="t('previousPage')"
+          >
+            <lucide-icon [img]="prevIcon" class="w-4 h-4" />
+          </button>
+        }
+
+        <!-- Page Links -->
+        @if (showPageLinks()) {
+          <div class="hidden sm:flex items-center">
+            @for (page of pageLinks(); track page) {
+              <button
+                type="button"
+                [class]="pageButtonClasses()(page)"
+                [disabled]="disabled()"
+                (click)="goToPage(page)"
+                [uiTooltip]="t('goToPageN', { page: page + 1 })"
+                [tooltipPosition]="'top'"
+                [attr.aria-current]="page === currentPage() ? 'page' : null"
+                [attr.aria-label]="t('goToPageN', { page: page + 1 })"
+              >
+                {{ page + 1 }}
+              </button>
+            }
+          </div>
+        }
+
+        <!-- Next Button -->
+        @if (showPrevNextButtons()) {
+          <button
+            type="button"
+            [class]="navButtonClasses()"
+            [disabled]="isLastPage() || disabled()"
+            (click)="goToNextPage()"
+            [uiTooltip]="t('nextPage')"
+            [tooltipPosition]="'top'"
+            [attr.aria-label]="t('nextPage')"
+          >
+            <lucide-icon [img]="nextIcon" class="w-4 h-4" />
+          </button>
+        }
+
+        <!-- Last Button -->
+        @if (showFirstLastButtons()) {
+          <button
+            type="button"
+            [class]="navButtonClasses()"
+            [disabled]="isLastPage() || disabled()"
+            (click)="goToLastPage()"
+            [uiTooltip]="t('lastPage')"
+            [tooltipPosition]="'top'"
+            [attr.aria-label]="t('lastPage')"
+          >
+            <lucide-icon [img]="lastIcon" class="w-4 h-4" />
+          </button>
+        }
+      </nav>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,63 @@
+<!-- Mask overlay -->
+@if (mask() && visible()) {
+  <div
+    class="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300"
+    [class]="maskClass()"
+    (click)="hide()"
+  ></div>
+}
+
+<!-- SpeedDial container -->
+<div class="relative inline-flex z-50" (click)="onContainerClick($event)">
+  <!-- Trigger button -->
+  <button
+    type="button"
+    [class]="triggerClasses()"
+    [class]="buttonClass()"
+    [disabled]="disabled()"
+    [attr.aria-label]="ariaLabel()"
+    [attr.aria-expanded]="visible()"
+    aria-haspopup="menu"
+    (click)="toggle()"
+  >
+    <lucide-icon [img]="triggerIcon()" [size]="iconSize()"></lucide-icon>
+  </button>
+
+  <!-- Menu items -->
+  @if (visible()) {
+    <div [class]="containerClasses()" [class.relative]="isCircular()" role="menu">
+      @for (item of model(); track item.id ?? $index; let i = $index) {
+        <button
+          type="button"
+          [class]="getItemClasses(item, i)"
+          [style]="getItemStyle(i)"
+          [disabled]="item.disabled"
+          [attr.aria-label]="item.label"
+          [attr.title]="item.label"
+          role="menuitem"
+          class="animate-scale-in"
+          (click)="onItemClicked(item, $event)"
+        >
+          <lucide-icon [img]="item.icon" [size]="itemIconSize()"></lucide-icon>
+        </button>
+      }
+    </div>
+  }
+</div>
+
+<style>
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.2s ease-out forwards;
+  }
+</style>

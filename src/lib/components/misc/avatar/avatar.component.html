@@ -1,0 +1,13 @@
+<span [class]="containerClasses()">
+  @switch (displayType()) {
+    @case ('image') {
+      <img [src]="image()" [alt]="label() || 'Avatar'" class="w-full h-full object-cover" />
+    }
+    @case ('label') {
+      <span class="font-medium select-none">{{ initials() }}</span>
+    }
+    @case ('icon') {
+      <lucide-icon [img]="userIcon" [size]="iconSize()" />
+    }
+  }
+</span>

@@ -1,0 +1,131 @@
+<div [class]="containerClasses()">
+  <!-- Header -->
+  @if (headerTemplate(); as template) {
+    <div
+      class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800"
+    >
+      <ng-container [ngTemplateOutlet]="template" />
+    </div>
+  }
+
+  <!-- Filter -->
+  @if (filter()) {
+    <div class="p-2 border-b border-gray-200 dark:border-gray-700">
+      <div class="relative">
+        <lucide-icon
+          [img]="searchIcon"
+          class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+        />
+        <input
+          type="text"
+          [placeholder]="filterPlaceholder()"
+          [value]="filterValue()"
+          (input)="onFilterInput($event)"
+          class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+        />
+      </div>
+    </div>
+  }
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="p-8 text-center">
+      <div
+        class="inline-block w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"
+      ></div>
+      <p class="mt-2 text-sm text-gray-500">Loading...</p>
+    </div>
+  } @else {
+    <!-- Tree -->
+    <div [class]="treeClasses()" [style.maxHeight]="scrollHeight()" role="tree">
+      @if (filteredNodes().length === 0) {
+        <div class="p-4 text-center text-gray-500 dark:text-gray-400">
+          @if (emptyTemplate(); as template) {
+            <ng-container [ngTemplateOutlet]="template" />
+          } @else {
+            No data available
+          }
+        </div>
+      } @else {
+        <ng-container
+          *ngTemplateOutlet="treeNodeTemplate; context: { nodes: filteredNodes(), level: 0 }"
+        />
+      }
+    </div>
+  }
+</div>
+
+<!-- Recursive Tree Node Template -->
+<ng-template #treeNodeTemplate let-nodes="nodes" let-level="level">
+  @for (node of nodes; track node.key) {
+    <div
+      class="tree-node"
+      [style.paddingLeft.px]="level * 20"
+      role="treeitem"
+      [attr.aria-expanded]="hasChildren(node) ? isExpanded(node) : null"
+      [attr.aria-selected]="isSelected(node)"
+    >
+      <!-- Node Content -->
+      <div [class]="getNodeClasses(node, level)" (click)="onNodeClick($event, node)">
+        <!-- Expand/Collapse Toggle -->
+        <button
+          type="button"
+          class="w-5 h-5 flex items-center justify-center shrink-0"
+          [class.invisible]="!hasChildren(node)"
+          (click)="toggleExpand($event, node)"
+        >
+          @if (isExpanded(node)) {
+            <lucide-icon [img]="collapseIcon" class="w-4 h-4 text-gray-500" />
+          } @else {
+            <lucide-icon [img]="expandIcon" class="w-4 h-4 text-gray-500" />
+          }
+        </button>
+
+        <!-- Checkbox (if checkbox mode) -->
+        @if (isCheckboxMode()) {
+          <div [class]="getCheckboxClasses(node)">
+            @if (isSelected(node)) {
+              <lucide-icon [img]="checkIcon" class="w-3 h-3" />
+            } @else if (isPartiallySelected(node)) {
+              <lucide-icon [img]="indeterminateIcon" class="w-3 h-3" />
+            }
+          </div>
+        }
+
+        <!-- Node Icon -->
+        @if (!nodeTemplate()) {
+          <lucide-icon
+            [img]="hasChildren(node) ? (isExpanded(node) ? folderOpenIcon : folderIcon) : fileIcon"
+            class="w-4 h-4 text-gray-500 shrink-0"
+          />
+        }
+
+        <!-- Node Label / Custom Template -->
+        <div class="flex-1 min-w-0">
+          @if (nodeTemplate(); as template) {
+            <ng-container
+              [ngTemplateOutlet]="template"
+              [ngTemplateOutletContext]="getNodeContext(node, level)"
+            />
+          } @else {
+            <span class="text-sm text-gray-900 dark:text-gray-100 truncate">
+              {{ node.label }}
+            </span>
+          }
+        </div>
+      </div>
+
+      <!-- Children (if expanded) -->
+      @if (hasChildren(node) && isExpanded(node)) {
+        <div role="group">
+          <ng-container
+            *ngTemplateOutlet="
+              treeNodeTemplate;
+              context: { nodes: node.children, level: level + 1 }
+            "
+          />
+        </div>
+      }
+    </div>
+  }
+</ng-template>

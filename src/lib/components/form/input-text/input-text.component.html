@@ -1,0 +1,72 @@
+<div [class]="wrapperClasses()">
+  <!-- Label -->
+  @if (label() && floatLabel() === 'never') {
+    <label [for]="inputId()" [class]="labelClasses()">
+      {{ label() }}
+    </label>
+  }
+
+  <!-- Input Container -->
+  <div [class]="containerClasses()">
+    <!-- Left Icon -->
+    @if (icon()) {
+      <span class="absolute left-3 flex items-center pointer-events-none" [class]="iconClasses()">
+        <lucide-icon [img]="icon()!" [size]="iconSize()"></lucide-icon>
+      </span>
+    }
+
+    <!-- Float Label -->
+    @if (label() && floatLabel() !== 'never') {
+      <label
+        [for]="inputId()"
+        class="absolute left-3 transition-all duration-200 pointer-events-none"
+        [class.text-xs]="showFloatLabel()"
+        [class.-top-2]="showFloatLabel()"
+        [class.bg-white]="showFloatLabel()"
+        [class.dark:bg-gray-900]="showFloatLabel()"
+        [class.px-1]="showFloatLabel()"
+        [class.text-primary-600]="showFloatLabel() && focused()"
+        [class.text-gray-500]="!showFloatLabel() || !focused()"
+        [class.top-1/2]="!showFloatLabel()"
+        [class.-translate-y-1/2]="!showFloatLabel()"
+      >
+        {{ label() }}
+      </label>
+    }
+
+    <!-- Input -->
+    <input
+      [type]="type()"
+      [class]="inputClasses()"
+      [placeholder]="floatLabel() !== 'never' ? '' : placeholder()"
+      [disabled]="disabled()"
+      [readonly]="readonly()"
+      [value]="value()"
+      [name]="name()"
+      [id]="inputId()"
+      [autocomplete]="autocomplete()"
+      [attr.maxlength]="maxLength()"
+      [attr.minlength]="minLength()"
+      [attr.aria-invalid]="invalid()"
+      [attr.aria-describedby]="helpText() ? inputId() + '-help' : null"
+      (focus)="onFocus($event)"
+      (blur)="onBlur($event)"
+      (input)="onInput($event)"
+      (keyup)="onKeyup($event)"
+    />
+
+    <!-- Right Icon -->
+    @if (iconEnd()) {
+      <span class="absolute right-3 flex items-center pointer-events-none" [class]="iconClasses()">
+        <lucide-icon [img]="iconEnd()!" [size]="iconSize()"></lucide-icon>
+      </span>
+    }
+  </div>
+
+  <!-- Help Text -->
+  @if (helpText()) {
+    <p [id]="inputId() + '-help'" [class]="helpTextClasses()">
+      {{ helpText() }}
+    </p>
+  }
+</div>

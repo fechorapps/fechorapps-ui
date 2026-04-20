@@ -1,0 +1,101 @@
+<div [class]="wrapperClasses()">
+  <!-- Label -->
+  @if (label()) {
+    <label [for]="inputId()" [class]="labelClasses()">
+      {{ label() }}
+    </label>
+  }
+
+  <!-- Container -->
+  <div #containerEl class="relative">
+    <!-- Trigger (only if not inline) -->
+    @if (!inline()) {
+      <button
+        type="button"
+        [class]="triggerClasses()"
+        [disabled]="disabled()"
+        [id]="inputId()"
+        [attr.aria-expanded]="panelVisible()"
+        [attr.aria-invalid]="invalid()"
+        (click)="togglePanel()"
+        (focus)="handleFocus()"
+        (blur)="handleBlur()"
+      >
+        <!-- Color swatch -->
+        <span
+          [class]="swatchSize()"
+          class="rounded border border-gray-300 dark:border-gray-600"
+          [style.backgroundColor]="value()"
+        ></span>
+
+        <!-- Display value -->
+        @if (showInput()) {
+          <span class="font-mono text-gray-900 dark:text-white">
+            {{ displayValue() }}
+          </span>
+        }
+      </button>
+    }
+
+    <!-- Color picker panel -->
+    @if (panelVisible() || inline()) {
+      <div [class]="panelClasses()" [style.width]="'240px'">
+        <!-- Native color input -->
+        <div class="mb-3">
+          <input
+            type="color"
+            [value]="value()"
+            (input)="onColorInput($event)"
+            class="w-full h-32 cursor-pointer rounded border-0"
+          />
+        </div>
+
+        <!-- Hex input -->
+        @if (showInput()) {
+          <div class="flex items-center gap-2 mb-3">
+            <span
+              class="w-8 h-8 rounded border border-gray-300 dark:border-gray-600 flex-shrink-0"
+              [style.backgroundColor]="value()"
+            ></span>
+            <input
+              type="text"
+              [value]="value()"
+              (input)="onTextInput($event)"
+              class="flex-1 px-2 py-1.5 text-sm font-mono bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+              placeholder="#000000"
+              maxlength="7"
+            />
+          </div>
+        }
+
+        <!-- Preset colors -->
+        @if (showPresets() && presets().length > 0) {
+          <div class="border-t border-gray-200 dark:border-gray-700 pt-3">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Presets</p>
+            <div class="flex flex-wrap gap-1.5">
+              @for (preset of presets(); track preset.value) {
+                <button
+                  type="button"
+                  [title]="preset.name"
+                  [class]="presetSwatchSize()"
+                  class="rounded border border-gray-300 dark:border-gray-600 cursor-pointer hover:scale-110 transition-transform"
+                  [style.backgroundColor]="preset.value"
+                  [class.ring-2]="value() === preset.value"
+                  [class.ring-primary-500]="value() === preset.value"
+                  (click)="selectPreset(preset)"
+                ></button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Help text -->
+  @if (helpText()) {
+    <p [id]="inputId() + '-help'" [class]="helpTextClasses()">
+      {{ helpText() }}
+    </p>
+  }
+</div>

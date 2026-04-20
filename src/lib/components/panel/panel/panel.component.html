@@ -1,0 +1,30 @@
+<div [class]="containerClasses()">
+  <!-- Header -->
+  <div [class]="headerClasses()">
+    <span class="font-semibold text-gray-800 dark:text-gray-200">
+      {{ header() }}
+    </span>
+
+    @if (toggleable()) {
+      <button
+        type="button"
+        class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        (click)="toggle()"
+        [attr.aria-expanded]="!isCollapsed()"
+      >
+        <lucide-icon
+          [img]="isCollapsed() ? plusIcon : minusIcon"
+          [size]="18"
+          class="text-gray-500"
+        />
+      </button>
+    }
+  </div>
+
+  <!-- Content -->
+  @if (!isCollapsed()) {
+    <div [class]="contentClasses()">
+      <ng-content />
+    </div>
+  }
+</div>

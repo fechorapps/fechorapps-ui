@@ -1,0 +1,75 @@
+/* ==========================================================================
+   Semantic UI Colors — Metronic Design System
+   Light / Dark mode via .dark class on <html>
+   ========================================================================== */
+
+:root {
+  /* Primary — uses the active theme palette */
+  --primary: var(--theme-primary-500);
+  --primary-foreground: #ffffff;
+
+  /* Secondary */
+  --secondary: #f4f4f5;           /* zinc-100 */
+  --secondary-foreground: #18181b; /* zinc-900 */
+
+  /* Accent */
+  --accent: #f4f4f5;              /* zinc-100 */
+  --accent-foreground: #18181b;   /* zinc-900 */
+
+  /* Muted */
+  --muted: #f4f4f5;               /* zinc-100 */
+  --muted-foreground: #71717a;    /* zinc-500 */
+
+  /* Destructive */
+  --destructive: #dc2626;          /* red-600 */
+  --destructive-foreground: #ffffff;
+
+  /* Surfaces */
+  --background: #ffffff;
+  --foreground: #09090b;           /* zinc-950 */
+  --card: #ffffff;
+  --card-foreground: #09090b;      /* zinc-950 */
+  --popover: #ffffff;
+  --popover-foreground: #09090b;
+
+  /* Controls */
+  --border: #e4e4e7;               /* zinc-200 */
+  --input: #e4e4e7;                /* zinc-200 */
+  --ring: #a1a1aa;                 /* zinc-400 */
+}
+
+.dark,
+.dark-mode {
+  /* Primary */
+  --primary: var(--theme-primary-600);
+  --primary-foreground: #ffffff;
+
+  /* Secondary */
+  --secondary: #27272a;            /* zinc-800 */
+  --secondary-foreground: #fafafa; /* zinc-50 */
+
+  /* Accent */
+  --accent: #18181b;               /* zinc-900 */
+  --accent-foreground: #fafafa;    /* zinc-50 */
+
+  /* Muted */
+  --muted: #18181b;                /* zinc-900 */
+  --muted-foreground: #71717a;     /* zinc-500 */
+
+  /* Destructive */
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+
+  /* Surfaces */
+  --background: #09090b;           /* zinc-950 */
+  --foreground: #fafafa;           /* zinc-50 */
+  --card: #09090b;                 /* zinc-950 */
+  --card-foreground: #fafafa;      /* zinc-50 */
+  --popover: #09090b;
+  --popover-foreground: #fafafa;
+
+  /* Controls */
+  --border: #27272a;               /* zinc-800 */
+  --input: #27272a;                /* zinc-800 */
+  --ring: #52525b;                 /* zinc-600 */
+}

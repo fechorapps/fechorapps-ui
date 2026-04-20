@@ -1,0 +1,112 @@
+<div [class]="wrapperClasses()">
+  <!-- Label -->
+  @if (label()) {
+    <label [for]="inputId()" [class]="labelClasses()">
+      {{ label() }}
+    </label>
+  }
+
+  <!-- Slider container -->
+  <div
+    class="relative"
+    [class.px-2]="orientation() === 'horizontal'"
+    [class.py-2]="orientation() === 'vertical'"
+  >
+    <!-- Min/Max labels -->
+    @if (showLabels() && orientation() === 'horizontal') {
+      <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-2">
+        <span>{{ min() }}</span>
+        <span>{{ max() }}</span>
+      </div>
+    }
+
+    <!-- Track -->
+    <div #trackEl [class]="trackClasses()" (click)="onTrackClick($event)">
+      <!-- Fill -->
+      @if (range()) {
+        <div
+          [class]="fillClasses()"
+          [style.left.%]="rangePercentages()[0]"
+          [style.width.%]="rangePercentages()[1] - rangePercentages()[0]"
+        ></div>
+      } @else {
+        <div [class]="fillClasses()" [style.left]="'0'" [style.width.%]="percentage()"></div>
+      }
+
+      <!-- Handles -->
+      @if (range()) {
+        <!-- Start handle -->
+        <div
+          [class]="handleClasses()"
+          [style.left.%]="rangePercentages()[0]"
+          tabindex="0"
+          role="slider"
+          [attr.aria-valuemin]="min()"
+          [attr.aria-valuemax]="max()"
+          [attr.aria-valuenow]="rangeValues()[0]"
+          [attr.aria-disabled]="disabled()"
+          (mousedown)="onHandleMouseDown($event, 0)"
+          (keydown)="onKeydown($event, 0)"
+        >
+          @if (showTooltip() && activeHandle() === 0) {
+            <div
+              class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap"
+            >
+              {{ rangeValues()[0] }}
+            </div>
+          }
+        </div>
+
+        <!-- End handle -->
+        <div
+          [class]="handleClasses()"
+          [style.left.%]="rangePercentages()[1]"
+          tabindex="0"
+          role="slider"
+          [attr.aria-valuemin]="min()"
+          [attr.aria-valuemax]="max()"
+          [attr.aria-valuenow]="rangeValues()[1]"
+          [attr.aria-disabled]="disabled()"
+          (mousedown)="onHandleMouseDown($event, 1)"
+          (keydown)="onKeydown($event, 1)"
+        >
+          @if (showTooltip() && activeHandle() === 1) {
+            <div
+              class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap"
+            >
+              {{ rangeValues()[1] }}
+            </div>
+          }
+        </div>
+      } @else {
+        <div
+          [class]="handleClasses()"
+          [style.left.%]="percentage()"
+          tabindex="0"
+          role="slider"
+          [attr.aria-valuemin]="min()"
+          [attr.aria-valuemax]="max()"
+          [attr.aria-valuenow]="singleValue()"
+          [attr.aria-disabled]="disabled()"
+          (mousedown)="onHandleMouseDown($event)"
+          (keydown)="onKeydown($event)"
+        >
+          @if (showTooltip() && dragging()) {
+            <div
+              class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap"
+            >
+              {{ singleValue() }}
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Help text -->
+  @if (helpText()) {
+    <p [id]="inputId() + '-help'" [class]="helpTextClasses()">
+      {{ helpText() }}
+    </p>
+  }
+</div>

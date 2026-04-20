@@ -1,0 +1,42 @@
+<div class="relative inline-block">
+  <!-- Trigger -->
+  <div
+    #trigger
+    (click)="onTriggerClick()"
+    (mouseenter)="onTriggerMouseEnter()"
+    (mouseleave)="onTriggerMouseLeave()"
+    (focus)="onTriggerFocus()"
+    (blur)="onTriggerBlur()"
+  >
+    <ng-content select="[trigger]" />
+  </div>
+
+  <!-- Popover -->
+  <div
+    #popover
+    [class]="popoverClasses() + ' ' + positionClasses()"
+    (mouseenter)="onPopoverMouseEnter()"
+    (mouseleave)="onPopoverMouseLeave()"
+    role="dialog"
+  >
+    <!-- Arrow -->
+    <div [class]="arrowClasses()"></div>
+
+    <!-- Close Button -->
+    @if (showCloseIcon()) {
+      <button
+        type="button"
+        class="absolute top-2 right-2 p-1 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+        (click)="hide()"
+        aria-label="Close"
+      >
+        <lucide-icon [img]="closeIcon" class="w-4 h-4" />
+      </button>
+    }
+
+    <!-- Content -->
+    <div class="relative">
+      <ng-content />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as InputGroupStories from './input-group.stories';
+
+<Meta of={InputGroupStories} />
+
+<Title />
+
+<Subtitle>Agrupa campos de entrada con addons de texto o iconos (prefijos y sufijos).</Subtitle>
+
+## Importación
+
+```typescript
+import { UiInputGroupComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-input-group prefix="$">
+  <input type="number" placeholder="0.00" />
+</ui-input-group>
+```
+
+<Canvas of={InputGroupStories.WithPrefix} />
+
+## API
+
+<ArgTypes of={InputGroupStories} />
+
+## Con Sufijo
+
+```html
+<ui-input-group suffix="USD">
+  <input type="number" placeholder="0.00" />
+</ui-input-group>
+```
+
+<Canvas of={InputGroupStories.WithSuffix} />
+
+## Ambos Addons
+
+```html
+<ui-input-group prefix="$" suffix="USD">
+  <input type="number" placeholder="0.00" />
+</ui-input-group>
+```
+
+<Canvas of={InputGroupStories.BothAddons} />
+
+## Con Iconos
+
+```html
+<ui-input-group [prefixIcon]="mailIcon">
+  <input type="email" placeholder="Email" />
+</ui-input-group>
+```
+
+<Canvas of={InputGroupStories.WithPrefixIcon} />
+
+## URL Input
+
+<Canvas of={InputGroupStories.WebsiteInput} />
+
+## Tamaños
+
+<Canvas of={InputGroupStories.Sizes} />
+
+## Estados
+
+### Deshabilitado
+
+<Canvas of={InputGroupStories.Disabled} />
+
+### Inválido
+
+<Canvas of={InputGroupStories.Invalid} />
+
+## Ejemplo de Formulario
+
+<Canvas of={InputGroupStories.FormExample} />
+
+## Tipos de Addon
+
+<Canvas of={InputGroupStories.VariousAddonTypes} />
+
+---
+
+## Todas las Stories
+
+<Stories />

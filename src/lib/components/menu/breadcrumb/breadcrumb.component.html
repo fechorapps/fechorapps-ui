@@ -1,0 +1,92 @@
+<nav [class]="breadcrumbClasses()" aria-label="Breadcrumb">
+  <ol class="flex items-center gap-2">
+    <!-- Home Item -->
+    @if (home(); as homeItem) {
+      <li>
+        @if (homeItem.url) {
+          <a
+            [href]="homeItem.url"
+            [class]="getItemClasses(homeItem, false)"
+            (click)="onItemClicked($event, homeItem)"
+          >
+            @if (homeItem.icon) {
+              <lucide-icon [img]="homeItem.icon" class="w-4 h-4" />
+            } @else {
+              <lucide-icon [img]="homeIcon" class="w-4 h-4" />
+            }
+            @if (homeItem.label) {
+              <span>{{ homeItem.label }}</span>
+            }
+          </a>
+        } @else {
+          <button
+            type="button"
+            [class]="getItemClasses(homeItem, false)"
+            [disabled]="homeItem.disabled"
+            (click)="onItemClicked($event, homeItem)"
+          >
+            @if (homeItem.icon) {
+              <lucide-icon [img]="homeItem.icon" class="w-4 h-4" />
+            } @else {
+              <lucide-icon [img]="homeIcon" class="w-4 h-4" />
+            }
+            @if (homeItem.label) {
+              <span>{{ homeItem.label }}</span>
+            }
+          </button>
+        }
+      </li>
+
+      <!-- Separator after home -->
+      <li class="text-gray-400 dark:text-gray-600" aria-hidden="true">
+        @if (separatorTemplate(); as template) {
+          <ng-container [ngTemplateOutlet]="template" />
+        } @else {
+          <lucide-icon [img]="separatorIcon" class="w-4 h-4" />
+        }
+      </li>
+    }
+
+    <!-- Breadcrumb Items -->
+    @for (item of model(); track trackByItem($index, item); let last = $last) {
+      <li>
+        @if (itemTemplate(); as template) {
+          <ng-container
+            [ngTemplateOutlet]="template"
+            [ngTemplateOutletContext]="{ $implicit: item, last: last }"
+          />
+        } @else if (item.url && !last) {
+          <a
+            [href]="item.url"
+            [class]="getItemClasses(item, last)"
+            [attr.aria-current]="last ? 'page' : null"
+            (click)="onItemClicked($event, item)"
+          >
+            @if (item.icon) {
+              <lucide-icon [img]="item.icon" class="w-4 h-4" />
+            }
+            <span>{{ item.label }}</span>
+          </a>
+        } @else {
+          <span [class]="getItemClasses(item, last)" [attr.aria-current]="last ? 'page' : null">
+            @if (item.icon) {
+              <lucide-icon [img]="item.icon" class="w-4 h-4" />
+            }
+            <span>{{ item.label }}</span>
+          </span>
+        }
+      </li>
+
+      <!-- Separator between items -->
+      @if (!last) {
+        <li class="text-gray-400 dark:text-gray-600" aria-hidden="true">
+          @if (separatorTemplate(); as template) {
+            <ng-container [ngTemplateOutlet]="template" />
+          } @else {
+            <lucide-icon [img]="separatorIcon" class="w-4 h-4" />
+          }
+        </li>
+      }
+    }
+  </ol>
+</nav>

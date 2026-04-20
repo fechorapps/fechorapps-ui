@@ -1,0 +1,46 @@
+<div [class]="stepsClasses()" role="navigation">
+  @for (item of model(); track trackByItem($index, item); let last = $last) {
+    <div [class]="getStepClasses($index)">
+      @if (itemTemplate(); as template) {
+        <ng-container
+          [ngTemplateOutlet]="template"
+          [ngTemplateOutletContext]="{
+            $implicit: item,
+            index: $index,
+            active: isActive($index),
+            completed: isCompleted($index),
+          }"
+        />
+      } @else {
+        <div
+          class="flex flex-col items-center"
+          [class.cursor-pointer]="!readonly() && !item.disabled"
+          (click)="onItemClick($event, item, $index)"
+        >
+          <!-- Step Number/Icon -->
+          <div [class]="getNumberClasses(item, $index)">
+            @if (isCompleted($index)) {
+              <lucide-icon [img]="checkIcon" class="w-5 h-5" />
+            } @else if (item.icon) {
+              <lucide-icon [img]="item.icon" class="w-5 h-5" />
+            } @else {
+              {{ $index + 1 }}
+            }
+          </div>
+
+          <!-- Label -->
+          @if (item.label) {
+            <span [class]="getLabelClasses(item, $index)">
+              {{ item.label }}
+            </span>
+          }
+        </div>
+      }
+
+      <!-- Connector -->
+      @if (!last) {
+        <div [class]="getConnectorClasses($index)"></div>
+      }
+    </div>
+  }
+</div>

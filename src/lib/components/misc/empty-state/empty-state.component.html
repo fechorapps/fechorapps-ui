@@ -1,0 +1,47 @@
+<div
+  class="flex flex-col items-center justify-center text-center"
+  [class]="size() === 'sm' ? 'py-6 px-4' : size() === 'lg' ? 'py-16 px-8' : 'py-12 px-6'"
+>
+  <!-- Icon -->
+  <div
+    class="text-gray-300 dark:text-gray-600"
+    [class]="size() === 'sm' ? 'mb-3' : size() === 'lg' ? 'mb-6' : 'mb-4'"
+  >
+    <lucide-icon [img]="resolvedIcon()" [class]="iconSizeClass()" />
+  </div>
+
+  <!-- Title -->
+  <h3
+    class="font-medium text-gray-900 dark:text-white"
+    [class]="size() === 'sm' ? 'text-sm' : size() === 'lg' ? 'text-xl' : 'text-base'"
+  >
+    {{ title() }}
+  </h3>
+
+  <!-- Description -->
+  @if (description()) {
+    <p
+      class="text-gray-500 dark:text-gray-400 mt-1"
+      [class]="
+        size() === 'sm' ? 'text-xs mt-1' : size() === 'lg' ? 'text-base mt-2' : 'text-sm mt-1'
+      "
+    >
+      {{ description() }}
+    </p>
+  }
+
+  <!-- Action Button -->
+  @if (actionLabel()) {
+    <button
+      type="button"
+      class="btn btn-primary mt-4"
+      [class]="size() === 'sm' ? 'btn-sm mt-3' : size() === 'lg' ? 'mt-6' : 'mt-4'"
+      (click)="onActionClick()"
+    >
+      {{ actionLabel() }}
+    </button>
+  }
+
+  <!-- Additional content slot -->
+  <ng-content></ng-content>
+</div>

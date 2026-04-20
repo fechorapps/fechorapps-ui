@@ -1,0 +1,259 @@
+import { Meta, Title, Subtitle, Canvas, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as CardStories from './card.stories';
+
+<Meta of={CardStories} />
+
+<Title />
+
+<Subtitle>Componente de tarjeta versátil con soporte para header, footer, imagen y slots de contenido.</Subtitle>
+
+## Importación
+
+```typescript
+import { UiCardComponent } from '@appcordion/ui';
+```
+
+## Uso Básico
+
+```html
+<ui-card title="Título" subtitle="Subtítulo opcional">
+  <p>Contenido de la tarjeta</p>
+</ui-card>
+```
+
+<Canvas of={CardStories.Default} />
+
+## API
+
+<ArgTypes of={CardStories} />
+
+## Variantes
+
+<Canvas of={CardStories.AllVariants} />
+
+| Variante | Uso |
+|----------|-----|
+| `default` | Uso general con borde sutil |
+| `elevated` | Tarjetas destacadas con sombra |
+| `outlined` | Énfasis en el borde |
+| `ghost` | Fondo sutil, sin borde |
+
+## Padding
+
+```html
+<ui-card padding="none">Sin padding</ui-card>
+<ui-card padding="sm">Padding pequeño</ui-card>
+<ui-card padding="md">Padding medio (default)</ui-card>
+<ui-card padding="lg">Padding grande</ui-card>
+```
+
+## Proyección de Contenido
+
+La tarjeta usa slots para contenido flexible:
+
+```html
+<ui-card title="Mi Tarjeta">
+  <!-- Slot de header personalizado (sobreescribe title/subtitle) -->
+  <ng-container header>
+    <div class="flex items-center gap-2">
+      <span class="text-2xl">🎯</span>
+      <span>Header Personalizado</span>
+    </div>
+  </ng-container>
+
+  <!-- Contenido principal (slot default) -->
+  <p>Contenido principal aquí.</p>
+
+  <!-- Slot de footer -->
+  <ng-container footer>
+    <ui-button>Acción</ui-button>
+  </ng-container>
+</ui-card>
+```
+
+<Canvas of={CardStories.WithFooter} />
+
+## Con Imagen
+
+<Canvas of={CardStories.WithImage} />
+
+```html
+<ui-card
+  imageUrl="https://example.com/image.jpg"
+  imageAlt="Descripción de imagen"
+  title="Producto"
+  subtitle="Categoría"
+>
+  <p>Descripción del producto.</p>
+</ui-card>
+```
+
+## Con Divisores
+
+<Canvas of={CardStories.WithDividers} />
+
+```html
+<ui-card title="Título" [dividers]="true">
+  <p>Contenido</p>
+  <ng-container footer>
+    <ui-button>Acción</ui-button>
+  </ng-container>
+</ui-card>
+```
+
+## Tarjetas Interactivas
+
+### Hoverable
+
+Efecto de elevación al pasar el mouse:
+
+<Canvas of={CardStories.Hoverable} />
+
+### Clickable
+
+Tarjeta que emite eventos de click:
+
+<Canvas of={CardStories.Clickable} />
+
+```typescript
+handleCardClick(event: MouseEvent): void {
+  console.log('Card clicked!', event);
+}
+```
+
+```html
+<ui-card
+  [clickable]="true"
+  [hoverable]="true"
+  (cardClick)="handleCardClick($event)"
+>
+  Haz clic aquí
+</ui-card>
+```
+
+---
+
+## Ejemplos de Uso Real
+
+### Stats Card
+
+Ideal para dashboards y métricas:
+
+<Canvas of={CardStories.StatsCard} />
+
+### Profile Card
+
+Para mostrar información de usuario:
+
+<Canvas of={CardStories.ProfileCard} />
+
+### Pricing Card
+
+Para planes y precios:
+
+<Canvas of={CardStories.PricingCard} />
+
+### Product Card
+
+Para catálogos de cursos:
+
+<Canvas of={CardStories.ProductCard} />
+
+### Notification Card
+
+Para alertas y mensajes:
+
+<Canvas of={CardStories.NotificationCard} />
+
+### Exam Result Card
+
+Para resultados de exámenes:
+
+<Canvas of={CardStories.ExamResultCard} />
+
+### Achievement Card
+
+Para logros y badges:
+
+<Canvas of={CardStories.AchievementCard} />
+
+### Progress Card
+
+Para mostrar progreso de cursos:
+
+<Canvas of={CardStories.ProgressCard} />
+
+### Leaderboard Card
+
+Para rankings y clasificaciones:
+
+<Canvas of={CardStories.LeaderboardCard} />
+
+### Schedule Card
+
+Para próximos eventos:
+
+<Canvas of={CardStories.ScheduleCard} />
+
+### Empty State Card
+
+Para estados vacíos:
+
+<Canvas of={CardStories.EmptyStateCard} />
+
+### Loading Skeleton
+
+Para estados de carga:
+
+<Canvas of={CardStories.LoadingSkeletonCard} />
+
+---
+
+## Layouts
+
+### Grid de Tarjetas
+
+<Canvas of={CardStories.CardGrid} />
+
+```html
+<div class="grid grid-cols-3 gap-4">
+  @for (item of items; track item.id) {
+    <ui-card [hoverable]="true" [title]="item.title">
+      {{ item.content }}
+    </ui-card>
+  }
+</div>
+```
+
+### Tarjeta Compleja
+
+<Canvas of={CardStories.ComplexCard} />
+
+---
+
+## Accesibilidad
+
+- Tarjetas clickables deben tener `role="button"` (agregado automáticamente)
+- El contenido debe tener estructura semántica adecuada
+- Imágenes deben incluir `imageAlt` descriptivo
+- Focus visible en tarjetas interactivas
+
+```html
+<!-- Ejemplo accesible -->
+<ui-card
+  [clickable]="true"
+  [hoverable]="true"
+  imageUrl="course.jpg"
+  imageAlt="Portada del curso de matemáticas"
+  title="Matemáticas Avanzadas"
+  subtitle="12 lecciones"
+>
+  <p>Descripción del curso...</p>
+</ui-card>
+```
+
+---
+
+## Todas las Stories
+
+<Stories />

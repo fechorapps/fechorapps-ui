@@ -1,0 +1,92 @@
+<div [class]="containerClasses()">
+  <!-- Main Image -->
+  <img
+    [src]="src()"
+    [alt]="alt()"
+    [class]="imageClasses()"
+    [style.width]="width() || null"
+    [style.height]="height() || null"
+    [style]="imageStyle()"
+    (click)="showPreview()"
+    (load)="onImageLoad()"
+    (error)="onImageError($event)"
+  />
+
+  <!-- Preview Overlay -->
+  @if (preview()) {
+    <div
+      class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/30 cursor-pointer"
+      (click)="showPreview()"
+    >
+      <lucide-icon [img]="zoomInIcon" class="text-white" [size]="24" />
+    </div>
+  }
+</div>
+
+<!-- Preview Modal -->
+@if (previewVisible()) {
+  <div
+    class="preview-backdrop fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+    (click)="onBackdropClick($event)"
+  >
+    <!-- Toolbar -->
+    <div
+      class="absolute top-4 right-4 flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-lg p-2"
+    >
+      <button
+        type="button"
+        class="p-2 text-white hover:bg-white/20 rounded-lg transition-colors"
+        (click)="zoomIn()"
+        title="Zoom In"
+      >
+        <lucide-icon [img]="zoomInIcon" [size]="20" />
+      </button>
+      <button
+        type="button"
+        class="p-2 text-white hover:bg-white/20 rounded-lg transition-colors"
+        (click)="zoomOut()"
+        title="Zoom Out"
+      >
+        <lucide-icon [img]="zoomOutIcon" [size]="20" />
+      </button>
+      <button
+        type="button"
+        class="p-2 text-white hover:bg-white/20 rounded-lg transition-colors"
+        (click)="rotateRight()"
+        title="Rotate"
+      >
+        <lucide-icon [img]="rotateIcon" [size]="20" />
+      </button>
+      <button
+        type="button"
+        class="p-2 text-white hover:bg-white/20 rounded-lg transition-colors"
+        (click)="download()"
+        title="Download"
+      >
+        <lucide-icon [img]="downloadIcon" [size]="20" />
+      </button>
+      <div class="w-px h-6 bg-white/30"></div>
+      <button
+        type="button"
+        class="p-2 text-white hover:bg-white/20 rounded-lg transition-colors"
+        (click)="hidePreview()"
+        title="Close"
+      >
+        <lucide-icon [img]="closeIcon" [size]="20" />
+      </button>
+    </div>
+
+    <!-- Preview Image -->
+    <img
+      [src]="src()"
+      [alt]="alt()"
+      class="max-h-[90vh] max-w-[90vw] object-contain"
+      [style]="previewImageStyle()"
+    />
+
+    <!-- Scale indicator -->
+    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-sm">
+      {{ (scale() * 100).toFixed(0) }}%
+    </div>
+  </div>
+}
