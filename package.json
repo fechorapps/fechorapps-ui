@@ -6,9 +6,9 @@
     "build:watch": "ng-packagr -p ng-package.json --watch",
     "storybook": "ng run fechorapps-ui:storybook",
     "build-storybook": "ng run fechorapps-ui:build-storybook",
-    "release:patch": "npm version patch && npm run build && npm publish dist",
-    "release:minor": "npm version minor && npm run build && npm publish dist",
-    "release:major": "npm version major && npm run build && npm publish dist"
+    "release:patch": "npm version patch && npm run build && npm publish dist --registry=https://npm.pkg.github.com",
+    "release:minor": "npm version minor && npm run build && npm publish dist --registry=https://npm.pkg.github.com",
+    "release:major": "npm version major && npm run build && npm publish dist --registry=https://npm.pkg.github.com"
   },
   "peerDependencies": {
     "@angular/common": ">=21.0.0",
