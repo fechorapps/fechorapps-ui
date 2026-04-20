@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/logo.png" alt="@fechorapps/ui" width="200" />
+</p>
+
 # @fechorapps/ui
 
 Angular 21 component library built with Tailwind CSS 4, Storybook, and Lucide icons. Published to GitHub Packages.
