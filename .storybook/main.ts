@@ -4,6 +4,7 @@ import type { Configuration } from 'webpack';
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: ['@storybook/addon-docs'],
+  staticDirs: ['../assets'],
   framework: {
     name: '@storybook/angular',
     options: {},

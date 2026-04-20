@@ -7,6 +7,7 @@ const darkTheme = create({
   brandTitle: '@fechorapps/ui',
   brandUrl: '/',
   brandTarget: '_self',
+  brandImage: '/assets/logo.png',
 
   colorPrimary: '#009EF7',
   colorSecondary: '#7239EA',
