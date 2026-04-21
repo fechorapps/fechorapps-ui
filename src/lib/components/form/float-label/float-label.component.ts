@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
 /**
  * FloatLabel variants
@@ -141,7 +141,7 @@ export class UiFloatLabelComponent {
     if (invalid) {
       baseClasses.push('text-red-500', 'peer-focus:text-red-500');
     } else {
-      baseClasses.push('text-gray-500', 'peer-focus:text-primary-500');
+      baseClasses.push('text-gray-500', 'peer-focus:text-primary');
     }
 
     return baseClasses.join(' ');

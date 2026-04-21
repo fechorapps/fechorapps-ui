@@ -254,7 +254,7 @@ export class UiPasswordComponent implements ControlValueAccessor {
     } else if (invalid) {
       stateClasses.push('border-red-500');
     } else if (focused) {
-      stateClasses.push('border-primary-500', 'ring-2', 'ring-primary-500/20');
+      stateClasses.push('border-primary', 'ring-2', 'ring-ring/20');
     } else {
       stateClasses.push('hover:border-gray-400');
     }

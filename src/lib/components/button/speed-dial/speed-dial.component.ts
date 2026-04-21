@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -169,7 +169,7 @@ export class UiSpeedDialComponent {
       'items-center',
       'justify-center',
       'rounded-full',
-      'bg-primary-500',
+      'bg-primary',
       'text-white',
       'shadow-lg',
       'transition-all',
@@ -177,7 +177,7 @@ export class UiSpeedDialComponent {
       'hover:bg-primary-600',
       'focus:outline-none',
       'focus:ring-2',
-      'focus:ring-primary-500',
+      'focus:ring-primary',
       'focus:ring-offset-2',
     ];
 
@@ -318,7 +318,7 @@ export class UiSpeedDialComponent {
     };
 
     const colorClasses: Record<string, string[]> = {
-      primary: ['bg-primary-500', 'text-white', 'hover:bg-primary-600', 'focus:ring-primary-500'],
+      primary: ['bg-primary', 'text-white', 'hover:bg-primary-600', 'focus:ring-primary'],
       secondary: ['bg-gray-500', 'text-white', 'hover:bg-gray-600', 'focus:ring-gray-500'],
       success: ['bg-green-500', 'text-white', 'hover:bg-green-600', 'focus:ring-green-500'],
       warning: ['bg-yellow-500', 'text-white', 'hover:bg-yellow-600', 'focus:ring-yellow-500'],

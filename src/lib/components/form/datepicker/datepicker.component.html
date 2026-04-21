@@ -1,4 +1,4 @@
-<div [class]="wrapperClasses()">
+﻿<div [class]="wrapperClasses()">
   <!-- Label -->
   @if (label()) {
     <label [for]="inputId()" [class]="labelClasses()">
@@ -118,7 +118,7 @@
               <button
                 type="button"
                 class="px-2 py-3 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white"
-                [class.bg-primary-500]="viewDate().getMonth() === i"
+                [class.bg-primary]="viewDate().getMonth() === i"
                 [class.text-white]="viewDate().getMonth() === i"
                 (click)="selectMonth(i)"
               >
@@ -135,7 +135,7 @@
               <button
                 type="button"
                 class="px-2 py-3 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white"
-                [class.bg-primary-500]="viewDate().getFullYear() === year"
+                [class.bg-primary]="viewDate().getFullYear() === year"
                 [class.text-white]="viewDate().getFullYear() === year"
                 (click)="selectYear(year)"
               >

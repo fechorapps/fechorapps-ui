@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -216,9 +216,9 @@ export class UiInputOtpComponent implements ControlValueAccessor {
         'dark:text-white',
         'hover:border-gray-400',
         'dark:hover:border-gray-500',
-        'focus:border-primary-500',
+        'focus:border-primary',
         'focus:ring-2',
-        'focus:ring-primary-500/20'
+        'focus:ring-ring/20'
       );
     }
 

@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -188,7 +188,7 @@ export class UiToggleButtonComponent implements ControlValueAccessor {
         stateClasses.push(
           'bg-primary-50',
           'dark:bg-primary-900/30',
-          'border-primary-500',
+          'border-primary',
           'text-primary-600',
           'dark:text-primary-400'
         );

@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -194,14 +194,14 @@ export class UiTextareaComponent implements ControlValueAccessor {
     } else if (invalid) {
       stateClasses.push('border-red-500', 'focus:ring-2', 'focus:ring-red-500/20');
     } else if (focused) {
-      stateClasses.push('border-primary-500', 'ring-2', 'ring-primary-500/20');
+      stateClasses.push('border-primary', 'ring-2', 'ring-ring/20');
     } else {
       stateClasses.push(
         'hover:border-gray-400',
         'dark:hover:border-gray-500',
-        'focus:border-primary-500',
+        'focus:border-primary',
         'focus:ring-2',
-        'focus:ring-primary-500/20'
+        'focus:ring-ring/20'
       );
     }
 

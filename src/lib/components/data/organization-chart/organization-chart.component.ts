@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -235,7 +235,7 @@ export class UiOrganizationChartComponent {
       classes.push('cursor-pointer', 'hover:shadow-md');
 
       if (this.isSelected(node)) {
-        classes.push('ring-2', 'ring-primary-500', 'border-primary-500');
+        classes.push('ring-2', 'ring-primary', 'border-primary');
       }
     }
 

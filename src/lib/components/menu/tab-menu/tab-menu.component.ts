@@ -1,4 +1,4 @@
-import {
+﻿import {
   Component,
   ChangeDetectionStrategy,
   input,
@@ -97,7 +97,7 @@ export class UiTabMenuComponent {
     if (item.disabled) {
       base.push('text-gray-400 dark:text-gray-600', 'border-transparent', 'cursor-not-allowed');
     } else if (this.isActive(item)) {
-      base.push('text-primary-600 dark:text-primary-400', 'border-primary-500');
+      base.push('text-primary-600 dark:text-primary-400', 'border-primary');
     } else {
       base.push(
         'text-gray-500 dark:text-gray-400',

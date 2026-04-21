@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -508,9 +508,9 @@ export class UiTreeComponent {
     ];
 
     if (this.isSelected(node)) {
-      classes.push('bg-primary-500', 'border-primary-500', 'text-white');
+      classes.push('bg-primary', 'border-primary', 'text-white');
     } else if (this.isPartiallySelected(node)) {
-      classes.push('bg-primary-500', 'border-primary-500', 'text-white');
+      classes.push('bg-primary', 'border-primary', 'text-white');
     } else {
       classes.push('border-gray-300', 'dark:border-gray-600', 'bg-white', 'dark:bg-gray-800');
     }

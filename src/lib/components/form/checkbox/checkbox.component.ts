@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -175,7 +175,7 @@ export class UiCheckboxComponent implements ControlValueAccessor {
         stateClasses.push('border-red-500', 'bg-white', 'dark:bg-gray-900');
       }
     } else if (isActive) {
-      stateClasses.push('bg-primary-500', 'border-primary-500');
+      stateClasses.push('bg-primary', 'border-primary');
     } else {
       stateClasses.push(
         'border-gray-300',

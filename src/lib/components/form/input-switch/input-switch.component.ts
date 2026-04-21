@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -143,7 +143,7 @@ export class UiInputSwitchComponent implements ControlValueAccessor {
         stateClasses.push('bg-red-200', 'dark:bg-red-900');
       }
     } else if (checked) {
-      stateClasses.push('bg-primary-500');
+      stateClasses.push('bg-primary');
     } else {
       stateClasses.push('bg-gray-300', 'dark:bg-gray-600');
     }

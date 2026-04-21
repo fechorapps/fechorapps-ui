@@ -1,4 +1,4 @@
-import {
+﻿import {
   Component,
   ChangeDetectionStrategy,
   input,
@@ -76,7 +76,7 @@ export class UiSplitterComponent {
     }
 
     if (this.isDragging()) {
-      base.push('bg-primary-500');
+      base.push('bg-primary');
     }
 
     return base.join(' ');

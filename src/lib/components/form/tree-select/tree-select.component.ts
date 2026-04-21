@@ -1,4 +1,4 @@
-import { NgTemplateOutlet } from '@angular/common';
+﻿import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -288,7 +288,7 @@ export class UiTreeSelectComponent implements ControlValueAccessor {
       if (invalid) {
         stateClasses.push('border-red-500');
       } else if (focused || panelVisible) {
-        stateClasses.push('border-primary-500', 'ring-2', 'ring-primary-500/20');
+        stateClasses.push('border-primary', 'ring-2', 'ring-ring/20');
       } else {
         stateClasses.push('border-gray-300', 'dark:border-gray-600', 'hover:border-gray-400');
       }

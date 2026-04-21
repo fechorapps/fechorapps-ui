@@ -1,4 +1,4 @@
-import {
+﻿import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
@@ -225,9 +225,9 @@ export class UiEditorComponent implements ControlValueAccessor, AfterViewInit {
       }
     } else if (focused) {
       classes.push(
-        'border-primary-500',
+        'border-primary',
         'ring-2',
-        'ring-primary-500/20',
+        'ring-ring/20',
         'bg-white',
         'dark:bg-gray-900'
       );

@@ -1,4 +1,4 @@
-import {
+﻿import {
   Component,
   ChangeDetectionStrategy,
   input,
@@ -108,9 +108,9 @@ export class UiStepsComponent {
     if (item.disabled) {
       base.push('bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500');
     } else if (this.isCompleted(index)) {
-      base.push('bg-primary-500 text-white');
+      base.push('bg-primary text-white');
     } else if (this.isActive(index)) {
-      base.push('bg-primary-500 text-white ring-4 ring-primary-100 dark:ring-primary-900/30');
+      base.push('bg-primary text-white ring-4 ring-primary-100 dark:ring-primary-900/30');
     } else {
       base.push('bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400');
     }
@@ -147,7 +147,7 @@ export class UiStepsComponent {
     }
 
     if (this.isCompleted(index + 1)) {
-      base.push('bg-primary-500');
+      base.push('bg-primary');
     } else {
       base.push('bg-gray-200 dark:bg-gray-700');
     }

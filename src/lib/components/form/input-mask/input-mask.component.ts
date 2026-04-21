@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -259,18 +259,18 @@ export class UiInputMaskComponent implements ControlValueAccessor {
       );
     } else if (focused) {
       stateClasses.push(
-        'border-primary-500',
+        'border-primary',
         'dark:border-primary-400',
         'ring-2',
-        'ring-primary-500/20'
+        'ring-ring/20'
       );
     } else {
       stateClasses.push(
         'hover:border-gray-400',
         'dark:hover:border-gray-500',
-        'focus-within:border-primary-500',
+        'focus-within:border-primary',
         'focus-within:ring-2',
-        'focus-within:ring-primary-500/20'
+        'focus-within:ring-ring/20'
       );
     }
 

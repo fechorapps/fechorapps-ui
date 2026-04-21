@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -212,7 +212,7 @@ export class UiSliderComponent implements ControlValueAccessor {
   });
 
   readonly fillClasses = computed(() => {
-    return ['absolute', 'bg-primary-500', 'rounded-full', this.trackHeight()].join(' ');
+    return ['absolute', 'bg-primary', 'rounded-full', this.trackHeight()].join(' ');
   });
 
   readonly handleClasses = computed(() => {
@@ -224,7 +224,7 @@ export class UiSliderComponent implements ControlValueAccessor {
       'rounded-full',
       'bg-white',
       'border-2',
-      'border-primary-500',
+      'border-primary',
       'shadow',
       'transform',
       '-translate-x-1/2',
@@ -237,9 +237,9 @@ export class UiSliderComponent implements ControlValueAccessor {
     if (disabled) {
       baseClasses.push('cursor-not-allowed', 'border-gray-400');
     } else {
-      baseClasses.push('cursor-grab', 'hover:ring-4', 'hover:ring-primary-500/20');
+      baseClasses.push('cursor-grab', 'hover:ring-4', 'hover:ring-ring/20');
       if (dragging) {
-        baseClasses.push('ring-4', 'ring-primary-500/20', 'cursor-grabbing');
+        baseClasses.push('ring-4', 'ring-ring/20', 'cursor-grabbing');
       }
     }
 

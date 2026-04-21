@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -260,7 +260,7 @@ export class UiDataViewComponent<T = unknown> {
       const classes = ['p-2', 'rounded-lg', 'transition-colors'];
 
       if (isActive) {
-        classes.push('bg-primary-500', 'text-white');
+        classes.push('bg-primary', 'text-white');
       } else {
         classes.push(
           'bg-gray-100',

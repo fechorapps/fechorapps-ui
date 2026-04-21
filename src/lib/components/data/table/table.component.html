@@ -1,4 +1,4 @@
-<div
+﻿<div
   class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-white dark:bg-gray-900"
 >
   <!-- Caption -->
@@ -23,7 +23,7 @@
           [placeholder]="globalFilterPlaceholder()"
           [value]="globalFilterValue()"
           (input)="onGlobalFilterInput($event)"
-          class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
+          class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-ring"
         />
       </div>
     </div>
@@ -79,7 +79,7 @@
     } @else {
       <div class="flex justify-center py-12">
         <div
-          class="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"
+          class="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"
         ></div>
       </div>
     }
@@ -105,7 +105,7 @@
           class="absolute inset-0 bg-white/50 dark:bg-gray-900/50 flex items-center justify-center z-10"
         >
           <div
-            class="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"
+            class="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"
           ></div>
         </div>
       }
@@ -121,10 +121,10 @@
               >
                 <div
                   class="w-4 h-4 rounded border flex items-center justify-center cursor-pointer transition-colors"
-                  [class.bg-primary-500]="isAllSelected()"
-                  [class.border-primary-500]="isAllSelected()"
-                  [class.bg-primary-500]="isPartiallySelected()"
-                  [class.border-primary-500]="isPartiallySelected()"
+                  [class.bg-primary]="isAllSelected()"
+                  [class.border-primary]="isAllSelected()"
+                  [class.bg-primary]="isPartiallySelected()"
+                  [class.border-primary]="isPartiallySelected()"
                   [class.border-gray-300]="!isAllSelected() && !isPartiallySelected()"
                   [class.dark:border-gray-600]="!isAllSelected() && !isPartiallySelected()"
                   (click)="toggleSelectAll($event)"
@@ -151,7 +151,7 @@
                         [img]="getSortIcon(column)"
                         class="w-4 h-4"
                         [class.text-gray-400]="sortField() !== column.field"
-                        [class.text-primary-500]="sortField() === column.field"
+                        [class.text-primary]="sortField() === column.field"
                       />
                     }
                   </div>
@@ -170,8 +170,8 @@
                 <td class="w-12 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
                   <div
                     class="w-4 h-4 rounded border flex items-center justify-center transition-colors"
-                    [class.bg-primary-500]="isSelected(rowData)"
-                    [class.border-primary-500]="isSelected(rowData)"
+                    [class.bg-primary]="isSelected(rowData)"
+                    [class.border-primary]="isSelected(rowData)"
                     [class.border-gray-300]="!isSelected(rowData)"
                     [class.dark:border-gray-600]="!isSelected(rowData)"
                   >

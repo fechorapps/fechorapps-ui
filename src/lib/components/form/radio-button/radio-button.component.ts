@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -140,7 +140,7 @@ export class UiRadioButtonComponent implements ControlValueAccessor {
     } else if (invalid) {
       stateClasses.push('border-red-500');
     } else if (selected) {
-      stateClasses.push('border-primary-500');
+      stateClasses.push('border-primary');
     } else {
       stateClasses.push('border-gray-300', 'dark:border-gray-600', 'hover:border-primary-400');
     }
@@ -165,7 +165,7 @@ export class UiRadioButtonComponent implements ControlValueAccessor {
       if (disabled) {
         baseClasses.push('bg-gray-400');
       } else {
-        baseClasses.push('bg-primary-500');
+        baseClasses.push('bg-primary');
       }
     } else {
       baseClasses.push('bg-transparent');

@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -216,7 +216,7 @@ export class UiKnobComponent implements ControlValueAccessor {
 
   readonly arcColor = computed(() => {
     if (this.valueColor()) return this.valueColor();
-    return 'var(--color-primary-500, #3b82f6)';
+    return 'var(--color-primary, #3b82f6)';
   });
 
   readonly trackColor = computed(() => {

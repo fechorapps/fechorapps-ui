@@ -1,9 +1,9 @@
-<fieldset [class]="containerClasses()">
+﻿<fieldset [class]="containerClasses()">
   <legend class="px-2 mx-2">
     @if (toggleable()) {
       <button
         type="button"
-        class="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500 transition-colors"
+        class="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
         (click)="toggle()"
         [attr.aria-expanded]="!isCollapsed()"
       >

@@ -1,4 +1,4 @@
-<div
+﻿<div
   class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden bg-white dark:bg-gray-900"
 >
   <!-- Loading Overlay -->
@@ -7,7 +7,7 @@
       class="absolute inset-0 bg-white/50 dark:bg-gray-900/50 flex items-center justify-center z-10"
     >
       <div
-        class="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"
+        class="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"
       ></div>
     </div>
   }
@@ -48,7 +48,7 @@
                       [img]="getSortIcon(column)"
                       class="w-4 h-4"
                       [class.text-gray-400]="sortField() !== column.field"
-                      [class.text-primary-500]="sortField() === column.field"
+                      [class.text-primary]="sortField() === column.field"
                     />
                   }
                 </div>
@@ -81,8 +81,8 @@
                 <td class="w-12 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
                   <div
                     class="w-4 h-4 rounded border flex items-center justify-center transition-colors cursor-pointer"
-                    [class.bg-primary-500]="isSelected(entry.node)"
-                    [class.border-primary-500]="isSelected(entry.node)"
+                    [class.bg-primary]="isSelected(entry.node)"
+                    [class.border-primary]="isSelected(entry.node)"
                     [class.bg-primary-300]="isPartiallySelected(entry.node)"
                     [class.border-primary-300]="isPartiallySelected(entry.node)"
                     [class.border-gray-300]="

@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -243,7 +243,7 @@ export class UiTimelineComponent {
 
       // Color mapping
       const colorMap: Record<string, string> = {
-        primary: 'bg-primary-500 text-white',
+        primary: 'bg-primary text-white',
         success: 'bg-green-500 text-white',
         info: 'bg-blue-500 text-white',
         warning: 'bg-yellow-500 text-white',

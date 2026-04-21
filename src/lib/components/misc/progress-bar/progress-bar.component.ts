@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
+﻿import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
 
 export type ProgressBarMode = 'determinate' | 'indeterminate';
 
@@ -40,7 +40,7 @@ export class UiProgressBarComponent {
     const base = ['h-full', 'rounded-full', 'transition-all', 'duration-200'];
 
     if (!this.color()) {
-      base.push('bg-primary-500');
+      base.push('bg-primary');
     }
 
     if (mode === 'indeterminate') {

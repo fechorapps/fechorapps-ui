@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+﻿import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
 import { LucideAngularModule, type LucideIconData } from 'lucide-angular';
 
@@ -91,9 +91,9 @@ export class UiInputGroupComponent {
       baseClasses.push(
         'border-gray-300',
         'dark:border-gray-600',
-        'focus-within:border-primary-500',
+        'focus-within:border-primary',
         'focus-within:ring-2',
-        'focus-within:ring-primary-500/20'
+        'focus-within:ring-ring/20'
       );
     }
 

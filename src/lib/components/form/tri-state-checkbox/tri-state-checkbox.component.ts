@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -185,9 +185,9 @@ export class UiTriStateCheckboxComponent implements ControlValueAccessor {
           baseClasses.push('border-red-500', 'bg-white', 'dark:bg-gray-900');
         }
       } else {
-        baseClasses.push('focus:ring-primary-500/20');
+        baseClasses.push('focus:ring-ring/20');
         if (val === true) {
-          baseClasses.push('bg-primary-500', 'border-primary-500');
+          baseClasses.push('bg-primary', 'border-primary');
         } else if (val === null) {
           baseClasses.push('bg-primary-400', 'border-primary-400');
         } else {
@@ -196,7 +196,7 @@ export class UiTriStateCheckboxComponent implements ControlValueAccessor {
             'dark:border-gray-600',
             'bg-white',
             'dark:bg-gray-900',
-            'hover:border-primary-500'
+            'hover:border-primary'
           );
         }
       }

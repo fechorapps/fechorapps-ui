@@ -1,4 +1,4 @@
-import {
+﻿import {
   Component,
   ChangeDetectionStrategy,
   input,
@@ -153,10 +153,10 @@ export class UiFileUploadComponent {
         'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 cursor-not-allowed opacity-60'
       );
     } else if (this.isDragOver()) {
-      base.push('border-primary-500 bg-primary-50 dark:bg-primary-900/20');
+      base.push('border-primary bg-primary-50 dark:bg-primary-900/20');
     } else {
       base.push(
-        'border-gray-300 dark:border-gray-600 hover:border-primary-400 dark:hover:border-primary-500'
+        'border-gray-300 dark:border-gray-600 hover:border-primary-400 dark:hover:border-primary'
       );
     }
 

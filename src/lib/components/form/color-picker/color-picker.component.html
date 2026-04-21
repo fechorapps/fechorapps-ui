@@ -1,4 +1,4 @@
-<div [class]="wrapperClasses()">
+﻿<div [class]="wrapperClasses()">
   <!-- Label -->
   @if (label()) {
     <label [for]="inputId()" [class]="labelClasses()">
@@ -81,7 +81,7 @@
                   class="rounded border border-gray-300 dark:border-gray-600 cursor-pointer hover:scale-110 transition-transform"
                   [style.backgroundColor]="preset.value"
                   [class.ring-2]="value() === preset.value"
-                  [class.ring-primary-500]="value() === preset.value"
+                  [class.ring-primary]="value() === preset.value"
                   (click)="selectPreset(preset)"
                 ></button>
               }

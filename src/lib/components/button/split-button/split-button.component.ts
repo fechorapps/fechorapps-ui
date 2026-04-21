@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -312,10 +312,10 @@ export class UiSplitButtonComponent {
       { bg: string; hover: string; ring: string; border: string; textColor: string }
     > = {
       primary: {
-        bg: 'bg-primary-500',
+        bg: 'bg-primary',
         hover: 'hover:bg-primary-600',
-        ring: 'focus:ring-primary-500',
-        border: 'border-primary-500',
+        ring: 'focus:ring-primary',
+        border: 'border-primary',
         textColor: 'text-primary-600',
       },
       secondary: {

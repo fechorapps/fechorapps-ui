@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -385,7 +385,7 @@ export class UiDatePickerComponent implements ControlValueAccessor {
       if (invalid) {
         stateClasses.push('border-red-500');
       } else if (focused || panelVisible) {
-        stateClasses.push('border-primary-500', 'ring-2', 'ring-primary-500/20');
+        stateClasses.push('border-primary', 'ring-2', 'ring-ring/20');
       } else {
         stateClasses.push('hover:border-gray-400');
       }
@@ -652,12 +652,12 @@ export class UiDatePickerComponent implements ControlValueAccessor {
     if (dayInfo.isDisabled) {
       baseClasses.push('opacity-30', 'cursor-not-allowed');
     } else if (dayInfo.isSelected) {
-      baseClasses.push('bg-primary-500', 'text-white', 'font-medium');
+      baseClasses.push('bg-primary', 'text-white', 'font-medium');
     } else if (dayInfo.isToday) {
       baseClasses.push(
         'border',
-        'border-primary-500',
-        'text-primary-500',
+        'border-primary',
+        'text-primary',
         'cursor-pointer',
         'hover:bg-primary-50',
         'dark:hover:bg-primary-900/20'
