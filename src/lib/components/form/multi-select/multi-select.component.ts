@@ -313,16 +313,18 @@ export class UiMultiSelectComponent implements ControlValueAccessor {
       'absolute',
       'z-50',
       'w-full',
-      'mt-1',
-      'bg-white',
-      'dark:bg-gray-900',
+      'mt-1.5',
+      'bg-popover',
+      'text-popover-foreground',
       'border',
-      'border-gray-200',
-      'dark:border-gray-700',
+      'border-border',
       'rounded-lg',
       'shadow-lg',
+      'ring-1',
+      'ring-black/5',
       'max-h-60',
       'overflow-auto',
+      'p-1.5',
     ].join(' ');
   });
 
@@ -369,6 +371,7 @@ export class UiMultiSelectComponent implements ControlValueAccessor {
       'py-2',
       'text-sm',
       'transition-colors',
+      'rounded-md',
     ];
 
     if (isDisabled) {
@@ -376,20 +379,28 @@ export class UiMultiSelectComponent implements ControlValueAccessor {
     } else {
       baseClasses.push('cursor-pointer');
 
-      if (isSelected) {
+      if (isSelected && isHighlighted) {
+        baseClasses.push(
+          'bg-primary-100',
+          'dark:bg-primary-900/30',
+          'text-primary-700',
+          'dark:text-primary-300',
+          'font-medium'
+        );
+      } else if (isSelected) {
         baseClasses.push(
           'bg-primary-50',
           'dark:bg-primary-900/20',
           'text-primary-700',
-          'dark:text-primary-300'
+          'dark:text-primary-300',
+          'font-medium'
         );
       } else if (isHighlighted) {
-        baseClasses.push('bg-gray-100', 'dark:bg-gray-800');
+        baseClasses.push('bg-primary-50', 'dark:bg-gray-800', 'text-foreground');
       } else {
         baseClasses.push(
-          'text-gray-900',
-          'dark:text-white',
-          'hover:bg-gray-50',
+          'text-foreground',
+          'hover:bg-primary-50',
           'dark:hover:bg-gray-800'
         );
       }

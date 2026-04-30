@@ -301,16 +301,18 @@ export class UiSelectComponent implements ControlValueAccessor {
       'absolute',
       'z-50',
       'w-full',
-      'mt-1',
+      'mt-1.5',
       'bg-popover',
       'text-popover-foreground',
       'border',
       'border-border',
       'rounded-lg',
-      'shadow-md',
+      'shadow-lg',
+      'ring-1',
+      'ring-black/5',
       'max-h-60',
       'overflow-auto',
-      'p-2',
+      'p-1.5',
     ].join(' ');
   });
 
@@ -359,21 +361,23 @@ export class UiSelectComponent implements ControlValueAccessor {
       'justify-between',
       'text-sm',
       'transition-colors',
+      'rounded-md',
     ];
 
     if (disabled) {
       baseClasses.push('opacity-50', 'cursor-not-allowed', 'text-muted-foreground');
-    } else if (highlighted) {
-      baseClasses.push('bg-accent', 'text-accent-foreground', 'cursor-pointer', 'rounded-md');
+    } else if (selected && highlighted) {
+      // Strongest emphasis — selected + keyboard/hover focus
+      baseClasses.push('bg-primary-100', 'text-primary-700', 'font-medium', 'cursor-pointer');
     } else if (selected) {
-      baseClasses.push('bg-primary/10', 'text-primary', 'cursor-pointer', 'rounded-md');
+      baseClasses.push('bg-primary-50', 'text-primary-700', 'font-medium', 'cursor-pointer');
+    } else if (highlighted) {
+      baseClasses.push('bg-primary-50', 'text-foreground', 'cursor-pointer');
     } else {
       baseClasses.push(
         'text-foreground',
-        'hover:bg-accent',
-        'hover:text-accent-foreground',
-        'cursor-pointer',
-        'rounded-md'
+        'hover:bg-primary-50',
+        'cursor-pointer'
       );
     }
 
