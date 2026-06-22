@@ -1,0 +1,70 @@
+<div class="border border-border rounded-xl overflow-hidden bg-card">
+  <!-- Header: nav + view switcher -->
+  <div class="flex items-center justify-between p-4 border-b border-border">
+    <div class="flex items-center gap-2">
+      <button (click)="prevPeriod()" class="p-1.5 rounded hover:bg-accent">
+        <lucide-icon [img]="chevronLeftIcon" [size]="18" />
+      </button>
+      <h2 class="text-base font-semibold min-w-36 text-center">{{ monthLabel() }}</h2>
+      <button (click)="nextPeriod()" class="p-1.5 rounded hover:bg-accent">
+        <lucide-icon [img]="chevronRightIcon" [size]="18" />
+      </button>
+    </div>
+    <div class="flex items-center gap-1 bg-muted rounded-lg p-1">
+      @for (v of views; track v) {
+        <button
+          (click)="changeView(v)"
+          class="px-3 py-1 text-xs rounded-md transition-colors"
+          [class.bg-background]="view() === v"
+          [class.shadow-sm]="view() === v"
+        >{{ v | titlecase }}</button>
+      }
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="flex items-center justify-center h-64">
+      <div class="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  } @else {
+    @switch (view()) {
+      @case ('month') {
+        <!-- Day headers -->
+        <div class="grid grid-cols-7 border-b border-border">
+          @for (day of ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; track day) {
+            <div class="text-center text-xs font-medium text-muted-foreground py-2">{{ day }}</div>
+          }
+        </div>
+        <!-- Day grid -->
+        <div class="grid grid-cols-7">
+          @for (day of monthDays(); track day.toISOString()) {
+            <div
+              class="min-h-[80px] p-1 border-r border-b border-border last:border-r-0 cursor-pointer hover:bg-accent/50 transition-colors"
+              (click)="dateClicked.emit(day)"
+              [class.opacity-50]="!isSameMonth(day)"
+            >
+              <p
+                class="text-xs font-medium mb-1 w-6 h-6 flex items-center justify-center rounded-full"
+                [class.bg-primary]="isToday(day)"
+                [class.text-primary-foreground]="isToday(day)"
+              >{{ day.getDate() }}</p>
+              @for (event of getEventsForDay(day).slice(0,2); track event.id) {
+                <div
+                  class="text-xs px-1 py-0.5 rounded truncate mb-0.5 text-white cursor-pointer"
+                  [style.background-color]="event.color ?? '#3b82f6'"
+                  (click)="$event.stopPropagation(); eventClicked.emit(event)"
+                >{{ event.title }}</div>
+              }
+            </div>
+          }
+        </div>
+      }
+      @case ('week') {
+        <div class="flex items-center justify-center h-40 text-muted-foreground text-sm">Week view coming soon</div>
+      }
+      @case ('day') {
+        <div class="flex items-center justify-center h-40 text-muted-foreground text-sm">Day view coming soon</div>
+      }
+    }
+  }
+</div>
