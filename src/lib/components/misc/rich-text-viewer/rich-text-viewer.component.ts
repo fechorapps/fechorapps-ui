@@ -5,6 +5,7 @@ import {
   computed,
   inject,
 } from '@angular/core';
+import { SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { marked } from 'marked';
 
@@ -20,15 +21,17 @@ export class UiRichTextViewerComponent {
 
   readonly content = input<string>('');
   readonly format = input<'markdown' | 'html'>('markdown');
-  readonly sanitize = input<boolean>(true);
   readonly styleClass = input<string>('');
 
   readonly parsedHtml = computed((): SafeHtml => {
     const c = this.content();
     if (!c) return '';
-    const html =
-      this.format() === 'markdown' ? (marked.parse(c) as string) : c;
-    return this.sanitizer.bypassSecurityTrustHtml(html);
+    const raw = this.format() === 'markdown'
+      ? (marked.parse(c, { async: false }) as string)
+      : c;
+    // Always sanitize through Angular's built-in HTML sanitizer before binding.
+    // Never bypass on user-supplied content.
+    return this.sanitizer.sanitize(SecurityContext.HTML, raw) ?? '';
   });
 
   readonly containerClasses = computed(() => {
