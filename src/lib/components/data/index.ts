@@ -1,5 +1,7 @@
 // Data components barrel export
+export * from './calendar-view';
 export * from './data-view';
+export * from './kanban';
 export * from './order-list';
 export * from './organization-chart';
 export * from './paginator';

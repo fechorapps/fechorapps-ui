@@ -1,0 +1,52 @@
+<div
+  class="bg-background px-6 py-4 border-b border-border"
+  [class.sticky]="sticky()"
+  [class.top-0]="sticky()"
+  [class.z-10]="sticky()"
+>
+  @if (breadcrumbs().length) {
+    <nav class="flex items-center gap-1 text-sm text-muted-foreground mb-2">
+      @for (crumb of breadcrumbs(); track crumb.label; let last = $last) {
+        @if (crumb.url && !last) {
+          <a
+            [href]="crumb.url"
+            class="flex items-center gap-1 hover:text-foreground transition-colors"
+          >
+            @if (crumb.icon) {
+              <lucide-icon [img]="crumb.icon" class="w-3.5 h-3.5" />
+            }
+            {{ crumb.label }}
+          </a>
+        } @else {
+          <span
+            class="flex items-center gap-1"
+            [class.text-foreground]="last"
+            [class.font-medium]="last"
+          >
+            @if (crumb.icon) {
+              <lucide-icon [img]="crumb.icon" class="w-3.5 h-3.5" />
+            }
+            {{ crumb.label }}
+          </span>
+        }
+        @if (!last) {
+          <span class="text-muted-foreground/50">/</span>
+        }
+      }
+    </nav>
+  }
+
+  <div class="flex items-start justify-between gap-4">
+    <div class="min-w-0">
+      <h1 class="text-2xl font-bold text-foreground truncate">{{ title() }}</h1>
+      @if (subtitle()) {
+        <p class="text-sm text-muted-foreground mt-0.5">{{ subtitle() }}</p>
+      }
+    </div>
+    <div class="flex items-center gap-2 flex-shrink-0">
+      <ng-content select="[actions]" />
+    </div>
+  </div>
+
+  <ng-content select="[extra]" />
+</div>

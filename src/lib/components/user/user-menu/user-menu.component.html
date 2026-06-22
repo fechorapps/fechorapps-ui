@@ -1,0 +1,42 @@
+<div class="relative">
+  <!-- Trigger: avatar button -->
+  <button (click)="toggle(); avatarClicked.emit()" class="flex items-center gap-2 rounded-full focus:outline-none">
+    @if (user().avatar) {
+      <img [src]="user().avatar" [alt]="user().name" class="w-8 h-8 rounded-full object-cover" />
+    } @else {
+      <span class="w-8 h-8 rounded-full bg-primary/10 text-primary text-xs font-semibold flex items-center justify-center">
+        {{ initials() }}
+      </span>
+    }
+    <lucide-icon [img]="chevronDownIcon" [size]="14" class="text-muted-foreground" />
+  </button>
+
+  <!-- Dropdown -->
+  @if (open()) {
+    <div [class]="'absolute mt-2 w-56 bg-popover border border-border rounded-xl shadow-lg z-50 ' + dropdownClasses()">
+      <!-- User info header -->
+      <div class="px-4 py-3 border-b border-border">
+        <p class="text-sm font-medium">{{ user().name }}</p>
+        <p class="text-xs text-muted-foreground">{{ user().email }}</p>
+        @if (user().role) {
+          <p class="text-xs text-primary mt-0.5">{{ user().role }}</p>
+        }
+      </div>
+      <!-- Menu items -->
+      <div class="py-1">
+        @for (item of menuItems(); track item.label) {
+          @if (item.divider) {
+            <hr class="border-border my-1" />
+          } @else {
+            <button (click)="selectItem(item)" class="w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-accent transition-colors text-left">
+              @if (item.icon) {
+                <lucide-icon [img]="item.icon" [size]="16" class="text-muted-foreground" />
+              }
+              <span>{{ item.label }}</span>
+            </button>
+          }
+        }
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,62 @@
+<div class="relative w-full">
+  <!-- Input container -->
+  <div
+    class="flex items-center gap-2 w-full px-3 py-2 border border-border rounded-lg bg-background transition-colors focus-within:ring-2 focus-within:ring-ring focus-within:border-transparent"
+  >
+    <!-- Search icon -->
+    <lucide-icon [img]="searchIcon" [size]="16" class="text-muted-foreground shrink-0" />
+
+    <!-- Input -->
+    <input
+      type="text"
+      [placeholder]="placeholder()"
+      [value]="value()"
+      (input)="onInput($event)"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      class="flex-1 bg-transparent outline-none text-sm min-w-0"
+    />
+
+    <!-- Loading spinner or clear button -->
+    @if (loading()) {
+      <lucide-icon
+        [img]="loadingIcon"
+        [size]="16"
+        class="text-muted-foreground shrink-0 animate-spin"
+      />
+    } @else if (value()) {
+      <button
+        type="button"
+        (click)="clearValue()"
+        class="text-muted-foreground hover:text-foreground transition-colors shrink-0"
+        aria-label="Clear search"
+      >
+        <lucide-icon [img]="clearIcon" [size]="16" />
+      </button>
+    }
+  </div>
+
+  <!-- Suggestions dropdown -->
+  @if (showDropdown()) {
+    <div
+      class="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-lg z-50 overflow-hidden"
+    >
+      @if (showHistory() && suggestions().length === 0) {
+        <p class="text-xs text-muted-foreground px-3 py-2">No recent searches</p>
+      }
+
+      @for (suggestion of suggestions(); track suggestion.label) {
+        <button
+          type="button"
+          class="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-accent transition-colors text-left"
+          (click)="selectSuggestion(suggestion)"
+        >
+          <span>{{ suggestion.label }}</span>
+          @if (suggestion.category) {
+            <span class="text-xs text-muted-foreground">{{ suggestion.category }}</span>
+          }
+        </button>
+      }
+    </div>
+  }
+</div>

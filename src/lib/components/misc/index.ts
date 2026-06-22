@@ -1,11 +1,16 @@
 // Misc components
+export * from './alert';
 export * from './avatar';
 export * from './badge';
 export * from './block-ui';
 export * from './chip';
+export * from './code-block';
+export * from './color-theme-switcher';
 export * from './empty-state';
+export * from './error-page';
 export * from './inplace';
 export * from './meter-group';
+export * from './notification-center';
 export * from './progress-bar';
 export * from './progress-spinner';
 export * from './scroll-top';

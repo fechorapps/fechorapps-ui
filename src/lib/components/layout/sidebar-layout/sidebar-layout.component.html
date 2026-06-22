@@ -1,0 +1,24 @@
+<div [class]="containerClasses()">
+  <!-- Sidebar -->
+  @if (visible()) {
+    <aside
+      [class]="sidebarClasses()"
+      [style.width]="width()"
+    >
+      <ng-content select="[sidebar]" />
+    </aside>
+  }
+
+  <!-- Overlay backdrop -->
+  @if (visible() && overlay()) {
+    <div
+      class="absolute inset-0 z-10 bg-black/40"
+      (click)="toggle()"
+    ></div>
+  }
+
+  <!-- Main content -->
+  <div class="flex-1 overflow-auto min-w-0">
+    <ng-content select="[content]" />
+  </div>
+</div>

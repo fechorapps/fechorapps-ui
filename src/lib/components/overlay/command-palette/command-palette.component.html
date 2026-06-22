@@ -1,0 +1,55 @@
+@if (visible()) {
+  <div
+    class="fixed inset-0 z-50 bg-black/50 flex items-start justify-center pt-[20vh]"
+    (click)="close()"
+  >
+    <div
+      class="bg-popover border border-border rounded-xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden"
+      (click)="$event.stopPropagation()"
+    >
+      <!-- Search input -->
+      <div class="flex items-center gap-3 px-4 py-3 border-b border-border">
+        <lucide-icon [img]="searchIcon" [size]="18" class="text-muted-foreground" />
+        <input
+          type="text"
+          [placeholder]="placeholder()"
+          class="flex-1 bg-transparent outline-none text-sm"
+          [value]="searchQuery()"
+          (input)="searchQuery.set($any($event.target).value); activeIndex.set(0)"
+          (keydown)="onKeydown($event)"
+          autofocus
+        />
+      </div>
+
+      <!-- Groups -->
+      <div class="max-h-80 overflow-y-auto py-2">
+        @if (filteredGroups().length === 0) {
+          <p class="text-center text-muted-foreground text-sm py-6">No results found.</p>
+        }
+
+        @for (group of filteredGroups(); track group.label) {
+          <div class="px-2">
+            <p class="text-xs font-medium text-muted-foreground px-2 py-1.5">{{ group.label }}</p>
+            @for (item of group.items; track item.id) {
+              <button
+                class="w-full flex items-center gap-3 px-2 py-2 rounded-md text-sm hover:bg-accent transition-colors text-left"
+                [class.bg-accent]="isActive(item)"
+                (click)="selectItem(item)"
+              >
+                @if (item.icon) {
+                  <lucide-icon [img]="item.icon" [size]="16" />
+                }
+                <span class="flex-1">{{ item.label }}</span>
+                @if (item.shortcut) {
+                  <kbd class="text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+                    {{ item.shortcut }}
+                  </kbd>
+                }
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

@@ -9,6 +9,12 @@ export * from './button';
 // Data components
 export * from './data';
 
+// Dashboard components
+export * from './dashboard';
+
+// Layout components
+export * from './layout';
+
 // File components
 export * from './file';
 
@@ -32,3 +38,6 @@ export * from './media';
 
 // Misc components
 export * from './misc';
+
+// User components
+export * from './user';
