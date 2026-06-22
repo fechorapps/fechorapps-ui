@@ -1,0 +1,18 @@
+<div
+  class="overflow-y-auto border border-border rounded-xl bg-card"
+  [style.height.px]="containerHeight()"
+  (scroll)="onScroll($event)"
+>
+  <div [style.height.px]="totalHeight()" class="relative">
+    <div [style.transform]="'translateY(' + offsetTop() + 'px)'">
+      @for (entry of visibleItems(); track entry.index) {
+        <div
+          class="flex items-center px-4 border-b border-border hover:bg-accent/50 transition-colors"
+          [style.height.px]="itemHeight()"
+        >
+          <span class="text-sm text-foreground">{{ getLabel(entry.item) }}</span>
+        </div>
+      }
+    </div>
+  </div>
+</div>

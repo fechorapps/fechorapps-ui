@@ -1,0 +1,40 @@
+@if (visible()) {
+  <div
+    class="fixed left-0 right-0 z-50 px-4 py-3 bg-card border-border shadow-lg"
+    [class]="positionClass()"
+    [class.border-t]="position() === 'bottom'"
+    [class.border-b]="position() === 'top'"
+  >
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center gap-3">
+      <!-- Icon + Message -->
+      <div class="flex items-start gap-3 flex-1 min-w-0">
+        <lucide-icon [img]="cookieIcon" [size]="20" class="text-muted-foreground shrink-0 mt-0.5" />
+        <p class="text-sm text-foreground">{{ message() }}</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-2 shrink-0">
+        @if (showSettings()) {
+          <button
+            (click)="openSettings()"
+            class="text-sm text-muted-foreground underline underline-offset-2 hover:text-foreground transition-colors px-2 py-1.5"
+          >
+            {{ settingsLabel() }}
+          </button>
+        }
+        <button
+          (click)="reject()"
+          class="px-3 py-1.5 text-sm border border-border rounded-md hover:bg-accent transition-colors"
+        >
+          {{ rejectLabel() }}
+        </button>
+        <button
+          (click)="accept()"
+          class="px-3 py-1.5 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors font-medium"
+        >
+          {{ acceptLabel() }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,32 @@
+<div class="overflow-x-auto border border-border rounded-xl">
+  @if (loading()) {
+    <div class="flex items-center justify-center h-32">
+      <div class="w-7 h-7 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  } @else {
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-muted/50 border-b border-border">
+          <th class="text-left px-4 py-2 font-medium text-muted-foreground">{{ config().rowField }}</th>
+          @for (col of colValues(); track col) {
+            <th class="text-right px-4 py-2 font-medium text-muted-foreground">{{ col }}</th>
+          }
+          <th class="text-right px-4 py-2 font-medium text-foreground">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rowValues(); track row) {
+          <tr class="border-b border-border hover:bg-muted/30">
+            <td class="px-4 py-2 font-medium">{{ row }}</td>
+            @for (col of colValues(); track col) {
+              <td class="text-right px-4 py-2 text-muted-foreground">
+                {{ (pivotData()[row]?.[col] ?? 0) | number:'1.0-2' }}
+              </td>
+            }
+            <td class="text-right px-4 py-2 font-semibold">{{ rowTotals()[row] | number:'1.0-2' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

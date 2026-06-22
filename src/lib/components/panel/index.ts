@@ -7,3 +7,4 @@ export * from './panel';
 export * from './splitter';
 export * from './tabs';
 export * from './toolbar';
+export * from './stepper';

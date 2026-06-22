@@ -1,0 +1,84 @@
+<div class="flex flex-col h-full bg-card border border-border rounded-xl overflow-hidden">
+  <!-- Header -->
+  <div class="flex items-center gap-3 px-4 py-3 border-b border-border bg-muted/30">
+    <div class="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center text-sm font-semibold flex-shrink-0">
+      <lucide-icon [img]="messageCircleIcon" [size]="18" />
+    </div>
+    <div class="flex-1 min-w-0">
+      <p class="text-sm font-semibold">{{ title() }}</p>
+      @if (subtitle()) {
+        <p class="text-xs text-muted-foreground">{{ subtitle() }}</p>
+      }
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="flex-1 overflow-y-auto p-4 space-y-3">
+    @if (loading()) {
+      @for (i of [1, 2, 3]; track i) {
+        <div class="flex gap-2 animate-pulse">
+          <div class="w-8 h-8 bg-muted rounded-full"></div>
+          <div class="h-10 bg-muted rounded-xl flex-1 max-w-xs"></div>
+        </div>
+      }
+    } @else {
+      @for (msg of sortedMessages(); track msg.id) {
+        <div class="flex gap-2" [class.flex-row-reverse]="isOwn(msg)">
+          <!-- Avatar -->
+          <div
+            class="w-8 h-8 rounded-full bg-primary/10 text-primary text-xs font-semibold flex items-center justify-center flex-shrink-0"
+            [class.bg-primary]="isOwn(msg)"
+            [class.text-primary-foreground]="isOwn(msg)"
+          >
+            @if (msg.avatar) {
+              <img [src]="msg.avatar" class="w-full h-full object-cover rounded-full" alt="{{ msg.sender }}" />
+            } @else {
+              {{ getInitials(msg.sender) }}
+            }
+          </div>
+          <!-- Bubble -->
+          <div class="max-w-[70%]">
+            @if (!isOwn(msg)) {
+              <p class="text-xs text-muted-foreground mb-1 ml-1">{{ msg.sender }}</p>
+            }
+            <div
+              class="px-3 py-2 rounded-2xl text-sm"
+              [class.bg-primary]="isOwn(msg)"
+              [class.text-primary-foreground]="isOwn(msg)"
+              [class.bg-muted]="!isOwn(msg)"
+            >
+              {{ msg.content }}
+            </div>
+            <p
+              class="text-xs text-muted-foreground mt-1"
+              [class.text-right]="isOwn(msg)"
+            >
+              {{ formatTime(msg.timestamp) }}
+            </p>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- Input -->
+  <div class="px-4 py-3 border-t border-border">
+    <div class="flex items-center gap-2">
+      <input
+        type="text"
+        [placeholder]="placeholder()"
+        class="flex-1 px-3 py-2 bg-muted/50 border border-border rounded-xl text-sm outline-none focus:border-primary transition-colors"
+        [value]="inputValue()"
+        (input)="onInput($event)"
+        (keydown.enter)="sendMessage()"
+      />
+      <button
+        (click)="sendMessage()"
+        [disabled]="!inputValue().trim()"
+        class="w-9 h-9 bg-primary text-primary-foreground rounded-xl flex items-center justify-center hover:bg-primary/90 disabled:opacity-40 transition-colors flex-shrink-0"
+      >
+        <lucide-icon [img]="sendIcon" [size]="16" />
+      </button>
+    </div>
+  </div>
+</div>

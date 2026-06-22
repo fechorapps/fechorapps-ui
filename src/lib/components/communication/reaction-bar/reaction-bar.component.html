@@ -1,0 +1,28 @@
+<div class="flex items-center flex-wrap gap-1.5">
+  @for (reaction of reactions(); track reaction.emoji) {
+    <button
+      (click)="reacted.emit(reaction)"
+      class="inline-flex items-center gap-1 rounded-full border transition-all hover:scale-110"
+      [class]="buttonSize()"
+      [class.border-primary]="reaction.reacted"
+      [class.bg-primary\/10]="reaction.reacted"
+      [class.border-border]="!reaction.reacted"
+      [class.bg-muted\/50]="!reaction.reacted"
+      [title]="reaction.label"
+    >
+      <span>{{ reaction.emoji }}</span>
+      @if (showCounts() && reaction.count > 0) {
+        <span class="text-muted-foreground font-medium" [class.text-primary]="reaction.reacted">{{ reaction.count }}</span>
+      }
+    </button>
+  }
+  @if (showAddButton()) {
+    <button
+      (click)="showPicker.set(!showPicker()); addReaction.emit()"
+      class="inline-flex items-center justify-center rounded-full border border-dashed border-border bg-transparent text-muted-foreground hover:border-primary hover:text-primary transition-all hover:scale-110"
+      [class]="buttonSize()"
+    >
+      <lucide-icon [img]="plusIcon" [size]="12" />
+    </button>
+  }
+</div>

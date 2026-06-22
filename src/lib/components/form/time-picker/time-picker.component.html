@@ -1,0 +1,93 @@
+<div class="relative">
+  <button
+    (click)="!disabled() && open.set(!open())"
+    class="flex items-center justify-between w-full px-3 py-2 border border-border rounded-lg bg-card text-sm hover:bg-accent transition-colors"
+    [class.opacity-50]="disabled()"
+    [class.cursor-not-allowed]="disabled()"
+  >
+    <span [class.text-muted-foreground]="!value()">{{ displayValue() }}</span>
+    <lucide-icon [img]="clockIcon" [size]="16" class="text-muted-foreground ml-2" />
+  </button>
+
+  @if (open()) {
+    <div class="absolute top-full mt-2 z-50 bg-popover border border-border rounded-xl shadow-lg p-4 w-56">
+      <div class="flex gap-2 justify-center">
+        <!-- Hours column -->
+        <div class="flex flex-col items-center">
+          <p class="text-xs text-muted-foreground mb-1">HH</p>
+          <div class="h-32 overflow-y-auto flex flex-col gap-0.5">
+            @for (h of hourOptions(); track h) {
+              <button
+                (click)="setHour(h)"
+                class="w-10 py-1 text-sm text-center rounded hover:bg-accent transition-colors"
+                [class.bg-primary]="hours() === h"
+                [class.text-primary-foreground]="hours() === h"
+              >{{ pad(h) }}</button>
+            }
+          </div>
+        </div>
+
+        <span class="self-center text-muted-foreground font-bold">:</span>
+
+        <!-- Minutes column -->
+        <div class="flex flex-col items-center">
+          <p class="text-xs text-muted-foreground mb-1">MM</p>
+          <div class="h-32 overflow-y-auto flex flex-col gap-0.5">
+            @for (m of minuteOptions(); track m) {
+              <button
+                (click)="setMinute(m)"
+                class="w-10 py-1 text-sm text-center rounded hover:bg-accent transition-colors"
+                [class.bg-primary]="minutes() === m"
+                [class.text-primary-foreground]="minutes() === m"
+              >{{ pad(m) }}</button>
+            }
+          </div>
+        </div>
+
+        @if (showSeconds()) {
+          <span class="self-center text-muted-foreground font-bold">:</span>
+          <!-- Seconds column -->
+          <div class="flex flex-col items-center">
+            <p class="text-xs text-muted-foreground mb-1">SS</p>
+            <div class="h-32 overflow-y-auto flex flex-col gap-0.5">
+              @for (s of secondOptions(); track s) {
+                <button
+                  (click)="setSecond(s)"
+                  class="w-10 py-1 text-sm text-center rounded hover:bg-accent transition-colors"
+                  [class.bg-primary]="seconds() === s"
+                  [class.text-primary-foreground]="seconds() === s"
+                >{{ pad(s) }}</button>
+              }
+            </div>
+          </div>
+        }
+
+        @if (!use24h()) {
+          <div class="flex flex-col gap-1 self-center ml-1">
+            <button
+              (click)="period.set('AM')"
+              class="px-2 py-1 text-xs rounded transition-colors"
+              [class.bg-primary]="period() === 'AM'"
+              [class.text-primary-foreground]="period() === 'AM'"
+              [class.border]="period() !== 'AM'"
+              [class.border-border]="period() !== 'AM'"
+            >AM</button>
+            <button
+              (click)="period.set('PM')"
+              class="px-2 py-1 text-xs rounded transition-colors"
+              [class.bg-primary]="period() === 'PM'"
+              [class.text-primary-foreground]="period() === 'PM'"
+              [class.border]="period() !== 'PM'"
+              [class.border-border]="period() !== 'PM'"
+            >PM</button>
+          </div>
+        }
+      </div>
+
+      <button
+        (click)="applyAndClose()"
+        class="mt-3 w-full py-1.5 bg-primary text-primary-foreground text-sm rounded-lg hover:bg-primary/90 transition-colors"
+      >Apply</button>
+    </div>
+  }
+</div>

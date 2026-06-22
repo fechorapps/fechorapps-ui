@@ -41,3 +41,9 @@ export * from './misc';
 
 // User components
 export * from './user';
+
+// Communication components
+export * from './communication';
+
+// Ecommerce components
+export * from './ecommerce';

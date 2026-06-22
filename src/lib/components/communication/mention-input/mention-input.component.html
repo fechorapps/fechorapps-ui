@@ -1,0 +1,43 @@
+<div class="relative">
+  <input
+    type="text"
+    [placeholder]="placeholder()"
+    [disabled]="disabled()"
+    [value]="value()"
+    class="w-full px-3 py-2 border border-border rounded-xl text-sm bg-card outline-none focus:border-primary transition-colors"
+    [class.opacity-50]="disabled()"
+    (input)="onInput($event)"
+    (keydown)="onKeydown($event)"
+  />
+  @if (showDropdown() && filteredUsers().length) {
+    <div class="absolute top-full mt-1 w-full bg-popover border border-border rounded-xl shadow-lg z-50 overflow-hidden">
+      @for (user of filteredUsers(); track user.id; let i = $index) {
+        <button
+          (click)="selectUser(user)"
+          (mouseenter)="activeIndex.set(i)"
+          class="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-accent transition-colors"
+          [class.bg-accent]="activeIndex() === i"
+        >
+          <div class="w-7 h-7 rounded-full bg-primary/10 text-primary text-xs font-semibold flex items-center justify-center flex-shrink-0 overflow-hidden">
+            @if (user.avatar) {
+              <img [src]="user.avatar" class="w-full h-full object-cover" alt="{{ user.name }}" />
+            } @else {
+              {{ getInitials(user.name) }}
+            }
+          </div>
+          <div>
+            <p class="text-sm font-medium">{{ user.name }}</p>
+            @if (user.username) {
+              <p class="text-xs text-muted-foreground">&#64;{{ user.username }}</p>
+            }
+          </div>
+        </button>
+      }
+    </div>
+  }
+  @if (showDropdown() && !filteredUsers().length && mentionQuery()) {
+    <div class="absolute top-full mt-1 w-full bg-popover border border-border rounded-xl shadow-lg z-50 px-3 py-2 text-sm text-muted-foreground">
+      No users found
+    </div>
+  }
+</div>

@@ -1,0 +1,49 @@
+<div class="overflow-x-auto">
+  @if (loading()) {
+    <div class="flex items-center justify-center h-32">
+      <div class="w-7 h-7 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  } @else {
+    <div class="relative inline-block">
+      <table class="border-collapse">
+        <thead>
+          <tr>
+            <th class="w-24"></th>
+            @for (col of cols(); track col) {
+              <th class="text-xs font-medium text-muted-foreground px-1 py-1 text-center min-w-[48px]">{{ col }}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track row) {
+            <tr>
+              <td class="text-xs font-medium text-muted-foreground pr-2 py-0.5 text-right">{{ row }}</td>
+              @for (col of cols(); track col) {
+                <td class="p-0.5">
+                  <div
+                    class="w-12 h-10 flex items-center justify-center rounded text-xs font-medium cursor-default transition-transform hover:scale-110"
+                    [style.background-color]="colorScale()[1]"
+                    [style.opacity]="getCell(row, col) ? getCellOpacity(getCell(row, col)!.value) : 0.05"
+                    [style.color]="getTextColor(getCell(row, col) ? getCellOpacity(getCell(row, col)!.value) : 0)"
+                    (mouseenter)="hoveredCell.set(getCell(row, col) ?? null)"
+                    (mouseleave)="hoveredCell.set(null)"
+                  >
+                    @if (showValues() && getCell(row, col)) {
+                      {{ getCell(row, col)!.value }}
+                    }
+                  </div>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+      @if (showTooltip() && hoveredCell()) {
+        <div class="absolute top-0 left-full ml-2 bg-popover border border-border rounded-lg px-3 py-2 text-xs shadow-lg pointer-events-none z-10">
+          <p class="font-medium">{{ hoveredCell()!.row }} × {{ hoveredCell()!.col }}</p>
+          <p class="text-muted-foreground">{{ hoveredCell()!.label ?? hoveredCell()!.value }}</p>
+        </div>
+      }
+    </div>
+  }
+</div>

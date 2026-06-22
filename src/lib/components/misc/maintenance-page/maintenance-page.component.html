@@ -1,0 +1,73 @@
+<div class="flex flex-col items-center justify-center min-h-[500px] text-center px-6 py-12">
+  <!-- Icon -->
+  <div class="flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-6">
+    <lucide-icon [img]="wrenchIcon" [size]="36" class="text-primary" />
+  </div>
+
+  <!-- Title -->
+  <h1 class="text-3xl font-bold text-foreground mb-3">{{ title() }}</h1>
+
+  <!-- Message -->
+  <p class="text-muted-foreground max-w-md text-base leading-relaxed mb-6">{{ message() }}</p>
+
+  <!-- Estimated time (static string) -->
+  @if (estimatedTime() && !showCountdown()) {
+    <div class="flex items-center gap-2 px-4 py-2.5 bg-accent rounded-lg mb-6">
+      <lucide-icon [img]="clockIcon" [size]="16" class="text-muted-foreground" />
+      <span class="text-sm text-foreground font-medium">
+        Estimated completion: {{ estimatedTime() }}
+      </span>
+    </div>
+  }
+
+  <!-- Live countdown -->
+  @if (showCountdown() && formattedCountdown()) {
+    <div class="mb-6">
+      <p class="text-xs uppercase tracking-widest text-muted-foreground font-medium mb-3">
+        Back online in
+      </p>
+      <div class="flex items-end gap-3">
+        <!-- Hours -->
+        <div class="flex flex-col items-center">
+          <div class="flex items-center justify-center w-16 h-16 bg-card border border-border rounded-xl shadow-sm">
+            <span class="text-2xl font-mono font-bold text-foreground">
+              {{ formattedCountdown()!.hours }}
+            </span>
+          </div>
+          <span class="text-xs text-muted-foreground mt-1.5">hrs</span>
+        </div>
+        <span class="text-2xl font-bold text-muted-foreground pb-5">:</span>
+        <!-- Minutes -->
+        <div class="flex flex-col items-center">
+          <div class="flex items-center justify-center w-16 h-16 bg-card border border-border rounded-xl shadow-sm">
+            <span class="text-2xl font-mono font-bold text-foreground">
+              {{ formattedCountdown()!.minutes }}
+            </span>
+          </div>
+          <span class="text-xs text-muted-foreground mt-1.5">min</span>
+        </div>
+        <span class="text-2xl font-bold text-muted-foreground pb-5">:</span>
+        <!-- Seconds -->
+        <div class="flex flex-col items-center">
+          <div class="flex items-center justify-center w-16 h-16 bg-card border border-border rounded-xl shadow-sm">
+            <span class="text-2xl font-mono font-bold text-foreground">
+              {{ formattedCountdown()!.seconds }}
+            </span>
+          </div>
+          <span class="text-xs text-muted-foreground mt-1.5">sec</span>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Contact email -->
+  @if (mailtoLink()) {
+    <a
+      [href]="mailtoLink()"
+      class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mt-2"
+    >
+      <lucide-icon [img]="mailIcon" [size]="15" />
+      Contact us at {{ contactEmail() }}
+    </a>
+  }
+</div>

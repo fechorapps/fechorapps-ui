@@ -1,0 +1,91 @@
+@if (visible()) {
+  <!-- Backdrop -->
+  <div
+    class="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm"
+    (click)="close()"
+  ></div>
+
+  <!-- Panel -->
+  <div
+    class="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg max-h-[80vh] flex flex-col bg-card border border-border rounded-xl shadow-2xl"
+  >
+    <!-- Header -->
+    <div class="flex items-center justify-between px-5 py-4 border-b border-border shrink-0">
+      <div class="flex items-center gap-2">
+        <lucide-icon [img]="keyboardIcon" [size]="18" class="text-muted-foreground" />
+        <h2 class="text-base font-semibold text-foreground">{{ title() }}</h2>
+      </div>
+      <button
+        (click)="close()"
+        class="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+        aria-label="Close shortcuts panel"
+      >
+        <lucide-icon [img]="xIcon" [size]="16" />
+      </button>
+    </div>
+
+    <!-- Search -->
+    @if (searchable()) {
+      <div class="px-5 py-3 border-b border-border shrink-0">
+        <div class="relative">
+          <lucide-icon
+            [img]="searchIcon"
+            [size]="16"
+            class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+          />
+          <input
+            type="text"
+            placeholder="Search shortcuts..."
+            [value]="searchTerm()"
+            (input)="onSearch($event)"
+            class="w-full pl-9 pr-8 py-2 text-sm bg-background border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
+          />
+          @if (searchTerm()) {
+            <button
+              (click)="clearSearch()"
+              class="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Clear search"
+            >
+              <lucide-icon [img]="xIcon" [size]="14" />
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Shortcut list -->
+    <div class="overflow-y-auto flex-1 px-5 py-3 space-y-5">
+      @if (hasResults()) {
+        @for (group of filteredGroups(); track trackByGroup($index, group)) {
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+              {{ group.group }}
+            </p>
+            <div class="space-y-1">
+              @for (item of group.items; track trackByItem($index, item)) {
+                <div class="flex items-center justify-between py-1.5">
+                  <span class="text-sm text-foreground">{{ item.label }}</span>
+                  <div class="flex items-center gap-1">
+                    @for (key of item.keys; track $index) {
+                      <kbd
+                        class="inline-flex items-center justify-center px-2 py-0.5 text-xs font-mono font-medium bg-muted border border-border rounded text-foreground shadow-sm min-w-[24px]"
+                      >{{ key }}</kbd>
+                      @if ($index < item.keys.length - 1) {
+                        <span class="text-xs text-muted-foreground">+</span>
+                      }
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      } @else {
+        <div class="flex flex-col items-center justify-center py-10 text-center">
+          <lucide-icon [img]="searchIcon" [size]="32" class="text-muted-foreground/40 mb-3" />
+          <p class="text-sm text-muted-foreground">No shortcuts found for "{{ searchTerm() }}"</p>
+        </div>
+      }
+    </div>
+  </div>
+}

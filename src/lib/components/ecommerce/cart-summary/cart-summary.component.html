@@ -1,0 +1,147 @@
+<div class="flex flex-col bg-card border border-border rounded-xl overflow-hidden">
+  <!-- Header -->
+  <div class="flex items-center gap-2 px-5 py-4 border-b border-border">
+    <lucide-icon [img]="bagIcon" [size]="18" class="text-primary" />
+    <h2 class="text-base font-semibold text-foreground">Order Summary</h2>
+    <span class="ml-auto text-sm text-muted-foreground">{{ items().length }} item{{ items().length !== 1 ? 's' : '' }}</span>
+  </div>
+
+  @if (items().length === 0) {
+    <!-- Empty state -->
+    <div class="flex flex-col items-center justify-center gap-3 py-12 text-muted-foreground">
+      <lucide-icon [img]="bagIcon" [size]="40" />
+      <p class="text-sm">Your cart is empty</p>
+    </div>
+  } @else {
+    <!-- Items list -->
+    <ul class="divide-y divide-border">
+      @for (item of items(); track item.id) {
+        <li class="flex items-start gap-3 px-5 py-4">
+          <!-- Image -->
+          @if (item.image) {
+            <img
+              [src]="item.image"
+              [alt]="item.name"
+              class="w-16 h-16 rounded-lg object-cover flex-shrink-0 border border-border"
+            />
+          } @else {
+            <div class="w-16 h-16 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+              <lucide-icon [img]="bagIcon" [size]="20" class="text-muted-foreground" />
+            </div>
+          }
+
+          <!-- Info -->
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium text-foreground truncate">{{ item.name }}</p>
+            @if (item.variant) {
+              <p class="text-xs text-muted-foreground">{{ item.variant }}</p>
+            }
+            <p class="text-sm font-semibold text-foreground mt-1">{{ formatAmount(item.price) }}</p>
+
+            <!-- Quantity stepper -->
+            <div class="flex items-center gap-1 mt-2">
+              <button
+                (click)="changeQuantity(item, -1)"
+                [disabled]="item.quantity <= 1"
+                class="w-6 h-6 rounded-md bg-muted flex items-center justify-center text-foreground hover:bg-muted/70 disabled:opacity-40 transition-colors"
+                aria-label="Decrease quantity"
+              >
+                <lucide-icon [img]="minusIcon" [size]="12" />
+              </button>
+              <span class="w-7 text-center text-sm font-medium text-foreground">{{ item.quantity }}</span>
+              <button
+                (click)="changeQuantity(item, 1)"
+                class="w-6 h-6 rounded-md bg-muted flex items-center justify-center text-foreground hover:bg-muted/70 transition-colors"
+                aria-label="Increase quantity"
+              >
+                <lucide-icon [img]="plusIcon" [size]="12" />
+              </button>
+            </div>
+          </div>
+
+          <!-- Item total + remove -->
+          <div class="flex flex-col items-end gap-2 flex-shrink-0">
+            <span class="text-sm font-semibold text-foreground">{{ formatAmount(item.price * item.quantity) }}</span>
+            <button
+              (click)="removeItem(item)"
+              class="text-muted-foreground hover:text-destructive transition-colors"
+              aria-label="Remove item"
+            >
+              <lucide-icon [img]="trashIcon" [size]="15" />
+            </button>
+          </div>
+        </li>
+      }
+    </ul>
+
+    <!-- Free shipping progress bar -->
+    @if (freeShippingThreshold()) {
+      <div class="px-5 py-3 border-t border-border bg-muted/20">
+        @if (freeShippingRemaining() === 0) {
+          <div class="flex items-center gap-2 text-sm text-green-600">
+            <lucide-icon [img]="truckIcon" [size]="14" />
+            <span class="font-medium">You've unlocked free shipping!</span>
+          </div>
+        } @else {
+          <div class="flex items-center gap-2 text-xs text-muted-foreground mb-1.5">
+            <lucide-icon [img]="truckIcon" [size]="13" />
+            <span>Add <strong class="text-foreground">{{ formatAmount(freeShippingRemaining()) }}</strong> more for free shipping</span>
+          </div>
+        }
+        <div class="h-1.5 rounded-full bg-muted overflow-hidden">
+          <div
+            class="h-full rounded-full bg-primary transition-all duration-500"
+            [style.width.%]="freeShippingProgress()"
+          ></div>
+        </div>
+      </div>
+    }
+
+    <!-- Summary rows -->
+    <div class="px-5 pt-4 pb-2 border-t border-border flex flex-col gap-2">
+      <div class="flex justify-between text-sm">
+        <span class="text-muted-foreground">Subtotal</span>
+        <span class="font-medium text-foreground">{{ formatAmount(subtotal()) }}</span>
+      </div>
+
+      @if (discount() > 0) {
+        <div class="flex justify-between text-sm">
+          <span class="text-muted-foreground">Discount</span>
+          <span class="font-medium text-green-600">-{{ formatAmount(discount()) }}</span>
+        </div>
+      }
+
+      <div class="flex justify-between text-sm">
+        <span class="text-muted-foreground">Shipping</span>
+        @if (shippingCost() === 0) {
+          <span class="font-medium text-green-600">Free</span>
+        } @else {
+          <span class="font-medium text-foreground">{{ formatAmount(shippingCost()) }}</span>
+        }
+      </div>
+
+      @if (tax() > 0) {
+        <div class="flex justify-between text-sm">
+          <span class="text-muted-foreground">Tax</span>
+          <span class="font-medium text-foreground">{{ formatAmount(tax()) }}</span>
+        </div>
+      }
+
+      <!-- Total -->
+      <div class="flex justify-between text-base font-bold border-t border-border pt-3 mt-1">
+        <span class="text-foreground">Total</span>
+        <span class="text-foreground">{{ formatAmount(total()) }}</span>
+      </div>
+    </div>
+
+    <!-- Checkout button -->
+    <div class="px-5 pb-5">
+      <button
+        (click)="onCheckout()"
+        class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
+      >
+        {{ checkoutLabel() }}
+      </button>
+    </div>
+  }
+</div>

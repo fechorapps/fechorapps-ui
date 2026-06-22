@@ -1,0 +1,50 @@
+<div class="relative">
+  <!-- Trigger -->
+  <button
+    (click)="!disabled() && open.set(!open())"
+    class="flex items-center justify-between w-full px-3 py-2 border border-border rounded-lg bg-card text-sm hover:bg-accent transition-colors"
+    [class.opacity-50]="disabled()"
+    [class.cursor-not-allowed]="disabled()"
+  >
+    <span [class.text-muted-foreground]="!value().start">{{ displayValue() }}</span>
+    <lucide-icon [img]="calendarIcon" [size]="16" class="text-muted-foreground ml-2 flex-shrink-0" />
+  </button>
+
+  @if (open()) {
+    <div class="absolute top-full mt-2 z-50 bg-popover border border-border rounded-xl shadow-lg p-4 min-w-[300px]">
+      <!-- Month nav -->
+      <div class="flex items-center justify-between mb-3">
+        <button (click)="prevMonth()" class="p-1 rounded hover:bg-accent">
+          <lucide-icon [img]="chevronLeftIcon" [size]="16" />
+        </button>
+        <span class="text-sm font-medium">{{ monthLabel() }}</span>
+        <button (click)="nextMonth()" class="p-1 rounded hover:bg-accent">
+          <lucide-icon [img]="chevronRightIcon" [size]="16" />
+        </button>
+      </div>
+
+      <!-- Day headers -->
+      <div class="grid grid-cols-7 mb-1">
+        @for (d of ['Su','Mo','Tu','We','Th','Fr','Sa']; track d) {
+          <div class="text-center text-xs text-muted-foreground py-1">{{ d }}</div>
+        }
+      </div>
+
+      <!-- Days -->
+      <div class="grid grid-cols-7">
+        @for (day of monthDays(); track day.toISOString()) {
+          <button
+            (click)="selectDay(day)"
+            (mouseenter)="hoverDate.set(day)"
+            (mouseleave)="hoverDate.set(null)"
+            class="h-8 w-8 text-xs flex items-center justify-center rounded-full mx-auto transition-colors"
+            [class.opacity-40]="!isSameMonth(day)"
+            [class.bg-primary]="isStart(day) || isEnd(day)"
+            [class.text-primary-foreground]="isStart(day) || isEnd(day)"
+            [class.bg-accent]="isInRange(day) && !isStart(day) && !isEnd(day)"
+          >{{ day.getDate() }}</button>
+        }
+      </div>
+    </div>
+  }
+</div>

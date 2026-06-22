@@ -1,0 +1,113 @@
+<div class="flex flex-col gap-8">
+  <!-- Billing toggle -->
+  <div class="flex items-center justify-center gap-3">
+    <span class="text-sm font-medium" [class.text-foreground]="billing() === 'monthly'" [class.text-muted-foreground]="billing() !== 'monthly'">Monthly</span>
+    <button
+      (click)="toggleBilling()"
+      class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none"
+      [class.bg-primary]="billing() === 'yearly'"
+      [class.bg-muted]="billing() !== 'yearly'"
+      role="switch"
+      [attr.aria-checked]="billing() === 'yearly'"
+    >
+      <span
+        class="inline-block h-4 w-4 transform rounded-full bg-background shadow transition-transform"
+        [class.translate-x-6]="billing() === 'yearly'"
+        [class.translate-x-1]="billing() !== 'yearly'"
+      ></span>
+    </button>
+    <span class="text-sm font-medium" [class.text-foreground]="billing() === 'yearly'" [class.text-muted-foreground]="billing() !== 'yearly'">
+      Yearly
+      <span class="ml-1 px-1.5 py-0.5 rounded-full text-xs font-semibold bg-accent text-accent-foreground">-{{ yearlyDiscount() }}%</span>
+    </span>
+  </div>
+
+  <!-- Plans grid -->
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    @for (plan of effectivePlans(); track plan.id) {
+      <div
+        class="relative flex flex-col rounded-2xl border bg-card p-6 transition-shadow hover:shadow-lg"
+        [class.border-border]="!plan.highlighted"
+        [class.border-primary]="plan.highlighted"
+        [class.ring-2]="plan.highlighted"
+        [class.ring-primary]="plan.highlighted"
+      >
+        <!-- Highlighted badge -->
+        @if (plan.highlighted && plan.badge) {
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+            <span class="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-primary text-primary-foreground">
+              <lucide-icon [img]="zapIcon" [size]="11" />
+              {{ plan.badge }}
+            </span>
+          </div>
+        } @else if (plan.badge) {
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-accent text-accent-foreground">
+              {{ plan.badge }}
+            </span>
+          </div>
+        }
+
+        <!-- Plan header -->
+        <div class="mb-4">
+          <h3 class="text-lg font-bold text-foreground">{{ plan.name }}</h3>
+          @if (plan.description) {
+            <p class="mt-1 text-sm text-muted-foreground">{{ plan.description }}</p>
+          }
+        </div>
+
+        <!-- Price -->
+        <div class="mb-6">
+          <div class="flex items-baseline gap-1">
+            <span class="text-4xl font-extrabold text-foreground">{{ formatPrice(plan.effectivePrice, plan.currency) }}</span>
+            @if (plan.period) {
+              <span class="text-sm text-muted-foreground">/ {{ plan.period }}</span>
+            }
+          </div>
+          @if (billing() === 'yearly' && plan.originalPrice) {
+            <p class="mt-1 text-xs text-muted-foreground line-through">{{ formatPrice(plan.originalPrice, plan.currency) }} / mo</p>
+          }
+        </div>
+
+        <!-- CTA Button -->
+        <button
+          (click)="selectPlan(plan)"
+          class="mb-6 w-full rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors"
+          [class.bg-primary]="plan.highlighted"
+          [class.text-primary-foreground]="plan.highlighted"
+          [class.hover:bg-primary/90]="plan.highlighted"
+          [class.bg-accent]="!plan.highlighted"
+          [class.text-accent-foreground]="!plan.highlighted"
+          [class.hover:bg-accent/80]="!plan.highlighted"
+        >
+          {{ plan.ctaLabel ?? 'Get Started' }}
+        </button>
+
+        <!-- Features list -->
+        <ul class="flex flex-col gap-3">
+          @for (feature of plan.features; track feature.label) {
+            <li class="flex items-start gap-2">
+              @if (feature.included) {
+                <span class="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center">
+                  <lucide-icon [img]="checkIcon" [size]="12" class="text-primary" />
+                </span>
+              } @else {
+                <span class="flex-shrink-0 w-5 h-5 rounded-full bg-muted flex items-center justify-center">
+                  <lucide-icon [img]="xIcon" [size]="12" class="text-muted-foreground" />
+                </span>
+              }
+              <span
+                class="text-sm"
+                [class.text-foreground]="feature.included"
+                [class.text-muted-foreground]="!feature.included"
+                [title]="feature.tooltip ?? ''"
+              >
+                {{ feature.label }}
+              </span>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+</div>

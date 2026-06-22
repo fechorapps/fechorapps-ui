@@ -1,0 +1,47 @@
+<div class="inline-flex flex-col items-center">
+  <svg
+    [attr.width]="size()"
+    [attr.height]="size() * 0.75"
+    [attr.viewBox]="'0 0 ' + size() + ' ' + (size() * 0.75)"
+  >
+    <!-- Track (background arc) -->
+    <path
+      [attr.d]="trackPath()"
+      fill="none"
+      stroke="#e5e7eb"
+      [attr.stroke-width]="size() * 0.06"
+      stroke-linecap="round"
+    />
+    <!-- Value arc -->
+    <path
+      [attr.d]="valuePath()"
+      fill="none"
+      [attr.stroke]="arcColor()"
+      [attr.stroke-width]="size() * 0.06"
+      stroke-linecap="round"
+    />
+    <!-- Center value text -->
+    <text
+      [attr.x]="cx()"
+      [attr.y]="cy() * 0.95"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      [attr.fill]="'currentColor'"
+      [attr.font-size]="size() * 0.16"
+      font-weight="bold"
+      font-family="inherit"
+    >{{ value() }}{{ unit() }}</text>
+    <!-- Label text -->
+    @if (label()) {
+      <text
+        [attr.x]="cx()"
+        [attr.y]="cy() * 0.95 + size() * 0.15"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        fill="#6b7280"
+        [attr.font-size]="size() * 0.08"
+        font-family="inherit"
+      >{{ label() }}</text>
+    }
+  </svg>
+</div>

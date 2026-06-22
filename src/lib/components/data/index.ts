@@ -11,3 +11,7 @@ export * from './table';
 export * from './timeline';
 export * from './tree';
 export * from './tree-table';
+export * from './gantt-chart';
+export * from './pivot-table';
+export * from './virtual-list';
+export * from './heatmap';

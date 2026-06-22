@@ -1,0 +1,37 @@
+<div class="inline-flex flex-col items-center gap-2">
+  @if (!value()) {
+    <div
+      class="flex items-center justify-center bg-muted rounded-xl"
+      [style.width.px]="size()"
+      [style.height.px]="size()"
+    >
+      <p class="text-muted-foreground text-xs text-center px-4">
+        Enter a value to generate QR code
+      </p>
+    </div>
+  } @else if (dataUrl()) {
+    <img
+      [src]="dataUrl()"
+      [alt]="'QR code for ' + value()"
+      [width]="size()"
+      [height]="size()"
+      class="rounded-xl"
+    />
+    @if (showValue()) {
+      <p class="text-xs text-muted-foreground text-center max-w-[200px] truncate">{{ value() }}</p>
+    }
+    <button
+      (click)="download()"
+      class="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+    >
+      <lucide-icon [img]="downloadIcon" [size]="14" />
+      Download
+    </button>
+  } @else {
+    <div
+      class="flex items-center justify-center bg-muted rounded-xl animate-pulse"
+      [style.width.px]="size()"
+      [style.height.px]="size()"
+    ></div>
+  }
+</div>

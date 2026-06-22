@@ -1,0 +1,78 @@
+@if (active()) {
+  <!-- Full-page overlay -->
+  <div
+    class="fixed inset-0 z-40 bg-background/60 backdrop-blur-[2px] pointer-events-none"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Highlight ring around target element -->
+  @if (highlightRect().width > 0) {
+    <div
+      class="absolute z-50 rounded-lg pointer-events-none ring-2 ring-primary ring-offset-2 ring-offset-background/60 transition-all duration-300"
+      [style]="highlightStyles()"
+      aria-hidden="true"
+    ></div>
+  }
+
+  <!-- Tooltip card -->
+  @if (step()) {
+    <div
+      class="absolute z-50 w-80 bg-card border border-border rounded-xl shadow-2xl flex flex-col transition-all duration-300"
+      [style]="tooltipStyles()"
+      role="dialog"
+      aria-modal="false"
+      [attr.aria-label]="step()!.title"
+    >
+      <!-- Card header -->
+      <div class="flex items-start justify-between px-4 pt-4 pb-2">
+        <h3 class="text-sm font-semibold text-foreground leading-tight pr-6">{{ step()!.title }}</h3>
+        <button
+          (click)="skip()"
+          class="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0 -mt-0.5"
+          aria-label="Skip tour"
+        >
+          <lucide-icon [img]="xIcon" [size]="14" />
+        </button>
+      </div>
+
+      <!-- Card content -->
+      <p class="px-4 pb-3 text-sm text-muted-foreground leading-relaxed">{{ step()!.content }}</p>
+
+      <!-- Footer -->
+      <div class="flex items-center justify-between px-4 py-3 border-t border-border">
+        <!-- Step counter -->
+        <span class="text-xs text-muted-foreground font-medium">{{ stepLabel() }}</span>
+
+        <!-- Nav buttons -->
+        <div class="flex items-center gap-2">
+          <button
+            (click)="skip()"
+            class="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded"
+          >
+            Skip
+          </button>
+          @if (!isFirst()) {
+            <button
+              (click)="prev()"
+              class="inline-flex items-center gap-1 px-3 py-1.5 text-xs border border-border rounded-md hover:bg-accent transition-colors"
+            >
+              <lucide-icon [img]="chevronLeftIcon" [size]="12" />
+              Prev
+            </button>
+          }
+          <button
+            (click)="next()"
+            class="inline-flex items-center gap-1 px-3 py-1.5 text-xs bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors font-medium"
+          >
+            @if (isLast()) {
+              Finish
+            } @else {
+              Next
+              <lucide-icon [img]="chevronRightIcon" [size]="12" />
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+}

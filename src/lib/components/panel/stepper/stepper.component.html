@@ -1,0 +1,85 @@
+<div>
+  <!-- Step indicators -->
+  <div [class]="orientation() === 'horizontal' ? 'flex items-start' : 'flex flex-col'">
+    @for (step of steps(); track step.label; let i = $index; let last = $last) {
+      <div [class]="orientation() === 'horizontal' ? 'flex items-center flex-1' : 'flex items-start'">
+        <!-- Step circle + label -->
+        <div class="flex flex-col items-center">
+          <button
+            (click)="goTo(i)"
+            class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium border-2 transition-all"
+            [class.bg-primary]="isActive(i)"
+            [class.border-primary]="isActive(i)"
+            [class.text-primary-foreground]="isActive(i)"
+            [class.bg-green-500]="isCompleted(i)"
+            [class.border-green-500]="isCompleted(i)"
+            [class.text-white]="isCompleted(i)"
+            [class.border-border]="!isActive(i) && !isCompleted(i)"
+            [class.text-muted-foreground]="!isActive(i) && !isCompleted(i)"
+          >
+            @if (isCompleted(i)) {
+              <lucide-icon [img]="checkIcon" [size]="16" />
+            } @else {
+              {{ i + 1 }}
+            }
+          </button>
+          <div class="mt-1 text-center max-w-[80px]">
+            <p
+              class="text-xs font-medium"
+              [class.text-primary]="isActive(i)"
+              [class.text-green-600]="isCompleted(i)"
+              [class.text-muted-foreground]="!isActive(i) && !isCompleted(i)"
+            >{{ step.label }}</p>
+            @if (step.description) {
+              <p class="text-xs text-muted-foreground leading-tight">{{ step.description }}</p>
+            }
+            @if (step.optional) {
+              <p class="text-xs text-muted-foreground italic">Optional</p>
+            }
+          </div>
+        </div>
+
+        <!-- Connector line (not after last step) -->
+        @if (!last) {
+          @if (orientation() === 'horizontal') {
+            <div
+              class="flex-1 h-0.5 mx-2 mt-[-18px]"
+              [class.bg-green-500]="isCompleted(i)"
+              [class.bg-border]="!isCompleted(i)"
+            ></div>
+          } @else {
+            <div
+              class="w-0.5 h-8 ml-4 mt-1"
+              [class.bg-green-500]="isCompleted(i)"
+              [class.bg-border]="!isCompleted(i)"
+            ></div>
+          }
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Step content slot -->
+  <div class="mt-6">
+    <ng-content />
+  </div>
+
+  <!-- Navigation buttons -->
+  <div class="flex items-center justify-between mt-6">
+    <button
+      (click)="prev()"
+      [disabled]="isFirst()"
+      class="flex items-center gap-2 px-4 py-2 border border-border rounded-lg text-sm disabled:opacity-40 hover:bg-accent transition-colors"
+    >
+      <lucide-icon [img]="arrowLeftIcon" [size]="16" />
+      Previous
+    </button>
+    <button
+      (click)="next()"
+      class="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm hover:bg-primary/90 transition-colors"
+    >
+      {{ isLast() ? 'Finish' : 'Next' }}
+      <lucide-icon [img]="arrowRightIcon" [size]="16" />
+    </button>
+  </div>
+</div>
