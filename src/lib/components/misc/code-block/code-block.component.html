@@ -1,0 +1,23 @@
+<div class="rounded-xl border border-border overflow-hidden bg-[#1e1e2e] text-white">
+  <!-- Header -->
+  <div class="flex items-center justify-between px-4 py-2 bg-[#181825] border-b border-white/10">
+    <div class="flex items-center gap-2 text-sm text-gray-400">
+      <lucide-icon [img]="fileCodeIcon" [size]="14" />
+      @if (filename()) {
+        <span>{{ filename() }}</span>
+      } @else {
+        <span>{{ language() }}</span>
+      }
+    </div>
+    @if (showCopyButton()) {
+      <button (click)="copy()" class="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors">
+        <lucide-icon [img]="copied() ? checkIcon : copyIcon" [size]="14" />
+        {{ copied() ? 'Copied!' : 'Copy' }}
+      </button>
+    }
+  </div>
+  <!-- Code -->
+  <div class="overflow-x-auto">
+    <pre class="p-4 text-sm leading-relaxed"><code #codeEl class="hljs language-{{ language() }}"></code></pre>
+  </div>
+</div>

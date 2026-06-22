@@ -1,0 +1,18 @@
+<div class="flex items-center gap-2">
+  @if (showLabel()) {
+    <span class="text-sm text-muted-foreground">Theme:</span>
+  }
+  <div class="flex items-center gap-1.5">
+    @for (theme of themes(); track theme.name) {
+      <button
+        (click)="selectTheme(theme)"
+        [title]="theme.name"
+        class="w-6 h-6 rounded-full border-2 transition-all hover:scale-110"
+        [style.background-color]="theme.color"
+        [class.border-foreground]="currentTheme() === theme.name"
+        [class.border-transparent]="currentTheme() !== theme.name"
+        [class.scale-125]="currentTheme() === theme.name"
+      ></button>
+    }
+  </div>
+</div>

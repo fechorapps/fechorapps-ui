@@ -1,0 +1,28 @@
+<div class="flex flex-col items-center justify-center min-h-[400px] text-center px-4">
+  <!-- Error code -->
+  <p class="text-8xl font-bold text-primary/20">{{ code() }}</p>
+  <h1 class="text-2xl font-bold mt-4">{{ defaultTitle() }}</h1>
+  <p class="text-muted-foreground mt-2 max-w-sm">{{ defaultDescription() }}</p>
+  <!-- Actions -->
+  <div class="flex items-center gap-3 mt-8">
+    @if (showHomeButton()) {
+      <button
+        (click)="homeClicked.emit()"
+        class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
+      >
+        <lucide-icon [img]="homeIcon" [size]="16" />
+        Go Home
+      </button>
+    }
+    @if (showBackButton()) {
+      <button
+        (click)="backClicked.emit()"
+        class="inline-flex items-center gap-2 px-4 py-2 border border-border rounded-lg text-sm font-medium hover:bg-accent transition-colors"
+      >
+        <lucide-icon [img]="arrowLeftIcon" [size]="16" />
+        Go Back
+      </button>
+    }
+  </div>
+  <ng-content select="[actions]" />
+</div>

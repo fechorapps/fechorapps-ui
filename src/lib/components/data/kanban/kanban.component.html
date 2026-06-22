@@ -1,0 +1,46 @@
+<div class="flex gap-4 overflow-x-auto pb-4">
+  @for (col of columns(); track col.id) {
+    <div
+      class="flex-shrink-0 w-72 bg-muted/50 rounded-xl p-3"
+      (dragover)="onDragOver($event)"
+      (drop)="onDrop($event, col.id, col.items.length)"
+    >
+      <!-- Column header -->
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          @if (col.color) {
+            <span class="w-2.5 h-2.5 rounded-full" [style.background-color]="col.color"></span>
+          }
+          <h3 class="font-semibold text-sm">{{ col.title }}</h3>
+        </div>
+        <span class="text-xs text-muted-foreground bg-background rounded-full px-2 py-0.5">{{ col.items.length }}</span>
+      </div>
+      <!-- Items -->
+      <div class="space-y-2">
+        @for (item of col.items; track item.id; let i = $index) {
+          <div
+            class="bg-card border border-border rounded-lg p-3 cursor-pointer hover:shadow-md transition-all"
+            [class.opacity-50]="draggedItemId() === item.id"
+            [draggable]="draggable()"
+            (dragstart)="onDragStart(item, col.id)"
+            (drop)="onDrop($event, col.id, i)"
+            (dragover)="onDragOver($event)"
+            (click)="itemClicked.emit(item)"
+          >
+            <p class="text-sm font-medium">{{ item.title }}</p>
+            @if (item.description) {
+              <p class="text-xs text-muted-foreground mt-1">{{ item.description }}</p>
+            }
+            @if (item.tags?.length) {
+              <div class="flex flex-wrap gap-1 mt-2">
+                @for (tag of item.tags!; track tag) {
+                  <span class="text-xs px-1.5 py-0.5 bg-primary/10 text-primary rounded">{{ tag }}</span>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
