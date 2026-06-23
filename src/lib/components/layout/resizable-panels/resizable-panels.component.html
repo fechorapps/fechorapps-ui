@@ -1,0 +1,16 @@
+<div class="flex h-full w-full" [class.flex-col]="direction() === 'vertical'">
+  <div [style.flex]="sizes()[0]" class="overflow-auto min-w-0 min-h-0">
+    <ng-content select="[panel-1]" />
+  </div>
+  <div
+    [style.width.px]="direction() === 'horizontal' ? gutterSize() : undefined"
+    [style.height.px]="direction() === 'vertical' ? gutterSize() : undefined"
+    [class]="isDragging() ? 'bg-primary/30' : 'bg-border hover:bg-primary/20'"
+    class="cursor-col-resize flex-shrink-0 transition-colors"
+    (pointerdown)="onGutterPointerDown($event)"
+    (dblclick)="onGutterDblClick()">
+  </div>
+  <div [style.flex]="sizes()[1]" class="overflow-auto min-w-0 min-h-0">
+    <ng-content select="[panel-2]" />
+  </div>
+</div>
