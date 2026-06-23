@@ -1,0 +1,214 @@
+<div class="flex flex-col gap-1">
+
+  <!-- ======================================================================
+       TYPEAHEAD SEARCH INPUT
+  ======================================================================= -->
+  <div class="relative">
+    <div class="flex items-center border border-border rounded-md bg-card overflow-hidden"
+         [class.opacity-50]="disabled()"
+         [class.pointer-events-none]="disabled()">
+
+      <!-- Search icon -->
+      <span class="pl-3 text-muted-foreground shrink-0">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35" />
+        </svg>
+      </span>
+
+      <!-- Query input -->
+      <input
+        type="text"
+        [value]="query()"
+        (input)="onQueryInput($event)"
+        (blur)="closeDropdown()"
+        [placeholder]="placeholder()"
+        [disabled]="disabled()"
+        class="flex-1 px-3 py-2 bg-transparent outline-none text-foreground text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed"
+        autocomplete="off"
+        aria-autocomplete="list"
+        [attr.aria-expanded]="showDropdown()"
+        aria-haspopup="listbox"
+      />
+
+      <!-- Loading spinner -->
+      @if (loading()) {
+        <span class="pr-3 text-muted-foreground shrink-0">
+          <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+            <path class="opacity-75" fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+        </span>
+      }
+
+      <!-- Clear button -->
+      @if (value() && !loading()) {
+        <button
+          type="button"
+          (click)="clearValue()"
+          class="pr-3 text-muted-foreground hover:text-foreground transition-colors shrink-0"
+          aria-label="Clear address"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      }
+    </div>
+
+    <!-- ====================================================================
+         SUGGESTIONS DROPDOWN
+    ===================================================================== -->
+    @if (showDropdown() && suggestions().length > 0) {
+      <div
+        class="absolute left-0 top-full z-50 mt-1 w-full bg-card border border-border rounded-md shadow-lg max-h-60 overflow-y-auto"
+        role="listbox"
+      >
+        @for (suggestion of suggestions(); track suggestion.id) {
+          <button
+            type="button"
+            (mousedown)="$event.preventDefault()"
+            (click)="selectSuggestion(suggestion)"
+            class="flex items-start gap-2 w-full px-3 py-2.5 hover:bg-accent text-sm transition-colors text-left"
+            role="option"
+          >
+            <svg class="w-4 h-4 mt-0.5 text-muted-foreground shrink-0" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span class="text-foreground">{{ suggestion.label }}</span>
+          </button>
+        }
+      </div>
+    }
+
+    <!-- Empty state when user searched but got no results -->
+    @if (showDropdown() && !loading() && suggestions().length === 0 && query().length >= minChars()) {
+      <div
+        class="absolute left-0 top-full z-50 mt-1 w-full bg-card border border-border rounded-md shadow-lg px-4 py-3 text-sm text-muted-foreground"
+      >
+        No results found.
+      </div>
+    }
+  </div>
+
+  <!-- ======================================================================
+       SELECTED VALUE PREVIEW
+  ======================================================================= -->
+  @if (value() && !showManualForm()) {
+    <div class="flex items-center gap-2 px-3 py-2 rounded-md bg-accent text-sm">
+      <svg class="w-4 h-4 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+      <span class="text-foreground flex-1 truncate">{{ query() }}</span>
+    </div>
+  }
+
+  <!-- ======================================================================
+       MANUAL ENTRY TOGGLE
+  ======================================================================= -->
+  @if (showManualEntry() && !disabled()) {
+    <button
+      type="button"
+      (click)="toggleManualForm()"
+      class="self-start text-xs text-primary hover:underline transition-colors mt-0.5"
+    >
+      @if (showManualForm()) {
+        Hide manual entry
+      } @else {
+        Enter address manually
+      }
+    </button>
+  }
+
+  <!-- ======================================================================
+       MANUAL ENTRY FORM
+  ======================================================================= -->
+  @if (showManualForm()) {
+    <div class="flex flex-col gap-3 p-4 border border-border rounded-md bg-card mt-1">
+      <p class="text-xs font-medium text-muted-foreground uppercase tracking-wide">Manual Entry</p>
+
+      <!-- Street -->
+      <div class="flex flex-col gap-1">
+        <label class="text-xs font-medium text-foreground">Street</label>
+        <input
+          type="text"
+          [value]="manualValue().street ?? ''"
+          (input)="onManualFieldInput('street', $event)"
+          placeholder="123 Main St"
+          class="px-3 py-2 border border-border rounded-md bg-card text-foreground text-sm outline-none focus:border-primary placeholder:text-muted-foreground transition-colors"
+        />
+      </div>
+
+      <!-- City + State row -->
+      <div class="grid grid-cols-2 gap-3">
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-medium text-foreground">City</label>
+          <input
+            type="text"
+            [value]="manualValue().city ?? ''"
+            (input)="onManualFieldInput('city', $event)"
+            placeholder="New York"
+            class="px-3 py-2 border border-border rounded-md bg-card text-foreground text-sm outline-none focus:border-primary placeholder:text-muted-foreground transition-colors"
+          />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-medium text-foreground">State / Province</label>
+          <input
+            type="text"
+            [value]="manualValue().state ?? ''"
+            (input)="onManualFieldInput('state', $event)"
+            placeholder="NY"
+            class="px-3 py-2 border border-border rounded-md bg-card text-foreground text-sm outline-none focus:border-primary placeholder:text-muted-foreground transition-colors"
+          />
+        </div>
+      </div>
+
+      <!-- Postal + Country row -->
+      <div class="grid grid-cols-2 gap-3">
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-medium text-foreground">Postal Code</label>
+          <input
+            type="text"
+            [value]="manualValue().postalCode ?? ''"
+            (input)="onManualFieldInput('postalCode', $event)"
+            placeholder="10001"
+            class="px-3 py-2 border border-border rounded-md bg-card text-foreground text-sm outline-none focus:border-primary placeholder:text-muted-foreground transition-colors"
+          />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-medium text-foreground">Country</label>
+          <input
+            type="text"
+            [value]="manualValue().country ?? ''"
+            (input)="onManualFieldInput('country', $event)"
+            placeholder="United States"
+            class="px-3 py-2 border border-border rounded-md bg-card text-foreground text-sm outline-none focus:border-primary placeholder:text-muted-foreground transition-colors"
+          />
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-2 pt-1">
+        <button
+          type="button"
+          (click)="applyManualValue()"
+          class="px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
+        >
+          Apply Address
+        </button>
+        <button
+          type="button"
+          (click)="toggleManualForm()"
+          class="px-4 py-2 rounded-md border border-border text-foreground text-sm hover:bg-accent transition-colors"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  }
+
+</div>
