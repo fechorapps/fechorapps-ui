@@ -1,0 +1,95 @@
+<div class="relative w-full font-mono text-sm">
+
+  <!-- ── Input row ─────────────────────────────────────────────────── -->
+  <div
+    class="flex items-center rounded-md border border-border bg-card transition-colors"
+    [class.opacity-50]="disabled()"
+    [class.cursor-not-allowed]="disabled()"
+  >
+    <!-- "=" prefix badge -->
+    <span
+      class="flex items-center justify-center w-8 h-9 shrink-0 border-r border-border text-muted-foreground select-none font-semibold"
+    >=</span>
+
+    <!-- Formula text input -->
+    <input
+      type="text"
+      class="flex-1 h-9 bg-transparent px-2 py-1 text-foreground placeholder:text-muted-foreground outline-none focus:ring-0"
+      [value]="inputValue()"
+      [disabled]="disabled()"
+      placeholder="Enter formula…"
+      autocomplete="off"
+      spellcheck="false"
+      aria-label="Formula input"
+      [attr.aria-invalid]="!isValid() && !!value()"
+      (input)="onInput($event)"
+    />
+
+    <!-- Validity indicator -->
+    @if (value()) {
+      <span
+        class="flex items-center justify-center w-8 h-9 shrink-0 text-xs font-bold"
+        [class.text-green-500]="isValid()"
+        [class.text-red-500]="!isValid()"
+        [attr.aria-label]="isValid() ? 'Formula valid' : 'Formula invalid'"
+      >
+        {{ isValid() ? '✓' : '✗' }}
+      </span>
+    }
+  </div>
+
+  <!-- ── Function signature tooltip ───────────────────────────────── -->
+  @if (activeFunction()) {
+    <div
+      class="mt-1 px-3 py-2 rounded-md border border-border bg-muted text-muted-foreground text-xs leading-relaxed"
+      role="tooltip"
+    >
+      <span class="font-semibold text-foreground">{{ activeFunction()!.name }}</span>
+      <span>({{ activeFunction()!.args.join(', ') }})</span>
+      <span class="mx-2 text-muted-foreground">—</span>
+      <span>{{ activeFunction()!.description }}</span>
+      <div class="mt-1 opacity-70">
+        <span class="font-medium">Example:</span> {{ activeFunction()!.example }}
+      </div>
+    </div>
+  }
+
+  <!-- ── Autocomplete dropdown ─────────────────────────────────────── -->
+  @if (showSuggestions() && suggestions().length > 0) {
+    <ul
+      class="absolute z-50 w-full mt-1 rounded-md border border-border bg-card shadow-lg max-h-60 overflow-y-auto"
+      role="listbox"
+      aria-label="Formula suggestions"
+    >
+      @for (suggestion of suggestions(); track suggestion.label) {
+        <li
+          class="flex items-start gap-2 px-3 py-2 cursor-pointer hover:bg-accent hover:text-foreground transition-colors"
+          role="option"
+          [attr.aria-selected]="false"
+          (click)="insertSuggestion(suggestion)"
+          (mousedown)="$event.preventDefault()"
+        >
+          <!-- Type badge -->
+          <span
+            class="shrink-0 mt-0.5 px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase leading-none"
+            [class.bg-primary]="suggestion.type === 'function'"
+            [class.text-primary-foreground]="suggestion.type === 'function'"
+            [class.bg-muted]="suggestion.type === 'variable'"
+            [class.text-muted-foreground]="suggestion.type === 'variable'"
+          >{{ suggestion.type === 'function' ? 'fn' : 'var' }}</span>
+
+          <div class="min-w-0">
+            <div class="font-semibold text-foreground truncate">{{ suggestion.label }}</div>
+            @if (suggestion.fn) {
+              <div class="text-muted-foreground text-[11px] truncate">
+                {{ suggestion.fn.description }}
+                <span class="ml-1 opacity-60">e.g. {{ suggestion.fn.example }}</span>
+              </div>
+            }
+          </div>
+        </li>
+      }
+    </ul>
+  }
+
+</div>
