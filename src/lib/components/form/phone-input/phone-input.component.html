@@ -28,6 +28,7 @@
         @for (country of filteredCountries(); track country.code) {
           <button
             type="button"
+            (mousedown)="$event.preventDefault()"
             (click)="selectCountry(country)"
             class="flex items-center gap-2 w-full px-3 py-2 hover:bg-accent text-sm transition-colors"
             [class.bg-accent]="country.code === selectedCountry().code"

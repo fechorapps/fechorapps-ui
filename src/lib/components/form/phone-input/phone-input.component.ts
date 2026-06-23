@@ -44,7 +44,7 @@ export class UiPhoneInputComponent {
   // EMBEDDED COUNTRY DATA
   // =========================================================================
 
-  readonly COUNTRIES: Country[] = [
+  private readonly COUNTRIES: Country[] = [
     { code: 'MX', name: 'México', dialCode: '+52', flag: '🇲🇽', minDigits: 10, maxDigits: 10 },
     { code: 'US', name: 'United States', dialCode: '+1', flag: '🇺🇸', minDigits: 10, maxDigits: 10 },
     { code: 'CA', name: 'Canada', dialCode: '+1', flag: '🇨🇦', minDigits: 10, maxDigits: 10 },
@@ -147,13 +147,11 @@ export class UiPhoneInputComponent {
       }
     });
 
-    // Emit changes whenever value changes
+    // Emit changes whenever value changes (only after user has entered digits)
     effect(() => {
-      const formatted = this.formattedValue();
-      const valid = this.isValid();
-      this.value.set(formatted);
-      this.phoneChange.emit(formatted);
-      this.validChange.emit(valid);
+      if (!this.rawDigits()) return;
+      this.phoneChange.emit(this.formattedValue());
+      this.validChange.emit(this.isValid());
     });
   }
 

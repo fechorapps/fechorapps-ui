@@ -85,7 +85,7 @@ describe('UiPhoneInputComponent', () => {
     fixture.detectChanges();
     component.showDropdown.set(true);
 
-    const us = component.COUNTRIES.find(c => c.code === 'US')!;
+    const us = component.filteredCountries().find(c => c.code === 'US')!;
     component.selectCountry(us);
     fixture.detectChanges();
 
@@ -163,6 +163,7 @@ describe('UiPhoneInputComponent', () => {
   });
 
   it('has at least 17 countries in COUNTRIES array', () => {
-    expect(component.COUNTRIES.length).toBeGreaterThanOrEqual(17);
+    fixture.detectChanges();
+    expect(component.filteredCountries().length).toBeGreaterThanOrEqual(17);
   });
 });
