@@ -1,0 +1,263 @@
+<!-- ============================================================================
+     Dynamic Form
+     ============================================================================ -->
+<form (submit)="onSubmit($event)" novalidate class="w-full">
+
+  <!-- Grid layout for fields -->
+  <div [class]="gridClasses()">
+
+    @for (field of visibleFields(); track field.key) {
+
+      <!-- Hidden fields: render but don't take up layout space -->
+      @if (field.type === 'hidden') {
+        <input
+          type="hidden"
+          [attr.name]="field.key"
+          [value]="getFieldValue(field.key) ?? ''"
+        />
+      } @else {
+
+        <!-- Visible field wrapper -->
+        <div [class]="fieldColspanClass(field)">
+
+          <!-- Label (not for checkbox/toggle — they render inline) -->
+          @if (field.type !== 'checkbox' && field.type !== 'toggle') {
+            <label
+              [for]="field.key"
+              class="block text-sm font-medium text-foreground mb-1"
+            >
+              {{ field.label }}
+              @if (field.required) {
+                <span class="text-destructive ml-0.5" aria-hidden="true">*</span>
+              }
+            </label>
+          }
+
+          <!-- ================================================================
+               Field input by type
+               ================================================================ -->
+
+          @switch (field.type) {
+
+            <!-- text | email | password | date → plain <input> -->
+            @case ('text') {
+              <input
+                [id]="field.key"
+                type="text"
+                [attr.placeholder]="field.placeholder ?? null"
+                [value]="getFieldValue(field.key) ?? ''"
+                [disabled]="disabled() || (field.disabled ?? false)"
+                (input)="updateField(field.key, $any($event.target).value)"
+                class="block w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+            }
+
+            @case ('email') {
+              <input
+                [id]="field.key"
+                type="email"
+                [attr.placeholder]="field.placeholder ?? null"
+                [value]="getFieldValue(field.key) ?? ''"
+                [disabled]="disabled() || (field.disabled ?? false)"
+                (input)="updateField(field.key, $any($event.target).value)"
+                class="block w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+            }
+
+            @case ('password') {
+              <input
+                [id]="field.key"
+                type="password"
+                [attr.placeholder]="field.placeholder ?? null"
+                [value]="getFieldValue(field.key) ?? ''"
+                [disabled]="disabled() || (field.disabled ?? false)"
+                (input)="updateField(field.key, $any($event.target).value)"
+                class="block w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+            }
+
+            @case ('number') {
+              <input
+                [id]="field.key"
+                type="number"
+                [attr.placeholder]="field.placeholder ?? null"
+                [value]="getFieldValue(field.key) ?? ''"
+                [disabled]="disabled() || (field.disabled ?? false)"
+                [attr.min]="field.validation?.min ?? null"
+                [attr.max]="field.validation?.max ?? null"
+                (input)="updateField(field.key, $any($event.target).valueAsNumber)"
+                class="block w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+            }
+
+            @case ('date') {
+              <input
+                [id]="field.key"
+                type="date"
+                [value]="getFieldValue(field.key) ?? ''"
+                [disabled]="disabled() || (field.disabled ?? false)"
+                (input)="updateField(field.key, $any($event.target).value)"
+                class="block w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+            }
+
+            @case ('textarea') {
+              <textarea
+                [id]="field.key"
+                [attr.placeholder]="field.placeholder ?? null"
+                [disabled]="disabled() || (field.disabled ?? false)"
+                rows="4"
+                (input)="updateField(field.key, $any($event.target).value)"
+                class="block w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50 disabled:cursor-not-allowed resize-y"
+              >{{ getFieldValue(field.key) ?? '' }}</textarea>
+            }
+
+            @case ('select') {
+              <select
+                [id]="field.key"
+                [disabled]="disabled() || (field.disabled ?? false)"
+                (change)="updateField(field.key, $any($event.target).value)"
+                class="block w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <option value="" disabled [selected]="!getFieldValue(field.key)">
+                  {{ field.placeholder ?? 'Select an option' }}
+                </option>
+                @for (opt of field.options ?? []; track opt.value) {
+                  <option
+                    [value]="opt.value"
+                    [selected]="getFieldValue(field.key) === opt.value"
+                  >
+                    {{ opt.label }}
+                  </option>
+                }
+              </select>
+            }
+
+            @case ('multi-select') {
+              <div class="flex flex-col gap-1.5 rounded-md border border-border bg-card p-3">
+                @for (opt of field.options ?? []; track opt.value) {
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      [checked]="isMultiSelected(field.key, opt.value)"
+                      [disabled]="disabled() || (field.disabled ?? false)"
+                      (change)="toggleMultiSelect(field.key, opt.value)"
+                      class="w-4 h-4 rounded border-border text-primary focus:ring-primary/40"
+                    />
+                    <span class="text-sm text-foreground">{{ opt.label }}</span>
+                  </label>
+                }
+              </div>
+            }
+
+            @case ('checkbox') {
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input
+                  [id]="field.key"
+                  type="checkbox"
+                  [checked]="isChecked(field.key)"
+                  [disabled]="disabled() || (field.disabled ?? false)"
+                  (change)="updateField(field.key, $any($event.target).checked)"
+                  class="w-4 h-4 rounded border-border text-primary focus:ring-primary/40"
+                />
+                <span class="text-sm font-medium text-foreground">
+                  {{ field.label }}
+                  @if (field.required) {
+                    <span class="text-destructive ml-0.5" aria-hidden="true">*</span>
+                  }
+                </span>
+              </label>
+            }
+
+            @case ('toggle') {
+              <label class="flex items-center gap-3 cursor-pointer">
+                <!-- Toggle track -->
+                <div class="relative">
+                  <input
+                    [id]="field.key"
+                    type="checkbox"
+                    [checked]="isChecked(field.key)"
+                    [disabled]="disabled() || (field.disabled ?? false)"
+                    (change)="updateField(field.key, $any($event.target).checked)"
+                    class="sr-only peer"
+                  />
+                  <div
+                    class="w-10 h-6 rounded-full border border-border bg-muted peer-checked:bg-primary peer-disabled:opacity-50 transition-colors"
+                  ></div>
+                  <div
+                    class="absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform peer-checked:translate-x-4 shadow-sm"
+                  ></div>
+                </div>
+                <span class="text-sm font-medium text-foreground">
+                  {{ field.label }}
+                  @if (field.required) {
+                    <span class="text-destructive ml-0.5" aria-hidden="true">*</span>
+                  }
+                </span>
+              </label>
+            }
+
+            @case ('radio') {
+              <div class="flex flex-col gap-2" role="radiogroup" [attr.aria-label]="field.label">
+                @for (opt of field.options ?? []; track opt.value) {
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      [name]="field.key"
+                      [checked]="isRadioSelected(field.key, opt.value)"
+                      [disabled]="disabled() || (field.disabled ?? false)"
+                      (change)="updateField(field.key, opt.value)"
+                      class="w-4 h-4 border-border text-primary focus:ring-primary/40"
+                    />
+                    <span class="text-sm text-foreground">{{ opt.label }}</span>
+                  </label>
+                }
+              </div>
+            }
+
+            @default {
+              <!-- Fallback for unknown types -->
+              <input
+                [id]="field.key"
+                type="text"
+                [attr.placeholder]="field.placeholder ?? null"
+                [value]="getFieldValue(field.key) ?? ''"
+                [disabled]="disabled() || (field.disabled ?? false)"
+                (input)="updateField(field.key, $any($event.target).value)"
+                class="block w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+            }
+
+          }
+
+          <!-- ================================================================
+               Error message
+               ================================================================ -->
+          @if (fieldError(field.key)) {
+            <p class="mt-1 text-xs text-destructive" role="alert">
+              {{ fieldError(field.key) }}
+            </p>
+          }
+
+        </div>
+
+      }
+
+    }
+
+  </div>
+
+  <!-- ============================================================================
+       Submit button
+       ============================================================================ -->
+  <div class="mt-6">
+    <button
+      type="submit"
+      [disabled]="disabled()"
+      class="inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      {{ submitLabel() }}
+    </button>
+  </div>
+
+</form>
