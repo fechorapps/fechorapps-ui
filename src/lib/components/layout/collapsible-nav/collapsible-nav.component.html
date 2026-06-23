@@ -1,0 +1,123 @@
+<nav
+  class="flex flex-col h-full bg-card border-r border-border overflow-hidden transition-all duration-300 ease-in-out"
+  [style.width]="currentWidth()"
+>
+  <!-- Header / Toggle Button -->
+  @if (showHeader()) {
+    <div class="flex items-center justify-between px-3 py-3 border-b border-border flex-shrink-0">
+      @if (!collapsed()) {
+        <span class="text-sm font-semibold text-foreground truncate">Navigation</span>
+      }
+      <button
+        type="button"
+        class="ml-auto flex items-center justify-center w-8 h-8 rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+        [title]="collapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+        (click)="toggleCollapse()"
+        aria-label="Toggle sidebar"
+      >
+        @if (collapsed()) {
+          <lucide-icon [img]="expandIcon" [size]="18" />
+        } @else {
+          <lucide-icon [img]="collapseIcon" [size]="18" />
+        }
+      </button>
+    </div>
+  }
+
+  <!-- Nav Items -->
+  <div class="flex-1 overflow-y-auto py-2">
+    @for (group of groupedItems(); track group.section) {
+      <!-- Section Header -->
+      @if (group.section && !collapsed()) {
+        <div class="px-3 pt-3 pb-1">
+          <span class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            {{ group.section }}
+          </span>
+        </div>
+      }
+
+      <!-- Items in Group -->
+      @for (item of group.items; track item.id) {
+        <!-- Nav Item -->
+        <div>
+          <button
+            type="button"
+            class="w-full flex items-center gap-3 px-3 py-2 text-sm transition-colors rounded-none focus:outline-none"
+            [class.opacity-50]="item.disabled"
+            [class.cursor-not-allowed]="item.disabled"
+            [class.cursor-pointer]="!item.disabled"
+            [class.bg-accent]="isActive(item)"
+            [class.text-foreground]="isActive(item)"
+            [class.font-medium]="isActive(item)"
+            [class.text-muted-foreground]="!isActive(item)"
+            [class.hover:bg-accent]="!item.disabled"
+            [class.hover:text-foreground]="!item.disabled"
+            [class.justify-center]="collapsed()"
+            [title]="collapsed() ? item.label : ''"
+            [attr.aria-disabled]="item.disabled || null"
+            (click)="onItemClick(item)"
+          >
+            <!-- Icon -->
+            @if (item.icon) {
+              <lucide-icon [img]="item.icon" [size]="18" class="flex-shrink-0" />
+            } @else {
+              <span class="w-[18px] h-[18px] flex-shrink-0 rounded-full bg-muted-foreground/30 inline-block"></span>
+            }
+
+            <!-- Label + Badge (hidden when collapsed) -->
+            @if (!collapsed()) {
+              <span class="flex-1 truncate text-left">{{ item.label }}</span>
+
+              @if (item.badge != null) {
+                <span class="ml-auto flex-shrink-0 rounded-full bg-primary text-primary-foreground text-xs px-2 py-0.5 min-w-[20px] text-center">
+                  {{ item.badge }}
+                </span>
+              }
+
+              @if (item.children?.length) {
+                <lucide-icon
+                  [img]="isExpanded(item.id) ? chevronDownIcon : chevronRightIcon"
+                  [size]="14"
+                  class="flex-shrink-0 text-muted-foreground"
+                />
+              }
+            }
+          </button>
+
+          <!-- Children (only when expanded and not collapsed) -->
+          @if (!collapsed() && item.children?.length && isExpanded(item.id)) {
+            <div class="pl-6">
+              @for (child of item.children; track child.id) {
+                <button
+                  type="button"
+                  class="w-full flex items-center gap-3 px-3 py-2 text-sm transition-colors rounded-none focus:outline-none"
+                  [class.opacity-50]="child.disabled"
+                  [class.cursor-not-allowed]="child.disabled"
+                  [class.cursor-pointer]="!child.disabled"
+                  [class.bg-accent]="isActive(child)"
+                  [class.text-foreground]="isActive(child)"
+                  [class.font-medium]="isActive(child)"
+                  [class.text-muted-foreground]="!isActive(child)"
+                  [class.hover:bg-accent]="!child.disabled"
+                  [class.hover:text-foreground]="!child.disabled"
+                  [attr.aria-disabled]="child.disabled || null"
+                  (click)="onItemClick(child)"
+                >
+                  @if (child.icon) {
+                    <lucide-icon [img]="child.icon" [size]="16" class="flex-shrink-0" />
+                  }
+                  <span class="flex-1 truncate text-left">{{ child.label }}</span>
+                  @if (child.badge != null) {
+                    <span class="ml-auto flex-shrink-0 rounded-full bg-primary text-primary-foreground text-xs px-2 py-0.5 min-w-[20px] text-center">
+                      {{ child.badge }}
+                    </span>
+                  }
+                </button>
+              }
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+</nav>
