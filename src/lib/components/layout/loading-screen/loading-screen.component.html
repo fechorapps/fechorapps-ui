@@ -1,0 +1,19 @@
+@if (showContent()) {
+  <div [class]="containerClass()">
+    <ng-content select="[logo]" />
+    <div class="mt-8 w-48">
+      @if (progress() !== null) {
+        <div class="w-full bg-muted rounded-full h-2">
+          <div class="bg-primary h-2 rounded-full transition-all duration-300"
+               [style.width.%]="progress()"></div>
+        </div>
+        <p class="text-center text-sm text-muted-foreground mt-2">{{ progress() }}%</p>
+      } @else {
+        <div class="flex justify-center">
+          <div class="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+        </div>
+      }
+    </div>
+    <p class="mt-4 text-muted-foreground text-sm">{{ message() }}</p>
+  </div>
+}
