@@ -2,12 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   input,
   model,
   output,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { UiCodeEditorComponent } from '../code-editor';
 
 // ---------------------------------------------------------------------------
@@ -62,7 +62,7 @@ export type JsonEditorMode = 'tree' | 'raw';
   selector: 'ui-json-editor',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, UiCodeEditorComponent],
+  imports: [UiCodeEditorComponent],
   templateUrl: './json-editor.component.html',
 })
 export class UiJsonEditorComponent {
@@ -74,7 +74,7 @@ export class UiJsonEditorComponent {
   value = model<JsonValue>(null);
 
   /** Current editor mode */
-  mode = input<JsonEditorMode>('tree');
+  mode = model<JsonEditorMode>('tree');
 
   /** When true, prevents editing (tree and raw modes are read-only) */
   readonly = input<boolean>(false);
@@ -85,12 +85,12 @@ export class UiJsonEditorComponent {
   /** Whether all nodes start expanded in tree mode */
   expandAll = input<boolean>(false);
 
+  /** Maximum depth to render in the tree view */
+  maxDepth = input<number>(10);
+
   // =========================================================================
   // OUTPUTS
   // =========================================================================
-
-  /** Emitted on every valid JSON change (both tree edits and raw saves) */
-  readonly valueChange = output<JsonValue>();
 
   /** Emitted when the raw text is not valid JSON */
   readonly parseError = output<string>();
@@ -116,12 +116,13 @@ export class UiJsonEditorComponent {
   // COMPUTED
   // =========================================================================
 
+  /** Full flat list of ALL nodes (used by expandAll effect) */
+  nodes = computed<JsonNode[]>(() => this.buildNodes(this.value(), '', 0));
+
   /** Flat list of *visible* nodes to render in tree mode */
   visibleNodes = computed<JsonNode[]>(() => {
-    const root = this.value();
-    const nodes = this.buildNodes(root, '', 0);
     // Filter to only visible nodes based on expanded paths
-    return this.filterVisible(nodes);
+    return this.filterVisible(this.nodes());
   });
 
   /** Formatted JSON string for the raw editor initial value */
@@ -140,6 +141,14 @@ export class UiJsonEditorComponent {
   constructor() {
     // Sync rawText when value changes externally
     // We use a computed in the template instead to avoid circular updates
+
+    // Expand all nodes when expandAll input becomes true
+    effect(() => {
+      if (this.expandAll()) {
+        const allPaths = new Set(this.nodes().map(n => n.path));
+        this.expandedPaths.set(allPaths);
+      }
+    });
   }
 
   // =========================================================================
@@ -156,6 +165,7 @@ export class UiJsonEditorComponent {
     depth: number,
     key = 'root'
   ): JsonNode[] {
+    if (depth > this.maxDepth()) return [];
     const type = this.typeOf(val);
     const hasChildren = type === 'object' || type === 'array';
     const childCount = hasChildren
@@ -294,7 +304,6 @@ export class UiJsonEditorComponent {
 
     const updated = this.setValueAtPath(this.value(), path, parsed);
     this.value.set(updated);
-    this.valueChange.emit(updated);
   }
 
   /**
@@ -343,13 +352,17 @@ export class UiJsonEditorComponent {
   // RAW MODE
   // =========================================================================
 
+  switchToRaw(): void {
+    this.rawText.set(JSON.stringify(this.value(), null, 2));
+    this.mode.set('raw');
+  }
+
   onRawChange(text: string): void {
     this.rawText.set(text);
     try {
       const parsed = JSON.parse(text) as JsonValue;
       this.errorMessage.set(null);
       this.value.set(parsed);
-      this.valueChange.emit(parsed);
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Invalid JSON';
       this.errorMessage.set(msg);
