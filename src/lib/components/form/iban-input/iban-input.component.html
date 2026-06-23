@@ -1,0 +1,89 @@
+<div class="flex flex-col gap-1.5 w-full">
+
+  <!-- Label -->
+  <label class="text-sm font-medium text-foreground">{{ label() }}</label>
+
+  <!-- Input wrapper -->
+  <div
+    class="relative flex items-center border border-border rounded-md bg-card overflow-hidden"
+    [class.opacity-50]="disabled()"
+    [class.cursor-not-allowed]="disabled()"
+  >
+    <!-- Country badge (when detected) -->
+    @if (detectedCountry()) {
+      <div class="flex items-center justify-center w-10 h-10 shrink-0 border-r border-border px-2">
+        <span class="text-xs font-semibold text-muted-foreground tracking-wider">
+          {{ detectedCountry() }}
+        </span>
+      </div>
+    }
+
+    <!-- IBAN text input -->
+    <input
+      type="text"
+      inputmode="text"
+      autocomplete="off"
+      spellcheck="false"
+      [value]="displayValue()"
+      (input)="onInput($event)"
+      [disabled]="disabled()"
+      placeholder="e.g. ES91 2100 0418 4502 0005 1332"
+      class="flex-1 px-3 py-2 bg-transparent outline-none text-foreground text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed font-mono tracking-wider"
+    />
+
+    <!-- Validity indicator -->
+    @if (value()) {
+      <div class="flex items-center justify-center px-2">
+        @if (isValid()) {
+          <lucide-icon
+            [img]="checkIcon"
+            class="w-4 h-4 text-green-600"
+            aria-label="Valid IBAN"
+          ></lucide-icon>
+        } @else {
+          <lucide-icon
+            [img]="xIcon"
+            class="w-4 h-4 text-destructive"
+            aria-label="Invalid IBAN"
+          ></lucide-icon>
+        }
+      </div>
+    }
+
+    <!-- Copy button -->
+    @if (value()) {
+      <button
+        type="button"
+        (click)="copyToClipboard()"
+        [disabled]="disabled()"
+        class="flex items-center justify-center px-2 py-2 text-muted-foreground hover:text-foreground transition-colors disabled:cursor-not-allowed"
+        [attr.aria-label]="copied() ? 'Copied!' : 'Copy IBAN'"
+        [attr.title]="copied() ? 'Copied!' : 'Copy IBAN'"
+      >
+        @if (copied()) {
+          <lucide-icon [img]="checkIcon" class="w-4 h-4 text-green-600"></lucide-icon>
+        } @else {
+          <lucide-icon [img]="copyIcon" class="w-4 h-4"></lucide-icon>
+        }
+      </button>
+    }
+  </div>
+
+  <!-- Expected length hint -->
+  @if (detectedCountry() && expectedLength()) {
+    <p class="text-xs text-muted-foreground">
+      {{ detectedCountry() }} IBAN: {{ expectedLength() }} characters
+      @if (value()) {
+        · {{ value().length }}/{{ expectedLength() }}
+      }
+    </p>
+  }
+
+  <!-- Bank name slot (when showBankName enabled) -->
+  @if (showBankName() && isValid()) {
+    <p class="text-xs text-muted-foreground italic">
+      Bank lookup not available in this version.
+    </p>
+  }
+
+</div>
