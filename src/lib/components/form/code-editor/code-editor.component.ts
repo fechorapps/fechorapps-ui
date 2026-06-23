@@ -2,8 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  OnDestroy,
   PLATFORM_ID,
   afterNextRender,
+  computed,
   inject,
   input,
   model,
@@ -38,7 +40,7 @@ interface EditorView {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div [style.height]="height()" class="relative border border-border rounded-md overflow-hidden">
+    <div [style.height]="height()" [class]="themeClass()" class="relative border border-border rounded-md overflow-hidden">
       <div #editorContainer class="h-full w-full"></div>
       @if (!cmLoaded()) {
         <textarea
@@ -52,7 +54,7 @@ interface EditorView {
     </div>
   `,
 })
-export class UiCodeEditorComponent {
+export class UiCodeEditorComponent implements OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
 
   readonly editorContainer = viewChild<ElementRef>('editorContainer');
@@ -72,10 +74,17 @@ export class UiCodeEditorComponent {
   /** Editor colour theme */
   theme = input<'light' | 'dark'>('light');
 
+  /** CSS class derived from `theme` — applied to the outer container so consumers can style it */
+  themeClass = computed(() => (this.theme() === 'dark' ? 'cm-theme-dark' : 'cm-theme-light'));
+
   /** Prevents user edits when true */
   readonly = input<boolean>(false);
 
-  /** Show line numbers */
+  /**
+   * Show line numbers.
+   * Note: lineNumbers=false only applies to the textarea fallback;
+   * CodeMirror's basicSetup always includes line numbers when CM loads.
+   */
   lineNumbers = input<boolean>(true);
 
   /** CSS height of the editor container */
@@ -177,6 +186,9 @@ export class UiCodeEditorComponent {
         const { python } = await import('@codemirror/lang-python' as any);
         return python();
       }
+      case 'bash':
+        // No native CM6 language package for bash — falls back to plain text editing
+        return [];
       default:
         return [];
     }
