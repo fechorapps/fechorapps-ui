@@ -1,0 +1,148 @@
+<div class="flex flex-col gap-2 w-full font-mono text-sm">
+
+  <!-- Toolbar -->
+  <div class="flex items-center gap-2 px-3 py-2 bg-muted rounded-md border border-border">
+    <!-- Mode switcher -->
+    <div class="flex rounded-md overflow-hidden border border-border">
+      <button
+        type="button"
+        (click)="mode() === 'tree' ? null : null"
+        [class]="mode() === 'tree'
+          ? 'px-3 py-1 text-xs font-medium bg-primary text-white'
+          : 'px-3 py-1 text-xs font-medium bg-card text-muted-foreground hover:bg-accent'"
+        aria-label="Switch to tree mode">
+        Tree
+      </button>
+      <button
+        type="button"
+        [class]="mode() === 'raw'
+          ? 'px-3 py-1 text-xs font-medium bg-primary text-white'
+          : 'px-3 py-1 text-xs font-medium bg-card text-muted-foreground hover:bg-accent'"
+        aria-label="Switch to raw mode">
+        Raw
+      </button>
+    </div>
+
+    @if (mode() === 'tree') {
+      <div class="flex gap-1 ml-auto">
+        <button
+          type="button"
+          (click)="expandAllNodes()"
+          class="px-2 py-1 text-xs rounded bg-card border border-border text-muted-foreground hover:bg-accent transition-colors"
+          aria-label="Expand all nodes">
+          Expand All
+        </button>
+        <button
+          type="button"
+          (click)="collapseAllNodes()"
+          class="px-2 py-1 text-xs rounded bg-card border border-border text-muted-foreground hover:bg-accent transition-colors"
+          aria-label="Collapse all nodes">
+          Collapse All
+        </button>
+      </div>
+    }
+  </div>
+
+  <!-- Tree mode -->
+  @if (mode() === 'tree') {
+    <div class="rounded-md border border-border bg-card overflow-auto" [style.min-height]="height()">
+      <ul role="tree" class="p-2 space-y-px">
+        @for (node of visibleNodes(); track trackByPath($index, node)) {
+          <li
+            role="treeitem"
+            [attr.aria-expanded]="node.hasChildren ? isExpanded(node.path) : null"
+            [attr.aria-level]="node.depth + 1"
+            class="flex items-start gap-1 group"
+            [style.padding-left.px]="node.depth * 16">
+
+            <!-- Expand/collapse toggle -->
+            @if (node.hasChildren) {
+              <button
+                type="button"
+                (click)="toggleExpand(node.path)"
+                class="flex-shrink-0 mt-0.5 w-4 h-4 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                [attr.aria-label]="isExpanded(node.path) ? 'Collapse ' + node.key : 'Expand ' + node.key">
+                @if (isExpanded(node.path)) {
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
+                    <path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                  </svg>
+                } @else {
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
+                    <path d="M3 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                  </svg>
+                }
+              </button>
+            } @else {
+              <span class="flex-shrink-0 w-4"></span>
+            }
+
+            <!-- Key label -->
+            <span class="text-muted-foreground flex-shrink-0">
+              @if (node.depth > 0) {
+                <span class="text-foreground font-semibold">{{ node.key }}</span>
+                <span class="text-muted-foreground">: </span>
+              }
+            </span>
+
+            <!-- Value -->
+            @if (node.hasChildren) {
+              <!-- Container: show type indicator and collapsed summary -->
+              <span [class]="typeColorClass(node.type)">
+                @if (node.type === 'array') {
+                  <span class="text-muted-foreground">[</span>
+                } @else {
+                  <span class="text-muted-foreground">&#123;</span>
+                }
+                @if (!isExpanded(node.path)) {
+                  <span class="text-muted-foreground italic text-xs ml-1">{{ collapsedSummary(node) }}</span>
+                  @if (node.type === 'array') {
+                    <span class="text-muted-foreground">]</span>
+                  } @else {
+                    <span class="text-muted-foreground">&#125;</span>
+                  }
+                }
+              </span>
+            } @else {
+              <!-- Leaf: editable value -->
+              @if (readonly()) {
+                <span [class]="typeColorClass(node.type)">{{ displayValue(node) }}</span>
+              } @else {
+                <input
+                  type="text"
+                  [value]="displayValue(node)"
+                  (change)="updateLeafValue(node.path, $any($event.target).value, node.type)"
+                  [class]="'flex-1 min-w-0 bg-transparent border-b border-transparent focus:border-border outline-none px-0.5 py-0 ' + typeColorClass(node.type)"
+                  [attr.aria-label]="'Edit value for ' + node.key" />
+              }
+            }
+
+          </li>
+        }
+      </ul>
+
+      @if (visibleNodes().length === 0) {
+        <div class="p-4 text-center text-muted-foreground text-xs">Empty JSON value</div>
+      }
+    </div>
+  }
+
+  <!-- Raw mode -->
+  @if (mode() === 'raw') {
+    <div class="flex flex-col gap-1">
+      <ui-code-editor
+        [value]="formattedJson()"
+        language="json"
+        [height]="height()"
+        [readonly]="readonly()"
+        (codeChange)="onRawChange($event)">
+      </ui-code-editor>
+
+      @if (errorMessage()) {
+        <p role="alert" class="text-xs text-red-600 dark:text-red-400 px-1">
+          {{ errorMessage() }}
+        </p>
+      }
+    </div>
+  }
+
+</div>
