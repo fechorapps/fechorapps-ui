@@ -1,0 +1,10 @@
+<div [class]="containerClass()">
+  <div [class]="leftClass() + ' w-full'">
+    <ng-content select="[left]" />
+  </div>
+  @if (rightVisible()) {
+    <div [class]="rightClass() + ' w-full'">
+      <ng-content select="[right]" />
+    </div>
+  }
+</div>
