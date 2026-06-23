@@ -33,6 +33,7 @@ export class UiStickyHeaderComponent implements OnDestroy {
   readonly isScrolled = signal<boolean>(false);
   readonly isVisible = signal<boolean>(true);
   private lastScrollY = 0;
+  private readonly boundOnScroll = this.onScroll.bind(this);
 
   // =========================================================================
   // COMPUTED
@@ -58,12 +59,12 @@ export class UiStickyHeaderComponent implements OnDestroy {
 
   constructor() {
     afterNextRender(() => {
-      window.addEventListener('scroll', this.onScroll.bind(this), { passive: true });
+      window.addEventListener('scroll', this.boundOnScroll, { passive: true });
     });
   }
 
   ngOnDestroy(): void {
-    window.removeEventListener('scroll', this.onScroll.bind(this));
+    window.removeEventListener('scroll', this.boundOnScroll);
   }
 
   // =========================================================================
