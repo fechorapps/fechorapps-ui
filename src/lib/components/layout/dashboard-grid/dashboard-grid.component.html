@@ -1,0 +1,40 @@
+<div
+  class="relative w-full"
+  [style.height.px]="gridHeight()"
+  (dragover)="onGridDragOver($event)"
+  (drop)="onGridDrop($event)">
+
+  @for (item of items(); track item.id) {
+    <div
+      class="absolute rounded-lg border border-border bg-card overflow-hidden shadow-sm"
+      [draggable]="editable() && !item.static"
+      [style]="itemStyle(item)"
+      (dragstart)="onItemDragStart($event, item)">
+
+      <!-- Drag handle header -->
+      <div
+        class="flex items-center gap-1 px-3 py-1.5 border-b border-border bg-accent/30"
+        [class.cursor-grab]="editable() && !item.static"
+        [class.cursor-default]="!editable() || item.static">
+        @if (editable() && !item.static) {
+          <lucide-icon
+            [img]="icons.GripHorizontal"
+            [size]="14"
+            class="text-muted-foreground shrink-0">
+          </lucide-icon>
+        }
+        <span class="text-xs font-medium text-muted-foreground truncate select-none">
+          {{ item.id }}
+        </span>
+        @if (item.static) {
+          <span class="ml-auto text-xs text-muted-foreground/60 select-none">static</span>
+        }
+      </div>
+
+      <!-- Card content slot -->
+      <div class="p-3 h-[calc(100%-2rem)] overflow-auto text-sm text-foreground">
+        <ng-content select="[slot='{{ item.id }}']"></ng-content>
+      </div>
+    </div>
+  }
+</div>
