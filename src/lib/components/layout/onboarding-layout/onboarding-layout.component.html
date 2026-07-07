@@ -1,0 +1,35 @@
+<div class="min-h-screen bg-background flex flex-col items-center justify-center p-8">
+  <ng-content select="[illustration]" />
+  @if (title()) { <h1 class="text-4xl font-bold text-foreground mt-6 text-center">{{ title() }}</h1> }
+  @if (subtitle()) { <p class="text-muted-foreground mt-2 text-center max-w-lg">{{ subtitle() }}</p> }
+  @if (features().length) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 max-w-3xl w-full">
+      @for (f of features(); track f.title) {
+        <div class="flex flex-col items-center text-center p-4 rounded-xl bg-card border border-border">
+          <lucide-icon [img]="f.icon" class="text-primary mb-3" [size]="28" />
+          <h3 class="font-semibold text-foreground">{{ f.title }}</h3>
+          <p class="text-sm text-muted-foreground mt-1">{{ f.description }}</p>
+        </div>
+      }
+    </div>
+  }
+  @if (showProgress() && totalSteps() > 0) {
+    <div class="flex gap-2 mt-8">
+      @for (_ of stepDots(); track $index) {
+        <div [class]="$index === currentStep() ? 'w-6 h-2 bg-primary' : 'w-2 h-2 bg-muted'"
+             class="rounded-full transition-all duration-300"></div>
+      }
+    </div>
+  }
+  <div class="flex flex-col sm:flex-row gap-3 mt-8">
+    <button (click)="primaryClicked.emit()" class="px-8 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90">
+      {{ primaryCta() }}
+    </button>
+    @if (secondaryCta()) {
+      <button (click)="secondaryClicked.emit()" class="px-8 py-3 border border-border text-foreground rounded-lg font-medium hover:bg-accent">
+        {{ secondaryCta() }}
+      </button>
+    }
+  </div>
+  <ng-content select="[footer]" />
+</div>

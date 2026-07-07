@@ -13,6 +13,15 @@ const config: StorybookConfig = {
   webpackFinal: async (webpackConfig: Configuration) => {
     if (!webpackConfig.module?.rules) return webpackConfig;
 
+    // CodeMirror is an optional, lazy-loaded dependency of UiCodeEditorComponent.
+    // The component guards its dynamic imports with try/catch and falls back to a
+    // <textarea> when the packages are absent, so ignore unresolved @codemirror/*
+    // modules at build time instead of hard-failing the whole Storybook build.
+    const webpack = (await import('webpack')).default;
+    (webpackConfig.plugins ??= []).push(
+      new webpack.IgnorePlugin({ resourceRegExp: /^@codemirror\// }),
+    );
+
     const tailwindPostcss = (await import('@tailwindcss/postcss')).default;
 
     const patchPostcssLoaders = (rules: any[]): void => {
