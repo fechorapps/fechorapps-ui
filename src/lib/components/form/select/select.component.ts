@@ -2,8 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   forwardRef,
+  inject,
   input,
   model,
   output,
@@ -180,6 +182,25 @@ export class UiSelectComponent implements ControlValueAccessor {
 
   private onChangeFn: (value: unknown) => void = () => {};
   private onTouchedFn: () => void = () => {};
+
+  /**
+   * handleBlur() defers its emit by 100ms (setTimeout) to let a click on an
+   * option register first. If the component is destroyed within that window
+   * (e.g. the parent modal closes on Escape right after this select loses
+   * focus), the deferred emit() would fire on an already-destroyed OutputRef
+   * — Angular no-ops that safely but logs NG0953. Cancel the pending timeout
+   * on destroy so it never fires at all.
+   */
+  private blurTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private readonly destroyRef = inject(DestroyRef);
+
+  constructor() {
+    this.destroyRef.onDestroy(() => {
+      if (this.blurTimeoutId !== null) {
+        clearTimeout(this.blurTimeoutId);
+      }
+    });
+  }
 
   writeValue(value: unknown): void {
     this.value.set(value);
@@ -484,7 +505,8 @@ export class UiSelectComponent implements ControlValueAccessor {
 
   handleBlur(event: FocusEvent): void {
     // Delay to allow click on options
-    setTimeout(() => {
+    this.blurTimeoutId = setTimeout(() => {
+      this.blurTimeoutId = null;
       if (!this.panelVisible()) {
         this.focused.set(false);
       }
