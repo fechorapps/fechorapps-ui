@@ -17,6 +17,7 @@ import { LucideAngularModule, GripHorizontal } from 'lucide-angular';
 
 export interface GridItem {
   id: string;
+  label?: string;
   x: number;
   y: number;
   w: number;

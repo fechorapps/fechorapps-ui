@@ -11,6 +11,7 @@ function baseConfig(overrides: Partial<WidgetConfig>): WidgetConfig {
     y: 0,
     w: 4,
     h: 2,
+    widgetKey: 'TestWidget',
     widgetType: 'kpi',
     title: 'Test Widget',
     data: {},
@@ -62,7 +63,12 @@ describe('WIDGET_REGISTRY', () => {
 
     const chartData = { labels: ['A', 'B'], datasets: [{ data: [1, 2] }] };
     const config = baseConfig({ widgetType: 'barChart', title: 'Bar', data: chartData });
-    expect(entry.resolveInputs(config)).toEqual({ type: 'bar', data: chartData });
+    expect(entry.resolveInputs(config)).toEqual({
+      type: 'bar',
+      data: chartData,
+      height: '100%',
+      maintainAspectRatio: false,
+    });
   });
 
   it('maps lineChart to UiChartComponent with type line and data passed through', () => {
@@ -71,10 +77,15 @@ describe('WIDGET_REGISTRY', () => {
 
     const chartData = { labels: ['A', 'B'], datasets: [{ data: [1, 2] }] };
     const config = baseConfig({ widgetType: 'lineChart', title: 'Line', data: chartData });
-    expect(entry.resolveInputs(config)).toEqual({ type: 'line', data: chartData });
+    expect(entry.resolveInputs(config)).toEqual({
+      type: 'line',
+      data: chartData,
+      height: '100%',
+      maintainAspectRatio: false,
+    });
   });
 
-  it('maps table to UiWidgetTableComponent with title/columns/rows resolved from data', () => {
+  it('maps table to UiWidgetTableComponent with columns/rows resolved from data', () => {
     const entry = WIDGET_REGISTRY['table'];
     expect(entry.component).toBe(UiWidgetTableComponent);
 
@@ -84,7 +95,6 @@ describe('WIDGET_REGISTRY', () => {
     };
     const config = baseConfig({ widgetType: 'table', title: 'Contratos', data: tableData });
     expect(entry.resolveInputs(config)).toEqual({
-      title: 'Contratos',
       columns: tableData.columns,
       rows: tableData.rows,
     });

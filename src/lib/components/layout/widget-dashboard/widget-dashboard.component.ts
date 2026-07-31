@@ -1,8 +1,9 @@
-import { Component, ChangeDetectionStrategy, model, output } from '@angular/core';
+import { Component, ChangeDetectionStrategy, model, output, type Type } from '@angular/core';
 import { NgComponentOutlet } from '@angular/common';
 import { UiDashboardGridComponent } from '../dashboard-grid/dashboard-grid.component';
 import type { GridItem } from '../dashboard-grid/dashboard-grid.component';
 import { WIDGET_REGISTRY } from './widget-registry';
+import { isWidgetType } from './widget-types';
 import type { WidgetConfig } from './widget-types';
 
 @Component({
@@ -16,12 +17,14 @@ export class UiWidgetDashboardComponent {
   items = model<WidgetConfig[]>([]);
   readonly layoutChange = output<WidgetConfig[]>();
 
-  widgetComponent(item: WidgetConfig) {
-    return WIDGET_REGISTRY[item.widgetType].component;
+  widgetComponent(item: WidgetConfig): Type<unknown> | null {
+    if (!isWidgetType(item.widgetType)) return null;
+    return WIDGET_REGISTRY[item.widgetType]?.component ?? null;
   }
 
   widgetInputs(item: WidgetConfig): Record<string, unknown> {
-    return WIDGET_REGISTRY[item.widgetType].resolveInputs(item);
+    if (!isWidgetType(item.widgetType)) return {};
+    return WIDGET_REGISTRY[item.widgetType]?.resolveInputs(item) ?? {};
   }
 
   /**

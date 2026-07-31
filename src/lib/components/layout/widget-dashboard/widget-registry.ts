@@ -18,6 +18,8 @@ interface TableWidgetData {
   rows: WidgetTableRow[];
 }
 
+const EMPTY_CHART_DATA: ChartData = { labels: [], datasets: [] };
+
 export interface WidgetRegistryEntry {
   component: Type<unknown>;
   resolveInputs: (config: WidgetConfig) => Record<string, unknown>;
@@ -27,10 +29,10 @@ export const WIDGET_REGISTRY: Record<WidgetType, WidgetRegistryEntry> = {
   kpi: {
     component: UiKpiCardComponent,
     resolveInputs: (config) => {
-      const data = config.data as KpiWidgetData;
+      const data = (config.data ?? {}) as Partial<KpiWidgetData>;
       return {
         label: config.title,
-        value: data.value,
+        value: data.value ?? 0,
         target: data.target,
         format: data.format ?? 'number',
         currency: data.currency ?? 'USD',
@@ -39,17 +41,27 @@ export const WIDGET_REGISTRY: Record<WidgetType, WidgetRegistryEntry> = {
   },
   barChart: {
     component: UiChartComponent,
-    resolveInputs: (config) => ({ type: 'bar', data: config.data as ChartData }),
+    resolveInputs: (config) => ({
+      type: 'bar',
+      data: (config.data as ChartData | undefined) ?? EMPTY_CHART_DATA,
+      height: '100%',
+      maintainAspectRatio: false,
+    }),
   },
   lineChart: {
     component: UiChartComponent,
-    resolveInputs: (config) => ({ type: 'line', data: config.data as ChartData }),
+    resolveInputs: (config) => ({
+      type: 'line',
+      data: (config.data as ChartData | undefined) ?? EMPTY_CHART_DATA,
+      height: '100%',
+      maintainAspectRatio: false,
+    }),
   },
   table: {
     component: UiWidgetTableComponent,
     resolveInputs: (config) => {
-      const data = config.data as TableWidgetData;
-      return { title: config.title, columns: data.columns, rows: data.rows };
+      const data = (config.data ?? {}) as Partial<TableWidgetData>;
+      return { columns: data.columns ?? [], rows: data.rows ?? [] };
     },
   },
 };

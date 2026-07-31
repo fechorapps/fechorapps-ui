@@ -15,20 +15,26 @@ export function isWidgetType(value: unknown): value is WidgetType {
 /**
  * One widget instance placed on a dashboard.
  *
- * `id` is NOT an opaque key: `UiDashboardGridComponent` displays it as the
- * visible label in the drag-handle header, uses it for `track`, the
- * HTML5 drag `dataTransfer` payload, and the `[slot='{id}']` content-
- * projection selector (see dashboard-grid.component.html). Callers must set
- * `id` to a human-readable, dashboard-unique string — typically the
- * widget's own title, since V1 allows at most one instance per widget key
- * per user (see design doc, UserDashboardLayout PK).
+ * `id` must still be a dashboard-unique string — it drives `UiDashboardGridComponent`'s
+ * `track`, the HTML5 drag `dataTransfer` payload, and (via `ContentChild`/
+ * `NgTemplateOutlet`) which item each rendered cell corresponds to. It is no
+ * longer the visible label: set `GridItem.label` for that, or the grid falls
+ * back to displaying `id` itself if `label` is omitted.
+ *
+ * `widgetKey` is the stable identity of *which widget this is* (matches the
+ * backend's WidgetKey smart enum) — distinct from `id`, which only needs to
+ * be unique within one dashboard instance. Callers persisting layout
+ * (UserDashboardLayout) key off `widgetKey`, not `id`.
  *
  * `data` is opaque on purpose: this library does not know how to turn "rows
  * from a report" into a KPI number or a Chart.js dataset — the caller
  * shapes `data` into whatever `WIDGET_REGISTRY[widgetType].resolveInputs`
- * expects (documented per-type in widget-registry.ts).
+ * expects (documented per-type in widget-registry.ts). A missing or
+ * malformed `data` is handled gracefully by every resolveInputs
+ * implementation (falls back to empty/zero values) rather than throwing.
  */
 export interface WidgetConfig extends GridItem {
+  widgetKey: string;
   widgetType: WidgetType;
   title: string;
   data: unknown;

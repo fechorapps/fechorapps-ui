@@ -15,7 +15,6 @@ export type WidgetTableRow = Record<string, string | number>;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiWidgetTableComponent {
-  readonly title = input<string>('');
   readonly columns = input<WidgetTableColumn[]>([]);
   readonly rows = input<WidgetTableRow[]>([]);
 }

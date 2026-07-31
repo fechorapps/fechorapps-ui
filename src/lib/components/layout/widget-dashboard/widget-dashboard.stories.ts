@@ -4,22 +4,28 @@ import type { WidgetConfig } from './widget-types';
 
 const DEMO_ITEMS: WidgetConfig[] = [
   {
-    id: 'Techo Presupuestal',
+    id: 'budget-ceiling',
+    label: 'Techo Presupuestal',
     x: 0, y: 0, w: 4, h: 2,
+    widgetKey: 'BudgetCeiling',
     widgetType: 'kpi',
     title: 'Techo Presupuestal',
     data: { value: 120000000, format: 'currency', currency: 'MXN' },
   },
   {
-    id: 'Comprometido Obras',
+    id: 'committed-works',
+    label: 'Comprometido Obras',
     x: 4, y: 0, w: 4, h: 2,
+    widgetKey: 'CommittedWorks',
     widgetType: 'kpi',
     title: 'Comprometido Obras',
     data: { value: 98050000, format: 'currency', currency: 'MXN' },
   },
   {
-    id: 'Contratos por Estatus',
+    id: 'contracts-by-status',
+    label: 'Contratos por Estatus',
     x: 0, y: 2, w: 8, h: 4,
+    widgetKey: 'ContractsByStatus',
     widgetType: 'barChart',
     title: 'Contratos por Estatus',
     data: {
@@ -38,7 +44,7 @@ const meta: Meta<UiWidgetDashboardComponent> = {
 export default meta;
 type Story = StoryObj<UiWidgetDashboardComponent>;
 
-/** Drag a widget — layoutChange logs to the Storybook Actions panel. */
+/** Drag a widget — layoutChange logs to the browser console. */
 export const Default: Story = {
   name: 'Default — Kpi + BarChart',
   args: { items: DEMO_ITEMS },

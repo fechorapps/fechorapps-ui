@@ -1,6 +1,11 @@
-<!-- src/lib/components/layout/widget-dashboard/widget-dashboard.component.html -->
 <ui-dashboard-grid [items]="items()" (layoutChange)="onGridLayoutChange($event)">
   <ng-template #cell let-item>
-    <ng-container *ngComponentOutlet="widgetComponent(item); inputs: widgetInputs(item)" />
+    @if (widgetComponent(item); as component) {
+      <ng-container *ngComponentOutlet="component; inputs: widgetInputs(item)" />
+    } @else {
+      <div class="flex h-full items-center justify-center p-3 text-center text-xs text-muted-foreground">
+        No se pudo mostrar este widget.
+      </div>
+    }
   </ng-template>
 </ui-dashboard-grid>

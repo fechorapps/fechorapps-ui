@@ -24,7 +24,7 @@
           </lucide-icon>
         }
         <span class="text-xs font-medium text-muted-foreground truncate select-none">
-          {{ item.id }}
+          {{ item.label ?? item.id }}
         </span>
         @if (item.static) {
           <span class="ml-auto text-xs text-muted-foreground/60 select-none">static</span>
