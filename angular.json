@@ -9,7 +9,7 @@
       "prefix": "ui",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular/build:application",
           "options": {
             "outputPath": "dist-app",
             "browser": "src/main.ts",
@@ -19,6 +19,13 @@
               "includePaths": ["src"]
             },
             "scripts": []
+          },
+          "configurations": {
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
           }
         },
         "storybook": {
@@ -39,6 +46,12 @@
             "tsConfig": ".storybook/tsconfig.json",
             "outputDir": "storybook-static",
             "compodoc": false
+          }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "tsconfig.spec.json"
           }
         }
       }

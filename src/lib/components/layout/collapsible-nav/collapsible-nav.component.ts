@@ -8,11 +8,12 @@ import {
   signal,
 } from '@angular/core';
 import { LucideAngularModule, ChevronDown, ChevronRight, PanelLeftClose, PanelLeftOpen } from 'lucide-angular';
+import type { LucideIconData } from 'lucide-angular';
 
 export interface NavItem {
   id: string;
   label: string;
-  icon?: unknown;
+  icon?: LucideIconData;
   route?: string;
   badge?: string | number;
   children?: NavItem[];
