@@ -1,7 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ContentChild,
   ElementRef,
+  TemplateRef,
   afterNextRender,
   computed,
   inject,
@@ -10,6 +12,7 @@ import {
   output,
   signal,
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { LucideAngularModule, GripHorizontal } from 'lucide-angular';
 
 export interface GridItem {
@@ -43,12 +46,15 @@ export interface GridItem {
 @Component({
   selector: 'ui-dashboard-grid',
   standalone: true,
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, NgTemplateOutlet],
   templateUrl: './dashboard-grid.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiDashboardGridComponent {
   readonly icons = { GripHorizontal };
+
+  @ContentChild('cell', { read: TemplateRef })
+  cellTemplate?: TemplateRef<{ $implicit: GridItem }>;
 
   // ─── Inputs ───────────────────────────────────────────────────────────────
   items = model<GridItem[]>([]);

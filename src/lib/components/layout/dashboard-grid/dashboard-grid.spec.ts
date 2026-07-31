@@ -1,3 +1,4 @@
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UiDashboardGridComponent, GridItem } from './dashboard-grid.component';
 
@@ -240,5 +241,35 @@ describe('UiDashboardGridComponent', () => {
       expect(emitted.length).toBe(1);
       expect(emitted[0]).toEqual(component.items());
     });
+  });
+});
+
+@Component({
+  standalone: true,
+  imports: [UiDashboardGridComponent],
+  template: `
+    <ui-dashboard-grid [items]="items">
+      <ng-template #cell let-item>
+        <span class="projected-content">{{ item.id }}-content</span>
+      </ng-template>
+    </ui-dashboard-grid>
+  `,
+})
+class TestHostComponent {
+  items: GridItem[] = [
+    { id: 'Widget A', x: 0, y: 0, w: 4, h: 2 },
+    { id: 'Widget B', x: 4, y: 0, w: 4, h: 2 },
+  ];
+}
+
+describe('UiDashboardGridComponent content projection', () => {
+  it('projects the cell template once per item, with the right item as context', () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+
+    const projected = fixture.nativeElement.querySelectorAll('.projected-content');
+    expect(projected.length).toBe(2);
+    expect(projected[0].textContent).toContain('Widget A-content');
+    expect(projected[1].textContent).toContain('Widget B-content');
   });
 });

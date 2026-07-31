@@ -33,7 +33,9 @@
 
       <!-- Card content slot -->
       <div class="p-3 h-[calc(100%-2rem)] overflow-auto text-sm text-foreground">
-        <ng-content select="[slot='{{ item.id }}']"></ng-content>
+        @if (cellTemplate) {
+          <ng-container *ngTemplateOutlet="cellTemplate; context: { $implicit: item }"></ng-container>
+        }
       </div>
     </div>
   }

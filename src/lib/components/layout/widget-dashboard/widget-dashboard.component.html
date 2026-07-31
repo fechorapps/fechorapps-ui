@@ -1,0 +1,6 @@
+<!-- src/lib/components/layout/widget-dashboard/widget-dashboard.component.html -->
+<ui-dashboard-grid [items]="items()" (layoutChange)="onGridLayoutChange($event)">
+  <ng-template #cell let-item>
+    <ng-container *ngComponentOutlet="widgetComponent(item); inputs: widgetInputs(item)" />
+  </ng-template>
+</ui-dashboard-grid>
