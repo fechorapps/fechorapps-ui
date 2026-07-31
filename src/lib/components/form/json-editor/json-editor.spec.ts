@@ -213,7 +213,7 @@ describe('UiJsonEditorComponent', () => {
 
   it('onRawChange parses valid JSON and updates value', () => {
     component.onRawChange('{"hello":"world"}');
-    const val: any = component.value();
+    const val = component.value() as Record<string, unknown>;
     expect(val).toEqual({ hello: 'world' });
     expect(component.errorMessage()).toBeNull();
   });
