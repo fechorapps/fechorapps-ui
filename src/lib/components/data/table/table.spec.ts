@@ -62,7 +62,7 @@ describe('UiTableComponent', () => {
     fixture.componentRef.setInput('sortField', 'name');
     fixture.componentRef.setInput('sortOrder', 1);
     fixture.detectChanges();
-    const names = fixture.componentInstance.displayData().map((r: Record<string, unknown>) => r['name']);
+    const names = fixture.componentInstance.displayData().map((r) => (r as Record<string, unknown>)['name']);
     expect(names[0]).toBe('Alice');
   });
 
@@ -72,7 +72,7 @@ describe('UiTableComponent', () => {
     fixture.componentRef.setInput('sortField', 'name');
     fixture.componentRef.setInput('sortOrder', -1);
     fixture.detectChanges();
-    const names = fixture.componentInstance.displayData().map((r: Record<string, unknown>) => r['name']);
+    const names = fixture.componentInstance.displayData().map((r) => (r as Record<string, unknown>)['name']);
     expect(names[0]).toBe('Carol');
   });
 

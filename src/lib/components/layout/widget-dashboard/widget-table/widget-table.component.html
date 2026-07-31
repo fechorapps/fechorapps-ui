@@ -1,0 +1,25 @@
+<div class="h-full flex flex-col">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="border-b border-border">
+        @for (col of columns(); track col.key) {
+          <th class="text-left font-medium text-muted-foreground px-2 py-1.5">{{ col.label }}</th>
+        }
+      </tr>
+    </thead>
+    @if (rows().length > 0) {
+      <tbody>
+        @for (row of rows(); track $index) {
+          <tr class="border-b border-border last:border-b-0">
+            @for (col of columns(); track col.key) {
+              <td class="px-2 py-1.5 text-card-foreground">{{ row[col.key] }}</td>
+            }
+          </tr>
+        }
+      </tbody>
+    }
+  </table>
+  @if (rows().length === 0) {
+    <p class="text-sm text-muted-foreground p-3">Sin datos</p>
+  }
+</div>

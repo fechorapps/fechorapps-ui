@@ -9,11 +9,12 @@ import {
   signal,
 } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
+import type { LucideIconData } from 'lucide-angular';
 
 export interface ScrollSpyItem {
   id: string;
   label: string;
-  icon?: unknown;
+  icon?: LucideIconData;
 }
 
 @Component({

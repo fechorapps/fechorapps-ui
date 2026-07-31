@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // vitest/globals provides Vitest test globals (describe, it, expect, etc.)
+    // jasmine types are included because this codebase's specs use jasmine.createSpy()
+    // extensively — unlike the sibling repo, this divergence is necessary and correct
+    "types": ["vitest/globals", "jasmine"]
+  },
+  "include": ["src/**/*.d.ts", "src/**/*.spec.ts"]
+}

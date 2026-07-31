@@ -1,4 +1,6 @@
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import { UiDashboardGridComponent, GridItem } from './dashboard-grid.component';
 
 const SAMPLE_ITEMS: GridItem[] = [
@@ -172,7 +174,7 @@ describe('UiDashboardGridComponent', () => {
 
       // Static item drag is prevented — dragstart calls e.preventDefault()
       const dragEvent = new DragEvent('dragstart');
-      const preventDefaultSpy = spyOn(dragEvent, 'preventDefault');
+      const preventDefaultSpy = vi.spyOn(dragEvent, 'preventDefault');
       component.onItemDragStart(dragEvent, items[0]);
       expect(preventDefaultSpy).toHaveBeenCalled();
     });
@@ -182,10 +184,10 @@ describe('UiDashboardGridComponent', () => {
       fixture.componentRef.setInput('editable', true);
       fixture.detectChanges();
 
-      const dt = { setData: jasmine.createSpy('setData') } as unknown as DataTransfer;
+      const dt = { setData: vi.fn() } as unknown as DataTransfer;
       const dragEvent = new DragEvent('dragstart');
       Object.defineProperty(dragEvent, 'dataTransfer', { value: dt });
-      const preventDefaultSpy = spyOn(dragEvent, 'preventDefault');
+      const preventDefaultSpy = vi.spyOn(dragEvent, 'preventDefault');
 
       component.onItemDragStart(dragEvent, item);
       expect(preventDefaultSpy).not.toHaveBeenCalled();
@@ -198,7 +200,7 @@ describe('UiDashboardGridComponent', () => {
       fixture.detectChanges();
 
       const dragEvent = new DragEvent('dragstart');
-      const preventDefaultSpy = spyOn(dragEvent, 'preventDefault');
+      const preventDefaultSpy = vi.spyOn(dragEvent, 'preventDefault');
       component.onItemDragStart(dragEvent, item);
       expect(preventDefaultSpy).toHaveBeenCalled();
     });
@@ -214,7 +216,7 @@ describe('UiDashboardGridComponent', () => {
       component.layoutChange.subscribe(v => emitted.push(v));
 
       // Mock getBoundingClientRect
-      spyOn(component.hostEl.nativeElement, 'getBoundingClientRect').and.returnValue({
+      vi.spyOn(component.hostEl.nativeElement, 'getBoundingClientRect').mockReturnValue({
         left: 0,
         top: 0,
         right: 960,
@@ -232,7 +234,7 @@ describe('UiDashboardGridComponent', () => {
       const dt = { getData: () => 'a' } as unknown as DataTransfer;
       const dropEvent = new DragEvent('drop', { clientX: 100, clientY: 50 });
       Object.defineProperty(dropEvent, 'dataTransfer', { value: dt });
-      spyOn(dropEvent, 'preventDefault');
+      vi.spyOn(dropEvent, 'preventDefault');
 
       component.onGridDrop(dropEvent);
       fixture.detectChanges();
@@ -240,5 +242,35 @@ describe('UiDashboardGridComponent', () => {
       expect(emitted.length).toBe(1);
       expect(emitted[0]).toEqual(component.items());
     });
+  });
+});
+
+@Component({
+  standalone: true,
+  imports: [UiDashboardGridComponent],
+  template: `
+    <ui-dashboard-grid [items]="items">
+      <ng-template #cell let-item>
+        <span class="projected-content">{{ item.id }}-content</span>
+      </ng-template>
+    </ui-dashboard-grid>
+  `,
+})
+class TestHostComponent {
+  items: GridItem[] = [
+    { id: 'Widget A', x: 0, y: 0, w: 4, h: 2 },
+    { id: 'Widget B', x: 4, y: 0, w: 4, h: 2 },
+  ];
+}
+
+describe('UiDashboardGridComponent content projection', () => {
+  it('projects the cell template once per item, with the right item as context', () => {
+    const fixture = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+
+    const projected = fixture.nativeElement.querySelectorAll('.projected-content');
+    expect(projected.length).toBe(2);
+    expect(projected[0].textContent).toContain('Widget A-content');
+    expect(projected[1].textContent).toContain('Widget B-content');
   });
 });

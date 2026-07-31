@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { UiOnboardingLayoutComponent, OnboardingFeature } from './onboarding-layout.component';
+import { Star } from 'lucide-angular';
 
 describe('UiOnboardingLayoutComponent', () => {
   let fixture: ComponentFixture<UiOnboardingLayoutComponent>;
@@ -45,9 +46,9 @@ describe('UiOnboardingLayoutComponent', () => {
 
   it('renders features grid when features are provided', () => {
     const features: OnboardingFeature[] = [
-      { icon: null, title: 'Feature A', description: 'Desc A' },
-      { icon: null, title: 'Feature B', description: 'Desc B' },
-      { icon: null, title: 'Feature C', description: 'Desc C' },
+      { icon: Star, title: 'Feature A', description: 'Desc A' },
+      { icon: Star, title: 'Feature B', description: 'Desc B' },
+      { icon: Star, title: 'Feature C', description: 'Desc C' },
     ];
     fixture.componentRef.setInput('features', features);
     fixture.detectChanges();
