@@ -1,3 +1,9 @@
 <div [class]="containerClasses()" [style]="containerStyles()">
-  <canvas #canvas></canvas>
+  @if (hasData()) {
+    <canvas #canvas></canvas>
+  } @else {
+    <div class="flex h-full w-full items-center justify-center">
+      <p class="text-sm text-muted-foreground">Sin datos</p>
+    </div>
+  }
 </div>

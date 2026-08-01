@@ -62,13 +62,25 @@ export class UiChartComponent implements OnDestroy {
   readonly onDataSelect = output<ChartClickEvent>();
 
   // View children
-  readonly canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('canvas');
+  // Not `.required`: the canvas only exists in the DOM when `hasData()` is true
+  // (see chart.component.html's `@if`) — `.required` throws when queried while
+  // the empty-state branch is rendered instead.
+  readonly canvas = viewChild<ElementRef<HTMLCanvasElement>>('canvas');
 
   // State
   private chart: Chart | null = null;
   readonly isInitialized = signal<boolean>(false);
 
   // Computed
+  // A chart with zero plottable points renders Chart.js's bare axes with no
+  // bars/lines/segments — reads as broken or still-loading, not as "there is
+  // legitimately nothing here yet". Show the same empty-state pattern this
+  // library already uses in UiWidgetTableComponent instead.
+  readonly hasData = computed(() => {
+    const d = this.data();
+    return d.datasets.some((ds) => Array.isArray(ds.data) && ds.data.length > 0);
+  });
+
   readonly containerClasses = computed(() => {
     const base = ['relative'];
     if (this.styleClass()) {
@@ -90,11 +102,15 @@ export class UiChartComponent implements OnDestroy {
       const options = this.options();
       const plugins = this.plugins();
 
-      if (isPlatformBrowser(this.platformId) && type && data) {
+      if (isPlatformBrowser(this.platformId) && type && data && this.hasData()) {
         // Use setTimeout to ensure canvas is available
         setTimeout(() => {
           this.initChart(type, data, options, plugins);
         }, 0);
+      } else if (this.chart) {
+        this.chart.destroy();
+        this.chart = null;
+        this.isInitialized.set(false);
       }
     });
   }
