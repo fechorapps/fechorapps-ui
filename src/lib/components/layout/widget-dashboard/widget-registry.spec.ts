@@ -27,17 +27,20 @@ describe('WIDGET_REGISTRY', () => {
     expect(WIDGET_REGISTRY['table']).toBeDefined();
   });
 
-  it('maps kpi to UiKpiCardComponent with label/value/target/format resolved from data', () => {
+  it('maps kpi to UiKpiCardComponent with value/target/format resolved from data', () => {
     const entry = WIDGET_REGISTRY['kpi'];
     expect(entry.component).toBe(UiKpiCardComponent);
 
+    // No `label` in the resolved inputs: UiDashboardGridComponent's own
+    // drag-handle header already renders `config.title` for every widget
+    // type generically — passing it again here duplicated the same text
+    // twice per KPI card (see widget-registry.ts's comment on this entry).
     const config = baseConfig({
       widgetType: 'kpi',
       title: 'Techo Presupuestal',
       data: { value: 120000000, target: 150000000, format: 'currency', currency: 'MXN' },
     });
     expect(entry.resolveInputs(config)).toEqual({
-      label: 'Techo Presupuestal',
       value: 120000000,
       target: 150000000,
       format: 'currency',
@@ -49,7 +52,6 @@ describe('WIDGET_REGISTRY', () => {
     const entry = WIDGET_REGISTRY['kpi'];
     const config = baseConfig({ widgetType: 'kpi', title: 'Count', data: { value: 5 } });
     expect(entry.resolveInputs(config)).toEqual({
-      label: 'Count',
       value: 5,
       target: undefined,
       format: 'number',

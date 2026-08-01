@@ -28,10 +28,15 @@ export interface WidgetRegistryEntry {
 export const WIDGET_REGISTRY: Record<WidgetType, WidgetRegistryEntry> = {
   kpi: {
     component: UiKpiCardComponent,
+    // No `label` here on purpose: UiDashboardGridComponent's own drag-handle
+    // header already renders `config.title` (via GridItem.label) above every
+    // cell, generically, for any widget type. Passing it again into
+    // UiKpiCardComponent's own `label` input duplicated the same text twice
+    // per card when rendered inside this grid — UiKpiCardComponent still
+    // accepts `label` and renders it when used standalone outside the grid.
     resolveInputs: (config) => {
       const data = (config.data ?? {}) as Partial<KpiWidgetData>;
       return {
-        label: config.title,
         value: data.value ?? 0,
         target: data.target,
         format: data.format ?? 'number',
