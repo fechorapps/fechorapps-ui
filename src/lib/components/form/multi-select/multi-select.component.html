@@ -27,12 +27,12 @@
         @if (chips() && selectedOptions().length > 0) {
           @for (option of displayChips(); track getOptionValue(option)) {
             <span
-              class="inline-flex items-center gap-1 px-2 py-0.5 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded text-xs"
+              class="inline-flex items-center gap-1 rounded-full border border-primary/25 bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary"
             >
               <span class="truncate max-w-[100px]">{{ getOptionLabel(option) }}</span>
               @if (!disabled()) {
                 <span
-                  class="hover:bg-primary-200 dark:hover:bg-primary-800 rounded-full p-0.5 cursor-pointer"
+                  class="grid cursor-pointer place-items-center rounded-full p-0.5 hover:bg-primary/15"
                   (click)="removeChip(option, $event)"
                 >
                   <lucide-icon [img]="closeIcon" [size]="12"></lucide-icon>
@@ -41,7 +41,7 @@
             </span>
           }
           @if (remainingCount() > 0) {
-            <span class="text-xs text-gray-500 dark:text-gray-400"
+            <span class="rounded-full bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground"
               >+{{ remainingCount() }} more</span
             >
           }
@@ -80,15 +80,15 @@
         <!-- Select All -->
         @if (showSelectAll()) {
           <div
-            class="flex items-center justify-between px-3 py-2 text-sm border-b border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+            class="mx-0.5 mb-1.5 mt-0.5 flex cursor-pointer items-center justify-between rounded-lg border border-border bg-muted px-3 py-2.5 text-xs transition-colors hover:border-primary/35 hover:bg-primary/10"
             (click)="selectAll()"
           >
-            <span class="font-medium text-gray-700 dark:text-gray-300">{{ selectAllLabel() }}</span>
+            <span class="font-semibold text-foreground">{{ selectAllLabel() }}</span>
             @if (allSelected()) {
               <lucide-icon
                 [img]="checkIcon"
                 [size]="iconSize()"
-                class="text-primary"
+                class="grid size-[1.375rem] place-items-center rounded-full bg-primary/15 text-primary"
               ></lucide-icon>
             }
           </div>
@@ -97,23 +97,16 @@
         <!-- Options -->
         @if (filteredOptions().length > 0) {
           @for (option of filteredOptions(); track getOptionValue(option); let i = $index) {
-            <div
-              [class]="getOptionClasses(option, i)"
-              role="option"
-              [attr.aria-selected]="isSelected(option)"
-              [attr.aria-disabled]="option.disabled"
-              (click)="toggleOption(option)"
-              (mouseenter)="highlightedIndex.set(i)"
-            >
-              <span>{{ getOptionLabel(option) }}</span>
-              @if (isSelected(option)) {
-                <lucide-icon
-                  [img]="checkIcon"
-                  [size]="iconSize()"
-                  class="text-primary"
-                ></lucide-icon>
-              }
-            </div>
+            <ng-container
+              [ngTemplateOutlet]="optionTemplate"
+              [ngTemplateOutletContext]="{
+                $implicit: option,
+                index: i,
+                selected: isSelected(option),
+                highlighted: highlightedIndex() === i,
+                disabled: !!option.disabled
+              }"
+            />
           }
         } @else {
           <div class="px-3 py-4 text-center text-gray-500 text-sm">
@@ -131,3 +124,35 @@
     </p>
   }
 </div>
+
+<ng-template #optionTemplate let-option let-index="index" let-selected="selected">
+  <div
+    [class]="getOptionClasses(option, index)"
+    role="option"
+    [attr.aria-selected]="selected"
+    [attr.aria-disabled]="option.disabled"
+    (click)="toggleOption(option)"
+    (mouseenter)="highlightedIndex.set(index)"
+  >
+    @if (itemTemplate(); as template) {
+      <ng-container
+        [ngTemplateOutlet]="template"
+        [ngTemplateOutletContext]="{
+          $implicit: option,
+          selected,
+          highlighted: highlightedIndex() === index,
+          disabled: !!option.disabled
+        }"
+      />
+    } @else {
+      <span>{{ getOptionLabel(option) }}</span>
+      @if (selected) {
+        <lucide-icon
+          [img]="checkIcon"
+          [size]="iconSize()"
+          class="grid size-[1.375rem] place-items-center rounded-full bg-primary/15 text-primary"
+        />
+      }
+    }
+  </div>
+</ng-template>

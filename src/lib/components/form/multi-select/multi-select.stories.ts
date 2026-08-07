@@ -97,6 +97,37 @@ export const MaxChips: Story = {
   },
 };
 
+export const CustomItemTemplate: Story = {
+  render: () => ({
+    props: {
+      options: skillOptions,
+    },
+    template: `
+      <ui-multi-select
+        label="Tecnologías"
+        placeholder="Selecciona tecnologías"
+        [options]="options"
+        [chips]="true"
+        [showSelectAll]="true"
+      >
+        <ng-template #item let-option let-selected="selected">
+          <span class="flex min-w-0 flex-1 flex-col">
+            <span class="font-medium">{{ option.label }}</span>
+            <span class="text-xs text-muted-foreground">
+              {{ selected ? 'Seleccionada' : 'Disponible' }}
+            </span>
+          </span>
+          @if (selected) {
+            <span class="rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
+              Seleccionada
+            </span>
+          }
+        </ng-template>
+      </ui-multi-select>
+    `,
+  }),
+};
+
 export const Variants: Story = {
   render: () => ({
     props: {

@@ -2,6 +2,7 @@
   ChangeDetectionStrategy,
   Component,
   computed,
+  contentChild,
   ElementRef,
   forwardRef,
   HostListener,
@@ -9,8 +10,10 @@
   model,
   output,
   signal,
+  TemplateRef,
   viewChild,
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { Check, ChevronDown, LucideAngularModule, X } from 'lucide-angular';
@@ -34,6 +37,14 @@ export interface MultiSelectOption {
   disabled?: boolean;
 }
 
+/** Context exposed to an optional <c>#item</c> option template. */
+export interface MultiSelectItemTemplateContext {
+  $implicit: MultiSelectOption;
+  selected: boolean;
+  highlighted: boolean;
+  disabled: boolean;
+}
+
 /**
  * UiMultiSelect Component
  *
@@ -48,7 +59,7 @@ export interface MultiSelectOption {
 @Component({
   selector: 'ui-multi-select',
   standalone: true,
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, NgTemplateOutlet],
   templateUrl: './multi-select.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
@@ -76,6 +87,9 @@ export class UiMultiSelectComponent implements ControlValueAccessor {
   // =========================================================================
 
   private readonly containerRef = viewChild<ElementRef>('containerEl');
+
+  /** Optional template for the contents of each option. Expose it as <c>#item</c>. */
+  readonly itemTemplate = contentChild<TemplateRef<MultiSelectItemTemplateContext>>('item');
 
   // =========================================================================
   // INPUTS
@@ -318,13 +332,11 @@ export class UiMultiSelectComponent implements ControlValueAccessor {
       'text-popover-foreground',
       'border',
       'border-border',
-      'rounded-lg',
-      'shadow-lg',
-      'ring-1',
-      'ring-black/5',
+      'rounded-xl',
+      'shadow-xl',
       'max-h-60',
       'overflow-auto',
-      'p-1.5',
+      'p-2',
     ].join(' ');
   });
 
@@ -367,11 +379,15 @@ export class UiMultiSelectComponent implements ControlValueAccessor {
       'flex',
       'items-center',
       'justify-between',
+      'min-h-11',
+      'm-0.5',
       'px-3',
-      'py-2',
+      'py-2.5',
       'text-sm',
       'transition-colors',
-      'rounded-md',
+      'rounded-lg',
+      'border',
+      'border-transparent',
     ];
 
     if (isDisabled) {
@@ -381,28 +397,24 @@ export class UiMultiSelectComponent implements ControlValueAccessor {
 
       if (isSelected && isHighlighted) {
         baseClasses.push(
-          'bg-primary-100',
-          'dark:bg-primary-900/30',
-          'text-primary-700',
-          'dark:text-primary-300',
-          'font-medium'
+          'border-primary/35',
+          'bg-primary/15',
+          'text-primary',
+          'font-semibold',
+          'ring-1',
+          'ring-primary/15'
         );
       } else if (isSelected) {
         baseClasses.push(
-          'bg-primary-50',
-          'dark:bg-primary-900/20',
-          'text-primary-700',
-          'dark:text-primary-300',
-          'font-medium'
+          'border-primary/25',
+          'bg-primary/10',
+          'text-primary',
+          'font-semibold'
         );
       } else if (isHighlighted) {
-        baseClasses.push('bg-primary-50', 'dark:bg-gray-800', 'text-foreground');
+        baseClasses.push('border-border', 'bg-muted', 'text-foreground');
       } else {
-        baseClasses.push(
-          'text-foreground',
-          'hover:bg-primary-50',
-          'dark:hover:bg-gray-800'
-        );
+        baseClasses.push('text-foreground', 'hover:border-border', 'hover:bg-muted');
       }
     }
 
