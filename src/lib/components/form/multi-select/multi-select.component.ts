@@ -336,7 +336,7 @@ export class UiMultiSelectComponent implements ControlValueAccessor {
       'shadow-xl',
       'max-h-60',
       'overflow-auto',
-      'p-2',
+      'p-1.5',
     ].join(' ');
   });
 
@@ -380,9 +380,11 @@ export class UiMultiSelectComponent implements ControlValueAccessor {
       'items-center',
       'justify-between',
       'min-h-11',
-      'm-0.5',
-      'px-3',
-      'py-2.5',
+      'gap-2.5',
+      'mx-0.5',
+      'my-px',
+      'px-2.5',
+      'py-2',
       'text-sm',
       'transition-colors',
       'rounded-lg',
@@ -398,23 +400,23 @@ export class UiMultiSelectComponent implements ControlValueAccessor {
       if (isSelected && isHighlighted) {
         baseClasses.push(
           'border-primary/35',
-          'bg-primary/15',
+          'bg-primary/10',
           'text-primary',
           'font-semibold',
           'ring-1',
-          'ring-primary/15'
+          'ring-primary/10'
         );
       } else if (isSelected) {
         baseClasses.push(
-          'border-primary/25',
-          'bg-primary/10',
+          'border-primary/20',
+          'bg-primary/5',
           'text-primary',
-          'font-semibold'
+          'font-medium'
         );
       } else if (isHighlighted) {
-        baseClasses.push('border-border', 'bg-muted', 'text-foreground');
+        baseClasses.push('border-border', 'bg-muted/80', 'text-foreground');
       } else {
-        baseClasses.push('text-foreground', 'hover:border-border', 'hover:bg-muted');
+        baseClasses.push('text-foreground', 'hover:border-border', 'hover:bg-muted/80');
       }
     }
 
